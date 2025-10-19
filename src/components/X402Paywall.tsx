@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { fetchUSDCBalance } from '@/lib/balance';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PaymentButton } from './PaymentButton';
 import { PaymentStatus } from './PaymentStatus';
@@ -31,7 +32,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   children,
 }) => {
   const [isPaid, setIsPaid] = useState(false);
-  const walletBalance = '0.00'; // TODO: Fetch real balance
+  const [walletBalance, setWalletBalance] = useState<string>('0.00');
 
   const { pay, isLoading, status, error, transactionId } = useX402Payment({
     wallet,
@@ -41,13 +42,16 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
     maxPaymentAmount,
   });
 
-  // Notify when wallet connects
+  // Fetch balance when wallet connects
   useEffect(() => {
     const walletAddress = wallet.publicKey?.toString() || wallet.address;
-    if (walletAddress && onWalletConnect) {
-      onWalletConnect(walletAddress);
+    if (walletAddress) {
+      onWalletConnect?.(walletAddress);
+      
+      // Fetch USDC balance
+      fetchUSDCBalance(walletAddress, network).then(setWalletBalance);
     }
-  }, [wallet, onWalletConnect]);
+  }, [wallet, network, onWalletConnect]);
 
   // Handle payment success
   useEffect(() => {
