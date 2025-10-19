@@ -185,10 +185,10 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           )}
 
           {/* Network Notice */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-xs text-blue-800 text-center">
-              <span className="font-semibold">Ready to Pay:</span> Uses PayAI facilitator on Solana Devnet.
-              <br />Requires devnet USDC balance. Test payments are refunded automatically.
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <p className="text-xs text-amber-800 text-center">
+              <span className="font-semibold">Live Payments:</span> Uses PayAI facilitator on Solana Mainnet.
+              <br />Requires real USDC balance. Test payments are refunded automatically.
             </p>
           </div>
         </CardContent>

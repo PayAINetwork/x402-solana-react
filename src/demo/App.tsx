@@ -76,7 +76,8 @@ function DemoContent() {
       amount={1}
       description="Premium Demo Content Access"
       wallet={walletAdapter}
-      network="solana-devnet"
+      network="solana"
+      rpcUrl={`https://mainnet.helius-rpc.com/?api-key=${import.meta.env.VITE_HELIUS_API_KEY || 'public'}`}
       showBalance={true}
       showNetworkInfo={true}
       onPaymentSuccess={(txId) => {
@@ -125,14 +126,14 @@ function DemoContent() {
                 </div>
               </div>
             </div>
-            
+
             <div className="text-center space-y-4">
               <p className="text-slate-600">
                 Thank you for supporting our project! Your payment helps us build better Web3 tools.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button 
+                <Button
                   onClick={() => window.location.reload()}
                   variant="outline"
                   className="border-slate-300 hover:bg-slate-50"
@@ -150,9 +151,9 @@ function DemoContent() {
 }
 
 function App() {
-  const network = WalletAdapterNetwork.Devnet;
+  const network = WalletAdapterNetwork.Mainnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  
+
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
