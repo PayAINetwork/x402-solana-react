@@ -31,6 +31,7 @@ export interface X402PaywallProps {
   wallet: WalletAdapter;
   network?: SolanaNetwork;
   rpcUrl?: string;
+  apiEndpoint?: string;
   treasuryAddress?: string;
   facilitatorUrl?: string;
 

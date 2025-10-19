@@ -6,6 +6,7 @@ export interface PaymentConfig {
   wallet: WalletAdapter;
   network: SolanaNetwork;
   rpcUrl?: string;
+  apiEndpoint?: string;
   treasuryAddress?: string;
   facilitatorUrl?: string;
   maxPaymentAmount?: number;
@@ -64,12 +65,8 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
           throw new Error('Wallet not connected');
         }
 
-        // Convert amount to micro-USDC (6 decimals)
-        const microUsdcAmount = BigInt(Math.floor(amount * 1_000_000));
-
-        // Create x402 client with real implementation
-        // TODO: Use x402Client.fetch() with actual API endpoint
-        createX402Client({
+        // Create x402 client
+        const x402Client = createX402Client({
           wallet: config.wallet,
           network: config.network,
           rpcUrl: config.rpcUrl,
@@ -78,21 +75,60 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
             : undefined,
         });
 
-        // Make a mock API call that would return 402
-        // In real usage, this would be the actual API endpoint
-        // For now, we'll just validate the setup
-        console.log('x402 payment initiated:', {
-          amount: microUsdcAmount.toString(),
+        // Determine API endpoint
+        // Default to PayAI Echo Merchant (free test endpoint that refunds payments)
+        // Users can override with their own 402-protected endpoint
+        const defaultEndpoint = 'https://x402.payai.network/api/solana/paid-content';
+        const apiEndpoint = config.apiEndpoint || defaultEndpoint;
+        const isEchoMerchant = apiEndpoint === defaultEndpoint;
+        
+        console.log('Initiating x402 payment:', {
+          endpoint: apiEndpoint,
+          isDemo: isEchoMerchant,
+          amount,
           description,
           wallet: walletAddress,
           network: config.network,
         });
 
-        // TODO: This needs actual API endpoint to test against
-        // For now, simulate success
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        // Make the 402-protected request
+        // x402Client.fetch() automatically handles the full payment flow:
+        // 1. Makes initial request → receives 402 with payment requirements
+        // 2. Creates and signs payment transaction
+        // 3. Retries with X-PAYMENT header containing signed payment
+        // 4. Merchant verifies, settles, and fulfills the request
+        const response = await x402Client.fetch(apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: description,
+            amount,
+          }),
+        });
 
-        const txId = `tx_${Date.now()}`;
+        if (!response.ok) {
+          throw new Error(`Payment request failed: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('Payment successful:', result);
+
+        // Extract transaction ID from response
+        const paymentResponse = response.headers.get('X-PAYMENT-RESPONSE');
+        let txId = `tx_${Date.now()}`;
+        
+        if (paymentResponse) {
+          try {
+            const decoded = JSON.parse(atob(paymentResponse));
+            txId = decoded.transactionId || decoded.signature || txId;
+            console.log('Payment details:', decoded);
+          } catch (e) {
+            console.warn('Could not decode payment response:', e);
+          }
+        }
+
         setTransactionId(txId);
         setStatus('success');
         setIsLoading(false);
