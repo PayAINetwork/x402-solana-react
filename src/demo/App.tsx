@@ -49,7 +49,7 @@ function DemoContent() {
   if (showPaywall && walletAdapter) {
     return (
       <X402Paywall
-        amount={2.50}
+        amount={1}
         description="Premium Demo Content"
         wallet={walletAdapter}
         network="solana-devnet"
