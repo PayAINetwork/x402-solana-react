@@ -42,6 +42,7 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
     "@solana/spl-token": "^0.4.0",
     "@solana/web3.js": "^1.90.0",
     "class-variance-authority": "^0.7.1",

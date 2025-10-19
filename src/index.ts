@@ -18,7 +18,7 @@ export type { PaymentConfig, UseX402PaymentReturn } from './hooks/useX402Payment
 export type {
   SolanaNetwork,
   WalletAdapter,
-  PaymentStatus,
+  PaymentStatus as PaymentStatusType,
   X402PaywallProps,
   PaymentButtonProps,
   PaymentStatusProps,

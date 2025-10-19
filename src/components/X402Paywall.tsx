@@ -22,8 +22,8 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   classNames,
   customStyles,
   maxPaymentAmount,
-  enablePaymentCaching = false,
-  autoRetry = false,
+  // enablePaymentCaching = false, // TODO: Implement in future
+  // autoRetry = false, // TODO: Implement in future
   onPaymentStart,
   onPaymentSuccess,
   onPaymentError,
@@ -31,7 +31,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   children,
 }) => {
   const [isPaid, setIsPaid] = useState(false);
-  const [walletBalance, setWalletBalance] = useState<string>('0.00');
+  const walletBalance = '0.00'; // TODO: Fetch real balance
 
   const { pay, isLoading, status, error, transactionId } = useX402Payment({
     wallet,
