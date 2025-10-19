@@ -14,6 +14,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   description,
   wallet,
   network = 'solana-devnet',
+  rpcUrl,
   treasuryAddress,
   facilitatorUrl,
   theme = 'solana',
@@ -37,6 +38,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   const { pay, isLoading, status, error, transactionId } = useX402Payment({
     wallet,
     network,
+    rpcUrl,
     treasuryAddress,
     facilitatorUrl,
     maxPaymentAmount,
@@ -49,7 +51,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
       onWalletConnect?.(walletAddress);
       
       // Fetch USDC balance
-      fetchUSDCBalance(walletAddress, network).then(setWalletBalance);
+      fetchUSDCBalance(walletAddress, network, rpcUrl).then(setWalletBalance);
     }
   }, [wallet, network, onWalletConnect]);
 

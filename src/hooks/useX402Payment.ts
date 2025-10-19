@@ -5,6 +5,7 @@ import { WalletAdapter, SolanaNetwork, PaymentStatus } from '@/types';
 export interface PaymentConfig {
   wallet: WalletAdapter;
   network: SolanaNetwork;
+  rpcUrl?: string;
   treasuryAddress?: string;
   facilitatorUrl?: string;
   maxPaymentAmount?: number;
@@ -71,6 +72,7 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
         createX402Client({
           wallet: config.wallet,
           network: config.network,
+          rpcUrl: config.rpcUrl,
           maxPaymentAmount: config.maxPaymentAmount
             ? BigInt(Math.floor(config.maxPaymentAmount * 1_000_000))
             : undefined,

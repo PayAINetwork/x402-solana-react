@@ -24,14 +24,17 @@ function getRpcUrl(network: SolanaNetwork): string {
  * Fetch USDC balance for a wallet address
  * @param walletAddress - Solana wallet public key as string
  * @param network - Solana network (mainnet or devnet)
+ * @param customRpcUrl - Optional custom RPC URL
  * @returns USDC balance as formatted string
  */
 export async function fetchUSDCBalance(
   walletAddress: string,
-  network: SolanaNetwork
+  network: SolanaNetwork,
+  customRpcUrl?: string
 ): Promise<string> {
   try {
-    const connection = new Connection(getRpcUrl(network), 'confirmed');
+    const rpcUrl = customRpcUrl || getRpcUrl(network);
+    const connection = new Connection(rpcUrl, 'confirmed');
     const walletPubkey = new PublicKey(walletAddress);
     const usdcMint = new PublicKey(getUSDCMint(network));
 
