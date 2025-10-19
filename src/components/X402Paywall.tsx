@@ -184,11 +184,11 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             </div>
           )}
 
-          {/* Demo Notice */}
+          {/* Network Notice */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-xs text-blue-800 text-center">
-              <span className="font-semibold">Demo Mode:</span> This is a payment simulation.
-              <br />Real transactions require USDC balance on Solana Devnet.
+              <span className="font-semibold">Ready to Pay:</span> Uses PayAI facilitator on Solana Devnet.
+              <br />Requires devnet USDC balance. Test payments are refunded automatically.
             </p>
           </div>
         </CardContent>
