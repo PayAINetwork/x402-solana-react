@@ -42,10 +42,13 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@solana/web3.js": "^1.90.0",
     "@solana/spl-token": "^0.4.0",
-    "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.0"
+    "@solana/web3.js": "^1.90.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.546.0",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
