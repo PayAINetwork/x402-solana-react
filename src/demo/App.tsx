@@ -13,7 +13,6 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 
 function DemoContent() {
   const { publicKey, signTransaction } = useWallet();
-  const [showPaywall, setShowPaywall] = useState(false);
 
   const walletAdapter = useMemo(() => {
     if (!publicKey || !signTransaction) return null;
@@ -23,128 +22,130 @@ function DemoContent() {
     };
   }, [publicKey, signTransaction]);
 
+  // If no wallet is connected, show a simplified connect prompt
   if (!publicKey) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold bg-solana-gradient bg-clip-text text-transparent">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <div className="text-center space-y-8 max-w-md mx-auto">
+          {/* Hero Section */}
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold bg-solana-gradient bg-clip-text text-transparent">
               x402 Solana React
-            </CardTitle>
-            <CardDescription className="text-lg">
-              Demo Paywall Component
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground text-center">
-              Connect your Solana wallet to try the demo.
+            </h1>
+            <p className="text-xl text-slate-300">
+              Seamless Web3 Paywall Component
             </p>
-            <WalletMultiButton className="w-full" />
-          </CardContent>
-        </Card>
+            <p className="text-slate-400 text-sm">
+              Connect your wallet to experience the demo paywall
+            </p>
+          </div>
+
+          {/* Features */}
+          <div className="bg-slate-800/50 backdrop-blur rounded-xl p-6 border border-slate-700">
+            <h3 className="font-semibold text-slate-200 mb-4">Features</h3>
+            <div className="grid grid-cols-2 gap-3 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 bg-solana-secondary rounded-full"></div>
+                <span>USDC Payments</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 bg-solana-secondary rounded-full"></div>
+                <span>Balance Display</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 bg-solana-secondary rounded-full"></div>
+                <span>TypeScript</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 bg-solana-secondary rounded-full"></div>
+                <span>Custom Themes</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Connect Button */}
+          <WalletMultiButton className="!bg-solana-gradient hover:!opacity-90 !border-0 !text-white font-semibold !py-3 !px-8 !rounded-xl" />
+        </div>
       </div>
     );
   }
 
-  if (showPaywall && walletAdapter) {
-    return (
-      <X402Paywall
-        amount={1}
-        description="Premium Demo Content"
-        wallet={walletAdapter}
-        network="solana-devnet"
-        showBalance={true}
-        showNetworkInfo={true}
-        onPaymentSuccess={(txId) => {
-          console.log('Payment successful!', txId);
-          alert(`Payment successful! Transaction ID: ${txId}`);
-        }}
-        onPaymentError={(error) => {
-          console.error('Payment failed:', error);
-          alert(`Payment failed: ${error.message}`);
-        }}
-      >
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-2xl">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-purple-900">
-                🎉 Premium Content Unlocked!
-              </CardTitle>
-              <CardDescription>
-                You have successfully paid to access this content.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-700">
-                This is the protected content that appears after a successful payment.
-              </p>
-              <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-6 rounded-lg">
-                <h3 className="font-semibold text-purple-900 mb-2">What you get:</h3>
-                <ul className="space-y-2 text-gray-700">
-                  <li>✓ Access to premium features</li>
-                  <li>✓ Exclusive content</li>
-                  <li>✓ Priority support</li>
-                  <li>✓ Advanced analytics</li>
-                </ul>
-              </div>
-              <Button 
-                onClick={() => setShowPaywall(false)}
-                variant="outline"
-                className="w-full"
-              >
-                Back to Demo
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </X402Paywall>
-    );
-  }
-
+  // If wallet is connected, show the paywall directly
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            x402 Solana React Paywall Demo
-          </CardTitle>
-          <CardDescription>
-            Connected: {publicKey.toString().slice(0, 8)}...{publicKey.toString().slice(-8)}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Component Features:</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>✓ Automatic 402 payment handling</li>
-              <li>✓ USDC balance display</li>
-              <li>✓ Solana network integration</li>
-              <li>✓ Custom styling support</li>
-              <li>✓ TypeScript type safety</li>
-            </ul>
-          </div>
-
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
-              <strong>Demo Mode:</strong> Payment simulation only.
-              <br />• Real payments require x402 facilitator API
-              <br />• USDC balance needed for actual transactions
-              <br />• Currently on Solana Devnet
-            </p>
-          </div>
-
-          <div className="flex gap-3">
-            <Button 
-              onClick={() => setShowPaywall(true)}
-              className="flex-1 bg-solana-gradient hover:opacity-90"
-            >
-              View Paywall Demo
-            </Button>
-            <WalletMultiButton />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    <X402Paywall
+      amount={1}
+      description="Premium Demo Content Access"
+      wallet={walletAdapter}
+      network="solana-devnet"
+      showBalance={true}
+      showNetworkInfo={true}
+      onPaymentSuccess={(txId) => {
+        console.log('Payment successful!', txId);
+        alert(`Payment successful! Transaction ID: ${txId}`);
+      }}
+      onPaymentError={(error) => {
+        console.error('Payment failed:', error);
+        alert(`Payment failed: ${error.message}`);
+      }}
+    >
+      {/* Premium Content */}
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl shadow-2xl border-0">
+          <CardHeader className="text-center pb-2">
+            <CardTitle className="text-4xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+              🎉 Welcome to Premium!
+            </CardTitle>
+            <CardDescription className="text-lg text-slate-600 mt-2">
+              You've successfully unlocked exclusive content
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6 pt-4">
+            <div className="bg-gradient-to-r from-emerald-100 via-blue-100 to-purple-100 p-6 rounded-xl border border-slate-200">
+              <h3 className="font-semibold text-slate-800 mb-4 text-lg">🚀 Premium Features Unlocked:</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    <span className="text-slate-700">Advanced Analytics</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-slate-700">Priority Support</span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span className="text-slate-700">Exclusive Content</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                    <span className="text-slate-700">API Access</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center space-y-4">
+              <p className="text-slate-600">
+                Thank you for supporting our project! Your payment helps us build better Web3 tools.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => window.location.reload()}
+                  variant="outline"
+                  className="border-slate-300 hover:bg-slate-50"
+                >
+                  Reset Demo
+                </Button>
+                <WalletMultiButton />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </X402Paywall>
   );
 }
 

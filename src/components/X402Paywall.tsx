@@ -98,21 +98,34 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
 
   return (
     <div
-      className={cn('flex items-center justify-center min-h-screen p-4', classNames?.container)}
+      className={cn(
+        'flex items-center justify-center min-h-screen p-4',
+        'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900',
+        classNames?.container
+      )}
       style={customStyles?.container}
     >
       <Card
-        className={cn('w-full max-w-md', getThemeClasses(), classNames?.card)}
+        className={cn(
+          'w-full max-w-lg shadow-2xl border-0 bg-white/95 backdrop-blur-sm',
+          getThemeClasses(),
+          classNames?.card
+        )}
         style={customStyles?.card}
       >
-        <CardHeader className="text-center">
-          <CardTitle className={cn('text-2xl font-bold', classNames?.text)} style={customStyles?.text}>
-            Payment Required
+        <CardHeader className="text-center pb-6">
+          <div className="mx-auto w-16 h-16 bg-solana-gradient rounded-full flex items-center justify-center mb-4">
+            <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <CardTitle className={cn('text-3xl font-bold bg-solana-gradient bg-clip-text text-transparent', classNames?.text)} style={customStyles?.text}>
+            Unlock Premium Access
           </CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardDescription className="text-lg text-slate-600 mt-2">{description}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {/* Wallet Info */}
           <WalletSection
             wallet={wallet}
@@ -123,20 +136,22 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
 
           {/* Payment Details */}
           {showPaymentDetails && (
-            <Card className="bg-muted/50">
-              <CardContent className="p-4 space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Amount</span>
-                  <span className="text-lg font-bold">${amount.toFixed(2)} USDC</span>
+            <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium text-slate-600">Payment Amount</span>
+                <span className="text-2xl font-bold text-slate-900">${amount.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-slate-500">Currency</span>
+                <span className="text-sm font-semibold text-slate-700 bg-slate-200 px-2 py-1 rounded-md">USDC</span>
+              </div>
+              {maxPaymentAmount && (
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-xs text-slate-500">Maximum Amount</span>
+                  <span className="text-xs text-slate-600">${maxPaymentAmount.toFixed(2)}</span>
                 </div>
-                {maxPaymentAmount && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">Maximum</span>
-                    <span className="text-xs">${maxPaymentAmount.toFixed(2)}</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+              )}
+            </div>
           )}
 
           {/* Payment Status */}
@@ -156,16 +171,26 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             onClick={handlePayment}
             loading={isLoading}
             disabled={isLoading}
-            className={classNames?.button}
+            className={cn('w-full h-12 text-lg font-semibold', classNames?.button)}
             style={customStyles?.button}
           />
 
           {/* Error Message */}
           {error && (
-            <p className="text-sm text-red-600 text-center">
-              {error.message}
-            </p>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-sm text-red-800 text-center">
+                <span className="font-semibold">Payment Error:</span> {error.message}
+              </p>
+            </div>
           )}
+
+          {/* Demo Notice */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-xs text-blue-800 text-center">
+              <span className="font-semibold">Demo Mode:</span> This is a payment simulation.
+              <br />Real transactions require USDC balance on Solana Devnet.
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
