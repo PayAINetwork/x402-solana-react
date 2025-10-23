@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
@@ -71,13 +71,15 @@ function DemoContent() {
   }
 
   // If wallet is connected, show the paywall directly
+  if (!walletAdapter) return null;
+
   return (
     <X402Paywall
       amount={1}
       description="Premium Demo Content Access"
       wallet={walletAdapter}
       network="solana"
-      rpcUrl={`https://mainnet.helius-rpc.com/?api-key=${import.meta.env.VITE_HELIUS_API_KEY || 'public'}`}
+      rpcUrl={`https://mainnet.helius-rpc.com/?api-key=${(import.meta as any).env?.VITE_HELIUS_API_KEY || 'public'}`}
       showBalance={true}
       showNetworkInfo={true}
       onPaymentSuccess={(txId) => {
