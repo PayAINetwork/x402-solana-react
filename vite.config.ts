@@ -26,9 +26,8 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
+        /^react($|\/)/,
+        /^react-dom($|\/)/,
         '@solana/web3.js',
         '@solana/spl-token',
         '@solana/wallet-adapter-base',
