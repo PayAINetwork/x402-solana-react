@@ -25,11 +25,22 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@solana/web3.js', '@solana/spl-token'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@solana/web3.js',
+        '@solana/spl-token',
+        '@solana/wallet-adapter-base',
+        '@solana/wallet-adapter-react',
+        '@solana/wallet-adapter-react-ui',
+        '@solana/wallet-adapter-wallets',
+      ],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
           '@solana/web3.js': 'SolanaWeb3',
           '@solana/spl-token': 'SolanaSplToken',
         },

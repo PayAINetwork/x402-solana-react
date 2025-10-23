@@ -1,6 +1,6 @@
 {
   "name": "@payai/x402-solana-react",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "Reusable React paywall components for Solana using the x402 payment protocol",
   "type": "module",
   "main": "./dist/index.js",
