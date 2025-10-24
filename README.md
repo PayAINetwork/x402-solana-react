@@ -229,8 +229,8 @@ MIT License
 
 ## 🔗 Related Projects
 
-- [x402-solana](../x402-solana/) - Base Solana payment protocol implementation
-- [x402](../x402/) - Core x402 payment protocol
+- [x402-solana](https://github.com/payainetwork/x402-solana) - Base Solana payment protocol implementation
+- [x402](https://github.com/payainetwork/x402) - Core x402 payment protocol
 - [PayAI Network](https://payai.network) - x402 payment infrastructure
 
 ---
