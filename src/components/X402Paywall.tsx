@@ -26,6 +26,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   facilitatorUrl,
   theme = "solana",
   showPaymentDetails = true,
+  onDisconnect,
   classNames,
   customStyles,
   maxPaymentAmount,
@@ -290,7 +291,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
 
         <CardContent className="space-y-6">
           {/* Wallet Info */}
-          <WalletSection wallet={wallet} />
+          <WalletSection wallet={wallet} onDisconnect={onDisconnect} />
 
           {/* Payment Details */}
           {showPaymentDetails && (

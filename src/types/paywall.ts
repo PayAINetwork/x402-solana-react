@@ -40,6 +40,7 @@ export interface X402PaywallProps {
   showBalance?: boolean;
   showNetworkInfo?: boolean;
   showPaymentDetails?: boolean;
+  onDisconnect?: () => void;
 
   // Styling Options
   classNames?: ComponentClassNames;
@@ -92,6 +93,7 @@ export interface WalletSectionProps {
   balance?: string;
   network?: SolanaNetwork;
   showBalance?: boolean;
+  onDisconnect?: () => void;
   className?: string;
   style?: React.CSSProperties;
 }

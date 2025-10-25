@@ -36,7 +36,7 @@ type Theme =
   | "custom";
 
 function DemoContent() {
-  const { publicKey, signTransaction } = useWallet();
+  const { publicKey, signTransaction, disconnect } = useWallet();
   const [currentTheme, setCurrentTheme] = useState<Theme>("solana");
 
   const walletAdapter = useMemo(() => {
@@ -145,6 +145,10 @@ function DemoContent() {
         }`}
         showBalance={true}
         showNetworkInfo={true}
+        onDisconnect={() => {
+          console.log("Disconnecting wallet...");
+          disconnect();
+        }}
         onPaymentSuccess={(txId) => {
           console.log("Payment successful!", txId);
           alert(`Payment successful! Transaction ID: ${txId}`);
@@ -230,7 +234,7 @@ function App() {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
+      <WalletProvider wallets={wallets} autoConnect={false}>
         <WalletModalProvider>
           <DemoContent />
         </WalletModalProvider>
