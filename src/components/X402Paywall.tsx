@@ -160,7 +160,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
           card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
           icon: "bg-gradient-to-r from-blue-600 to-purple-600",
-          title: "text-slate-900 font-bold",
+          title: "text-slate-900",
           button: "bg-black hover:bg-gray-800 text-white font-bold rounded-xl",
           paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
           notice: "text-slate-600",
@@ -255,7 +255,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             <div>
               <CardTitle
                 className={cn(
-                  "text-2xl font-bold",
+                  "text-l fw-bold pb-1",
                   themeConfig.title,
                   classNames?.text
                 )}
@@ -265,7 +265,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
               </CardTitle>
               <CardDescription
                 className={cn(
-                  "text-sm",
+                  "text-sm font-light",
                   theme === "terminal" ? "text-green-300" : "text-slate-600"
                 )}
               >
@@ -278,10 +278,10 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           <div className="border-b border-slate-200 mb-6"></div>
 
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            <h2 className="text-2xl font-normal text-slate-900 mb-2">
               Payment Required
             </h2>
-            <p className="text-slate-600 text-sm">
+            <p className="text-slate-600 text-sm font-light">
               Access to protected content on base-sepolia. To access this
               content, please pay $0.01 Base Sepolia USDC
             </p>
