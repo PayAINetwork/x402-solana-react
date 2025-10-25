@@ -25,8 +25,6 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   treasuryAddress,
   facilitatorUrl,
   theme = "solana",
-  showBalance = true,
-  showNetworkInfo = true,
   showPaymentDetails = true,
   classNames,
   customStyles,
