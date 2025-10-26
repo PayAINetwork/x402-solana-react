@@ -24,7 +24,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   apiEndpoint,
   treasuryAddress,
   facilitatorUrl,
-  theme = "solana",
+  theme = "solana-light",
   showPaymentDetails = true,
   onDisconnect,
   classNames,
@@ -90,19 +90,21 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   // Theme-based styling configuration
   const getThemeConfig = () => {
     switch (theme) {
-      case "classic":
+      case "solana-dark":
         return {
-          container:
-            "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
-          card: "bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl",
-          icon: "bg-gradient-to-r from-blue-600 to-purple-600",
-          title:
-            "bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent",
-          button:
-            "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white",
+          container: "",
+          card: "!bg-[#171719] border-0 text-white rounded-xl",
+          icon: "bg-slate-600",
+          title: "",
+          button: "bg-solana-gradient hover:opacity-90 text-white rounded-full",
           paymentDetails:
-            "bg-gradient-to-r from-slate-50 to-slate-100 border-slate-200 rounded-lg",
-          notice: "bg-amber-50 border-amber-200 text-amber-800 rounded-lg",
+            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
+          walletSection:
+            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
+          notice: "bg-amber-900/50 border-amber-700 text-white rounded-lg",
+          securityMessage: "text-slate-400",
+          helperText: "text-white",
+          helperLink: undefined,
         };
       case "seeker":
         return {
@@ -131,17 +133,21 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           notice:
             "bg-yellow-900/50 border-yellow-400/30 text-yellow-300 rounded-lg",
         };
-      case "solana":
+      case "solana-light":
         return {
           container:
-            "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
-          card: "bg-white/95 backdrop-blur-sm border-solana-primary/20 rounded-xl",
-          icon: "bg-solana-gradient",
-          title: "bg-solana-gradient bg-clip-text text-transparent",
-          button: "bg-solana-gradient hover:opacity-90 text-white rounded-full",
-          paymentDetails:
-            "bg-gradient-to-r from-slate-50 to-slate-100 border-slate-200 rounded-lg",
-          notice: "bg-amber-50 border-amber-200 text-amber-800 rounded-lg",
+            "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
+          card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
+          icon: "bg-gradient-to-r from-blue-600 to-purple-600",
+          title: "text-slate-900",
+          button:
+            "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full",
+          paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
+          notice: "text-slate-600",
+          walletSection: "bg-slate-50 border border-slate-200 rounded-xl",
+          securityMessage: "text-slate-600",
+          helperText: "text-slate-600",
+          helperLink: "text-purple-600 underline",
         };
       case "dark":
         return {
@@ -157,6 +163,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           notice: "bg-amber-900/50 border-amber-700 text-white rounded-lg",
           securityMessage: "text-slate-400",
           helperText: "text-white",
+          helperLink: undefined,
         };
       case "light":
         return {
@@ -207,299 +214,348 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           : customStyles?.container
       }
     >
-      <Card
+      <div
         className={cn(
-          "w-full max-w-lg shadow-2xl border-0",
-          themeConfig.card,
-          classNames?.card
+          "w-full max-w-lg",
+          theme === "solana-dark" && "p-[2px] bg-solana-gradient rounded-xl"
         )}
-        style={customStyles?.card}
       >
-        <CardHeader className="pb-6">
-          {/* Header with icon, title, and subtitle in top left */}
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-auto h-auto rounded-full p-[2px] flex items-center justify-center overflow-hidden">
-              <div className="w-full h-full rounded-full flex items-center justify-center">
-                <img
-                  src="/src/components/ui/SolanaLogo.svg"
-                  alt="Solana"
-                  className="w-12 h-auto"
-                />
+        <Card
+          className={cn(
+            "w-full shadow-2xl border-0",
+            themeConfig.card,
+            classNames?.card
+          )}
+          style={customStyles?.card}
+        >
+          <CardHeader className="pb-6">
+            {/* Header with icon, title, and subtitle in top left */}
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-auto h-auto rounded-full p-[2px] flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full rounded-full flex items-center justify-center">
+                  <img
+                    src="/src/components/ui/SolanaLogo.svg"
+                    alt="Solana"
+                    className="w-12 h-auto"
+                  />
+                </div>
+              </div>
+              <div>
+                <CardTitle
+                  className={cn(
+                    "text-l fw-bold pb-1",
+                    themeConfig.title,
+                    classNames?.text
+                  )}
+                  style={customStyles?.text}
+                >
+                  Premium Content XYZ
+                </CardTitle>
+                <CardDescription
+                  className={cn(
+                    "text-sm font-light",
+                    theme === "terminal" ? "text-green-300" : "text-[#71717A]"
+                  )}
+                >
+                  content.xyz
+                </CardDescription>
               </div>
             </div>
-            <div>
-              <CardTitle
+
+            {/* Underline */}
+            <div
+              className={cn(
+                "border-b mb-6",
+                theme === "dark" || theme === "solana-dark"
+                  ? "border-slate-600"
+                  : "border-slate-200"
+              )}
+            ></div>
+
+            <div className="text-center">
+              <h2
                 className={cn(
-                  "text-l fw-bold pb-1",
-                  themeConfig.title,
-                  classNames?.text
+                  "text-2xl font-normal mb-2",
+                  theme === "dark" || theme === "solana-dark"
+                    ? "text-white"
+                    : "text-slate-900"
                 )}
-                style={customStyles?.text}
               >
-                Premium Content XYZ
-              </CardTitle>
-              <CardDescription
+                Payment Required
+              </h2>
+              <p
                 className={cn(
                   "text-sm font-light",
-                  theme === "terminal" ? "text-green-300" : "text-[#71717A]"
+                  theme === "dark" || theme === "solana-dark"
+                    ? "text-white"
+                    : "text-slate-600"
                 )}
               >
-                content.xyz
-              </CardDescription>
+                Access to protected content on base-sepolia. To access this
+                content, please pay $0.01 Base Sepolia USDC
+              </p>
             </div>
-          </div>
+          </CardHeader>
 
-          {/* Underline */}
-          <div
-            className={cn(
-              "border-b mb-6",
-              theme === "dark" ? "border-slate-600" : "border-slate-200"
-            )}
-          ></div>
-
-          <div className="text-center">
-            <h2
+          <CardContent className="space-y-6">
+            {/* Wallet Info */}
+            <WalletSection
+              wallet={wallet}
+              onDisconnect={onDisconnect}
+              theme={theme}
               className={cn(
-                "text-2xl font-normal mb-2",
-                theme === "dark" ? "text-white" : "text-slate-900"
+                "mb-4",
+                (theme === "dark" || theme === "solana-dark") &&
+                  "bg-[#0000001F] border-slate-600 text-white"
               )}
-            >
-              Payment Required
-            </h2>
-            <p
-              className={cn(
-                "text-sm font-light",
-                theme === "dark" ? "text-white" : "text-slate-600"
-              )}
-            >
-              Access to protected content on base-sepolia. To access this
-              content, please pay $0.01 Base Sepolia USDC
-            </p>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-6">
-          {/* Wallet Info */}
-          <WalletSection
-            wallet={wallet}
-            onDisconnect={onDisconnect}
-            className={cn(
-              "mb-4",
-              theme === "dark" && "bg-[#0000001F] border-slate-600 text-white"
-            )}
-            style={
-              theme === "dark"
-                ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                : undefined
-            }
-          />
-
-          {/* Payment Details */}
-          {showPaymentDetails && (
-            <div
-              className={cn("p-6", themeConfig.paymentDetails)}
               style={
-                theme === "dark"
+                theme === "dark" || theme === "solana-dark"
                   ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
                   : undefined
               }
-            >
-              {/* Amount Section - Top Row */}
-              <div className="flex items-center justify-between mb-4">
-                <span
-                  className={cn(
-                    "text-sm",
-                    theme === "dark" ? "text-white" : "text-black"
-                  )}
-                >
-                  Amount
-                </span>
-                <div className="text-xl font-bold text-[#21ECAB]">$0.01</div>
-              </div>
+            />
 
-              {/* Separator Line */}
+            {/* Payment Details */}
+            {showPaymentDetails && (
               <div
-                className={cn(
-                  "border-t mb-4",
-                  theme === "dark" ? "border-slate-600" : "border-slate-200"
-                )}
-              ></div>
+                className={cn("p-6", themeConfig.paymentDetails)}
+                style={
+                  theme === "dark" || theme === "solana-dark"
+                    ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
+                    : undefined
+                }
+              >
+                {/* Amount Section - Top Row */}
+                <div className="flex items-center justify-between mb-4">
+                  <span
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" || theme === "solana-dark"
+                        ? "text-white"
+                        : "text-black"
+                    )}
+                  >
+                    Amount
+                  </span>
+                  <div
+                    className={cn(
+                      "text-xl font-bold",
+                      theme === "light" || theme === "solana-light"
+                        ? "text-purple-600"
+                        : "text-[#21ECAB]"
+                    )}
+                  >
+                    $0.01
+                  </div>
+                </div>
 
-              {/* Other Details */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-black"
-                    )}
-                  >
-                    Wallet
-                  </span>
-                  <div
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-slate-900"
-                    )}
-                  >
-                    0x288D...2bD1
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-black"
-                    )}
-                  >
-                    Available Balance
-                  </span>
-                  <div
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-slate-900"
-                    )}
-                  >
-                    $5.210
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-black"
-                    )}
-                  >
-                    Currency
-                  </span>
-                  <div
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-slate-900"
-                    )}
-                  >
-                    USDC
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" ? "text-white" : "text-black"
-                    )}
-                  >
-                    Network
-                  </span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                {/* Separator Line */}
+                <div
+                  className={cn(
+                    "border-t mb-4",
+                    theme === "dark" || theme === "solana-dark"
+                      ? "border-slate-600"
+                      : "border-slate-200"
+                  )}
+                ></div>
+
+                {/* Other Details */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
                     <span
                       className={cn(
                         "text-sm",
-                        theme === "dark" ? "text-white" : "text-slate-900"
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-black"
                       )}
                     >
-                      Solana
+                      Wallet
                     </span>
+                    <div
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}
+                    >
+                      0x288D...2bD1
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-black"
+                      )}
+                    >
+                      Available Balance
+                    </span>
+                    <div
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}
+                    >
+                      $5.210
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-black"
+                      )}
+                    >
+                      Currency
+                    </span>
+                    <div
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}
+                    >
+                      USDC
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-black"
+                      )}
+                    >
+                      Network
+                    </span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-slate-900"
+                        )}
+                      >
+                        Solana
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* Payment Status */}
-          {status !== "idle" && (
-            <PaymentStatus
-              status={status}
-              message={error?.message}
-              className={classNames?.status}
-              style={customStyles?.status}
-            />
-          )}
-
-          {/* Security Message */}
-          <div className="flex items-center justify-center space-x-2">
-            <svg
-              className="w-4 h-4 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-            >
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-              <path
-                d="M9 12l2 2 4-4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className={cn("text-sm", themeConfig.securityMessage)}>
-              Secure payment powered by Solana
-            </span>
-          </div>
-
-          {/* Payment Button */}
-          <PaymentButton
-            amount={amount}
-            description={description}
-            onClick={handlePayment}
-            loading={isLoading}
-            disabled={isLoading}
-            className={cn(
-              "w-full h-12",
-              theme === "dark"
-                ? "bg-[#FFFFFF1F] rounded-full"
-                : themeConfig.button,
-              classNames?.button
             )}
-            style={
-              theme === "dark"
-                ? {
-                    backgroundColor: "#FFFFFF1F",
-                    boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
-                    ...customStyles?.button,
-                  }
-                : customStyles?.button
-            }
-          />
 
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-sm text-red-800 text-center">
-                <span className="font-semibold">Payment Error:</span>{" "}
-                {error.message}
+            {/* Payment Status */}
+            {status !== "idle" && (
+              <PaymentStatus
+                status={status}
+                message={error?.message}
+                className={classNames?.status}
+                style={customStyles?.status}
+              />
+            )}
+
+            {/* Security Message */}
+            <div className="flex items-center justify-center space-x-2">
+              <svg
+                className="w-4 h-4 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+              >
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+                <path
+                  d="M9 12l2 2 4-4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className={cn("text-sm", themeConfig.securityMessage)}>
+                Secure payment powered by Solana
+              </span>
+            </div>
+
+            {/* Payment Button */}
+            <PaymentButton
+              amount={amount}
+              description={description}
+              onClick={handlePayment}
+              loading={isLoading}
+              disabled={isLoading}
+              className={cn(
+                "w-full h-12",
+                theme === "dark" || theme === "solana-dark"
+                  ? theme === "dark"
+                    ? "bg-[#FFFFFF1F] rounded-full"
+                    : "bg-solana-gradient rounded-full"
+                  : themeConfig.button,
+                classNames?.button
+              )}
+              style={
+                theme === "dark"
+                  ? {
+                      backgroundColor: "#FFFFFF1F",
+                      boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
+                      ...customStyles?.button,
+                    }
+                  : customStyles?.button
+              }
+            />
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-sm text-red-800 text-center">
+                  <span className="font-semibold">Payment Error:</span>{" "}
+                  {error.message}
+                </p>
+              </div>
+            )}
+
+            {/* Helper Text */}
+            <div className="text-center">
+              <p className={cn("text-sm", themeConfig.helperText)}>
+                Don't have USDC?{" "}
+                <a
+                  href="#"
+                  className={cn(
+                    "font-medium text-[#4ADE80]",
+                    themeConfig.helperLink
+                  )}
+                >
+                  Get it here
+                  <svg
+                    className={cn(
+                      "inline w-3 h-3 ml-1",
+                      theme === "light" ? "text-purple-600" : "text-[#4ADE80]"
+                    )}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
               </p>
             </div>
-          )}
-
-          {/* Helper Text */}
-          <div className="text-center">
-            <p className={cn("text-sm", themeConfig.helperText)}>
-              Don't have USDC?{" "}
-              <a
-                href="#"
-                className={cn(
-                  "font-medium text-[#4ADE80]",
-                  themeConfig.helperLink
-                )}
-              >
-                Get it here
-                <svg
-                  className="inline w-3 h-3 ml-1 text-[#4ADE80]"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </a>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

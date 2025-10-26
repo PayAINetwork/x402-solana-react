@@ -27,17 +27,17 @@ import {
 // Import wallet adapter styles
 import "@solana/wallet-adapter-react-ui/styles.css";
 type Theme =
-  | "solana"
+  | "solana-light"
+  | "solana-dark"
   | "dark"
   | "light"
-  | "classic"
   | "seeker"
   | "terminal"
   | "custom";
 
 function DemoContent() {
   const { publicKey, signTransaction, disconnect } = useWallet();
-  const [currentTheme, setCurrentTheme] = useState<Theme>("solana");
+  const [currentTheme, setCurrentTheme] = useState<Theme>("solana-light");
 
   const walletAdapter = useMemo(() => {
     if (!publicKey || !signTransaction) return null;
@@ -107,10 +107,10 @@ function DemoContent() {
           <div className="grid grid-cols-2 gap-2">
             {(
               [
-                "solana",
+                "solana-light",
+                "solana-dark",
                 "dark",
                 "light",
-                "classic",
                 "seeker",
                 "terminal",
                 "custom",

@@ -94,6 +94,7 @@ export interface WalletSectionProps {
   network?: SolanaNetwork;
   showBalance?: boolean;
   onDisconnect?: () => void;
+  theme?: ThemePreset;
   className?: string;
   style?: React.CSSProperties;
 }

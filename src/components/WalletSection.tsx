@@ -10,6 +10,7 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
   network,
   showBalance = true,
   onDisconnect,
+  theme,
   className,
   style,
 }) => {
@@ -51,17 +52,36 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
               </span>
             </div>
             <div>
-              <div className="text-xs font-medium text-[#FFFFFF66] drop-shadow-sm shadow-sm">
+              <div
+                className={cn(
+                  "text-xs font-medium drop-shadow-sm shadow-sm",
+                  theme === "light" || theme === "solana-light"
+                    ? "text-[#71717A]"
+                    : "text-[#FFFFFF66]"
+                )}
+              >
                 Connected Wallet
               </div>
-              <div className="text-sm text-white font-mono">
+              <div
+                className={cn(
+                  "text-sm font-mono",
+                  theme === "light" || theme === "solana-light"
+                    ? "text-black"
+                    : "text-white"
+                )}
+              >
                 {formatAddress(walletAddress)}
               </div>
             </div>
           </div>
           <button
             onClick={onDisconnect}
-            className="text-[#FFFFFF66] text-sm font-medium hover:opacity-80 transition-colors"
+            className={cn(
+              "text-sm font-medium transition-colors",
+              theme === "light" || theme === "solana-light"
+                ? "text-red-500 hover:text-red-700"
+                : "text-[#FFFFFF66] hover:opacity-80"
+            )}
           >
             Disconnect
           </button>
