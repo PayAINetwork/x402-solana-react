@@ -125,7 +125,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           icon: "bg-green-400 text-black",
           title: "text-green-400 font-mono",
           button:
-            "bg-green-400 text-black hover:bg-green-300 font-mono rounded-lg",
+            "bg-green-400 text-black hover:bg-green-300 font-mono rounded-full",
           paymentDetails:
             "bg-gray-900/50 border-green-400/20 text-green-300 rounded-lg",
           notice:
@@ -138,7 +138,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           card: "bg-white/95 backdrop-blur-sm border-solana-primary/20 rounded-xl",
           icon: "bg-solana-gradient",
           title: "bg-solana-gradient bg-clip-text text-transparent",
-          button: "bg-solana-gradient hover:opacity-90 text-white rounded-lg",
+          button: "bg-solana-gradient hover:opacity-90 text-white rounded-full",
           paymentDetails:
             "bg-gradient-to-r from-slate-50 to-slate-100 border-slate-200 rounded-lg",
           notice: "bg-amber-50 border-amber-200 text-amber-800 rounded-lg",
@@ -149,7 +149,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           card: "!bg-[#171719] border-slate-700 text-white rounded-xl",
           icon: "bg-slate-600",
           title: "",
-          button: "bg-slate-600 hover:bg-slate-700 rounded-lg",
+          button: "bg-slate-600 hover:bg-slate-700 rounded-full",
           paymentDetails:
             "bg-[#0000001F] border-slate-600 text-white rounded-lg",
           walletSection:
@@ -165,7 +165,8 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
           icon: "bg-gradient-to-r from-blue-600 to-purple-600",
           title: "text-slate-900",
-          button: "bg-black hover:bg-gray-800 text-white font-light rounded-xl",
+          button:
+            "bg-black hover:bg-gray-800 text-white font-light rounded-full",
           paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
           notice: "text-slate-600",
           walletSection: "bg-slate-50 border border-slate-200 rounded-xl",
@@ -180,7 +181,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           card: "bg-white/95 backdrop-blur-sm rounded-xl",
           icon: "bg-slate-600",
           title: "text-slate-900",
-          button: "bg-slate-600 hover:bg-slate-700 text-white rounded-lg",
+          button: "bg-slate-600 hover:bg-slate-700 text-white rounded-full",
           paymentDetails: "bg-slate-50 border-slate-200 rounded-lg",
           notice: "bg-amber-50 border-amber-200 text-amber-800 rounded-lg",
         };
@@ -444,8 +445,10 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             loading={isLoading}
             disabled={isLoading}
             className={cn(
-              "w-full h-12 rounded-full",
-              theme === "dark" ? "bg-[#FFFFFF1F]" : themeConfig.button,
+              "w-full h-12",
+              theme === "dark"
+                ? "bg-[#FFFFFF1F] rounded-full"
+                : themeConfig.button,
               classNames?.button
             )}
             style={
