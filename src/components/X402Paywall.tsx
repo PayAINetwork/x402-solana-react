@@ -145,15 +145,18 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
         };
       case "dark":
         return {
-          container:
-            "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
-          card: "bg-slate-800/95 backdrop-blur-sm border-slate-700 text-white rounded-xl",
+          container: "",
+          card: "!bg-[#171719] border-slate-700 text-white rounded-xl",
           icon: "bg-slate-600",
-          title: "text-white",
-          button: "bg-slate-600 hover:bg-slate-700 text-white rounded-lg",
+          title: "",
+          button: "bg-slate-600 hover:bg-slate-700 rounded-lg",
           paymentDetails:
-            "bg-slate-700/50 border-slate-600 text-slate-200 rounded-lg",
-          notice: "bg-amber-900/50 border-amber-700 text-amber-200 rounded-lg",
+            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
+          walletSection:
+            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
+          notice: "bg-amber-900/50 border-amber-700 text-white rounded-lg",
+          securityMessage: "text-slate-400",
+          helperText: "text-white",
         };
       case "light":
         return {
@@ -162,7 +165,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
           icon: "bg-gradient-to-r from-blue-600 to-purple-600",
           title: "text-slate-900",
-          button: "bg-black hover:bg-gray-800 text-white font-bold rounded-xl",
+          button: "bg-black hover:bg-gray-800 text-white font-light rounded-xl",
           paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
           notice: "text-slate-600",
           walletSection: "bg-slate-50 border border-slate-200 rounded-xl",
@@ -193,7 +196,15 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
         themeConfig.container,
         classNames?.container
       )}
-      style={customStyles?.container}
+      style={
+        theme === "dark"
+          ? {
+              background:
+                "radial-gradient(circle at center, #ec4899 0%, #3b82f6 50%, #9333ea 100%)",
+              ...customStyles?.container,
+            }
+          : customStyles?.container
+      }
     >
       <Card
         className={cn(
@@ -206,51 +217,13 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
         <CardHeader className="pb-6">
           {/* Header with icon, title, and subtitle in top left */}
           <div className="flex items-center space-x-4 mb-6">
-            <div className="w-16 h-16 rounded-full p-[2px] bg-gradient-to-r from-[#00D4AA] to-[#9945FF] flex items-center justify-center">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-                  {/* Top bar - teal to bright green gradient */}
-                  <path d="M6.5 5h10l-1.5 2H5L6.5 5z" fill="url(#solana-top)" />
-                  {/* Middle bar - blue gradient */}
-                  <path d="M5 9h10l1.5 2H6.5L5 9z" fill="url(#solana-middle)" />
-                  {/* Bottom bar - purple gradient */}
-                  <path
-                    d="M6.5 13h10l-1.5 2H5L6.5 13z"
-                    fill="url(#solana-bottom)"
-                  />
-                  <defs>
-                    <linearGradient
-                      id="solana-top"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#00D4AA" />
-                      <stop offset="100%" stopColor="#00FFA3" />
-                    </linearGradient>
-                    <linearGradient
-                      id="solana-middle"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#4F46E5" />
-                      <stop offset="100%" stopColor="#06B6D4" />
-                    </linearGradient>
-                    <linearGradient
-                      id="solana-bottom"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#7C3AED" />
-                      <stop offset="100%" stopColor="#A855F7" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+            <div className="w-auto h-auto rounded-full p-[2px] flex items-center justify-center overflow-hidden">
+              <div className="w-full h-full rounded-full flex items-center justify-center">
+                <img
+                  src="/src/components/ui/SolanaLogo.svg"
+                  alt="Solana"
+                  className="w-12 h-auto"
+                />
               </div>
             </div>
             <div>
@@ -267,7 +240,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
               <CardDescription
                 className={cn(
                   "text-sm font-light",
-                  theme === "terminal" ? "text-green-300" : "text-slate-600"
+                  theme === "terminal" ? "text-green-300" : "text-[#71717A]"
                 )}
               >
                 content.xyz
@@ -276,13 +249,28 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           </div>
 
           {/* Underline */}
-          <div className="border-b border-slate-200 mb-6"></div>
+          <div
+            className={cn(
+              "border-b mb-6",
+              theme === "dark" ? "border-slate-600" : "border-slate-200"
+            )}
+          ></div>
 
           <div className="text-center">
-            <h2 className="text-2xl font-normal text-slate-900 mb-2">
+            <h2
+              className={cn(
+                "text-2xl font-normal mb-2",
+                theme === "dark" ? "text-white" : "text-slate-900"
+              )}
+            >
               Payment Required
             </h2>
-            <p className="text-slate-600 text-sm font-light">
+            <p
+              className={cn(
+                "text-sm font-light",
+                theme === "dark" ? "text-white" : "text-slate-600"
+              )}
+            >
               Access to protected content on base-sepolia. To access this
               content, please pay $0.01 Base Sepolia USDC
             </p>
@@ -291,39 +279,126 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
 
         <CardContent className="space-y-6">
           {/* Wallet Info */}
-          <WalletSection wallet={wallet} onDisconnect={onDisconnect} />
+          <WalletSection
+            wallet={wallet}
+            onDisconnect={onDisconnect}
+            className={cn(
+              "mb-4",
+              theme === "dark" && "bg-[#0000001F] border-slate-600 text-white"
+            )}
+            style={
+              theme === "dark"
+                ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
+                : undefined
+            }
+          />
 
           {/* Payment Details */}
           {showPaymentDetails && (
-            <div className={cn("p-6", themeConfig.paymentDetails)}>
+            <div
+              className={cn("p-6", themeConfig.paymentDetails)}
+              style={
+                theme === "dark"
+                  ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
+                  : undefined
+              }
+            >
               {/* Amount Section - Top Row */}
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-black">Amount</span>
-                <div className="text-xl font-bold text-purple-600">$0.01</div>
+                <span
+                  className={cn(
+                    "text-sm",
+                    theme === "dark" ? "text-white" : "text-black"
+                  )}
+                >
+                  Amount
+                </span>
+                <div className="text-xl font-bold text-[#21ECAB]">$0.01</div>
               </div>
 
               {/* Separator Line */}
-              <div className="border-t border-slate-200 mb-4"></div>
+              <div
+                className={cn(
+                  "border-t mb-4",
+                  theme === "dark" ? "border-slate-600" : "border-slate-200"
+                )}
+              ></div>
 
               {/* Other Details */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-black">Wallet</span>
-                  <div className="text-sm text-slate-900">0x288D...2bD1</div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-black"
+                    )}
+                  >
+                    Wallet
+                  </span>
+                  <div
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-slate-900"
+                    )}
+                  >
+                    0x288D...2bD1
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-black">Available Balance</span>
-                  <div className="text-sm text-slate-900">$5.210</div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-black"
+                    )}
+                  >
+                    Available Balance
+                  </span>
+                  <div
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-slate-900"
+                    )}
+                  >
+                    $5.210
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-black">Currency</span>
-                  <div className="text-sm text-slate-900">USDC</div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-black"
+                    )}
+                  >
+                    Currency
+                  </span>
+                  <div
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-slate-900"
+                    )}
+                  >
+                    USDC
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-black">Network</span>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      theme === "dark" ? "text-white" : "text-black"
+                    )}
+                  >
+                    Network
+                  </span>
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-slate-900">Solana</span>
+                    <span
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" ? "text-white" : "text-slate-900"
+                      )}
+                    >
+                      Solana
+                    </span>
                   </div>
                 </div>
               </div>
@@ -369,11 +444,19 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             loading={isLoading}
             disabled={isLoading}
             className={cn(
-              "w-full h-12",
-              themeConfig.button,
+              "w-full h-12 rounded-full",
+              theme === "dark" ? "bg-[#FFFFFF1F]" : themeConfig.button,
               classNames?.button
             )}
-            style={customStyles?.button}
+            style={
+              theme === "dark"
+                ? {
+                    backgroundColor: "#FFFFFF1F",
+                    boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
+                    ...customStyles?.button,
+                  }
+                : customStyles?.button
+            }
           />
 
           {/* Error Message */}
@@ -390,10 +473,16 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
           <div className="text-center">
             <p className={cn("text-sm", themeConfig.helperText)}>
               Don't have USDC?{" "}
-              <a href="#" className={cn("font-medium", themeConfig.helperLink)}>
+              <a
+                href="#"
+                className={cn(
+                  "font-medium text-[#4ADE80]",
+                  themeConfig.helperLink
+                )}
+              >
                 Get it here
                 <svg
-                  className="inline w-3 h-3 ml-1"
+                  className="inline w-3 h-3 ml-1 text-[#4ADE80]"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >

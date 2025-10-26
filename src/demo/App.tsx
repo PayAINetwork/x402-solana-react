@@ -135,7 +135,7 @@ function DemoContent() {
       </div>
 
       <X402Paywall
-        amount={1}
+        amount={0.01}
         description="Premium Demo Content Access"
         wallet={walletAdapter}
         network="solana"

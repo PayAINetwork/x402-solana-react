@@ -51,17 +51,17 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
               </span>
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-600 drop-shadow-sm">
+              <div className="text-xs font-medium text-[#FFFFFF66] drop-shadow-sm shadow-sm">
                 Connected Wallet
               </div>
-              <div className="text-xs text-slate-500 font-mono">
+              <div className="text-sm text-white font-mono">
                 {formatAddress(walletAddress)}
               </div>
             </div>
           </div>
           <button
             onClick={onDisconnect}
-            className="text-red-500 text-sm font-medium hover:text-red-700 transition-colors"
+            className="text-[#FFFFFF66] text-sm font-medium hover:opacity-80 transition-colors"
           >
             Disconnect
           </button>
