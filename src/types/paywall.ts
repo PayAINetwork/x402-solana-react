@@ -72,6 +72,7 @@ export interface PaymentButtonProps {
   loading?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  customText?: string;
 }
 
 /**

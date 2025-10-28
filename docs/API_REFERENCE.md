@@ -14,7 +14,7 @@ The main paywall component that wraps protected content.
   network?={'solana' | 'solana-devnet'}
   treasuryAddress?={string}
   facilitatorUrl?={string}
-  theme?={'solana' | 'dark' | 'light' | 'custom'}
+  theme?={'solana' | 'dark' | 'light' | 'seeker-2'}
   showBalance?={boolean}
   showNetworkInfo?={boolean}
   showPaymentDetails?={boolean}
@@ -40,7 +40,7 @@ The main paywall component that wraps protected content.
 | `network` | `'solana' \| 'solana-devnet'` | `'solana-devnet'` | Solana network to use |
 | `treasuryAddress` | `string` | `undefined` | Treasury wallet address for payments |
 | `facilitatorUrl` | `string` | `undefined` | x402 facilitator service URL |
-| `theme` | `'solana' \| 'dark' \| 'light' \| 'custom'` | `'solana'` | Visual theme preset |
+| `theme` | `'solana' \| 'dark' \| 'light' \| 'seeker-2'` | `'solana'` | Visual theme preset |
 | `showBalance` | `boolean` | `true` | Show wallet balance |
 | `showNetworkInfo` | `boolean` | `true` | Show network information |
 | `showPaymentDetails` | `boolean` | `true` | Show payment amount details |
@@ -200,7 +200,7 @@ type SolanaNetwork = 'solana' | 'solana-devnet';
 - **solana**: Purple/green gradient with Solana branding (default)
 - **dark**: Dark theme with Solana accents
 - **light**: Light theme with subtle Solana colors
-- **custom**: Fully customizable via `classNames` and `customStyles`
+- **seeker-2**: Fully customizable via `classNames` and `customStyles`
 
 ### Custom Styling
 
@@ -222,7 +222,7 @@ Example:
     container: { minHeight: '100vh' },
     button: { boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)' }
   }}
-  theme="custom"
+  theme="seeker-2"
   {...otherProps}
 />
 ```

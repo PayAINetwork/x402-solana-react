@@ -17,6 +17,7 @@ export const PaymentButton = React.forwardRef<
       loading = false,
       className,
       style,
+      customText,
       ...props
     },
     ref
@@ -35,7 +36,9 @@ export const PaymentButton = React.forwardRef<
         onClick={onClick}
         disabled={disabled || loading}
         className={cn(
-          "w-full bg-solana-gradient hover:opacity-90 text-white font-normal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] rounded-xl",
+          "w-full hover:opacity-90 text-white font-normal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] rounded-xl",
+          // Only apply bg-solana-gradient if no custom style is provided
+          !style && "bg-solana-gradient",
           disabled || loading ? "opacity-50 cursor-not-allowed" : "",
           className
         )}
@@ -52,7 +55,7 @@ export const PaymentButton = React.forwardRef<
             <span>Processing Payment...</span>
           </div>
         ) : (
-          <span>Pay {formatAmount(amount)} USDC</span>
+          <span>{customText || `Pay ${formatAmount(amount)} USDC`}</span>
         )}
       </Button>
     );

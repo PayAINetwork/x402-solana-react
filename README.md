@@ -111,7 +111,7 @@ The component comes with built-in Solana-themed styles. You can customize using 
   amount={5.00}
   description="Premium Features"
   wallet={wallet}
-  theme="custom"
+  theme="seeker-2"
   classNames={{
     container: "bg-gradient-to-r from-purple-600 to-blue-600",
     button: "bg-white text-purple-600 hover:bg-gray-50 font-bold"
@@ -137,7 +137,7 @@ The component comes with built-in Solana-themed styles. You can customize using 
 | `rpcUrl` | `string` | ❌ | - | Custom RPC URL |
 | `treasuryAddress` | `string` | ❌ | - | Custom treasury address |
 | `facilitatorUrl` | `string` | ❌ | - | Custom facilitator URL |
-| `theme` | `'solana' \| 'dark' \| 'light' \| 'custom'` | ❌ | `'solana'` | Visual theme |
+| `theme` | `'solana' \| 'dark' \| 'light' \| 'seeker-2'` | ❌ | `'solana'` | Visual theme |
 | `showBalance` | `boolean` | ❌ | `true` | Show wallet balance |
 | `showNetworkInfo` | `boolean` | ❌ | `true` | Show network info |
 | `maxPaymentAmount` | `number` | ❌ | - | Maximum payment amount |

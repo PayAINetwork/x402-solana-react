@@ -108,17 +108,30 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
         };
       case "seeker":
         return {
-          container:
-            "bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900",
-          card: "bg-white/95 backdrop-blur-sm border-emerald-200 rounded-xl",
+          container: "",
+          card: "backdrop-blur-sm border-emerald-200 rounded-xl",
           icon: "bg-gradient-to-r from-emerald-500 to-teal-500",
-          title:
-            "bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent",
+          title: "text-white",
           button:
-            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white",
-          paymentDetails:
-            "bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200 rounded-lg",
+            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
+          paymentDetails: "rounded-lg",
           notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
+          securityMessage: "text-white",
+          helperText: "text-white",
+          stringName: `meow ${amount} bla bla`
+        };
+      case "seeker-2":
+        return {
+          container: "",
+          card: "backdrop-blur-sm border-emerald-200 rounded-xl",
+          icon: "bg-gradient-to-r from-emerald-500 to-teal-500",
+          title: "text-white",
+          button:
+            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
+          paymentDetails: "rounded-lg",
+          notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
+          securityMessage: "text-white",
+          helperText: "text-white",
         };
       case "terminal":
         return {
@@ -211,22 +224,39 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
                 "radial-gradient(circle at center, #ec4899 0%, #3b82f6 50%, #9333ea 100%)",
               ...customStyles?.container,
             }
+        : theme === "seeker"
+          ? {
+              background: "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
+              ...customStyles?.container,
+            }
+        : theme === "seeker-2"
+          ? {
+              background: "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
+              ...customStyles?.container,
+            }
           : customStyles?.container
       }
     >
-      <div
-        className={cn(
-          "w-full max-w-lg",
-          theme === "solana-dark" && "p-[2px] bg-solana-gradient rounded-xl"
-        )}
-      >
         <Card
           className={cn(
-            "w-full shadow-2xl border-0",
+            "w-full max-w-lg shadow-2xl border-0",
             themeConfig.card,
             classNames?.card
           )}
-          style={customStyles?.card}
+          style={
+            theme === "seeker"
+              ? { 
+                  backgroundColor: "#171719",
+                  ...customStyles?.card 
+                }
+              : theme === "seeker-2"
+              ? {
+                  backgroundColor: "rgba(29, 35, 35, 1)",
+                  backdropFilter: "blur(12px)",
+                  ...customStyles?.card
+                }
+              : customStyles?.card
+          }
         >
           <CardHeader className="pb-6">
             {/* Header with icon, title, and subtitle in top left */}
@@ -253,9 +283,13 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
                 </CardTitle>
                 <CardDescription
                   className={cn(
-                    "text-sm font-light",
-                    theme === "terminal" ? "text-green-300" : "text-[#71717A]"
-                  )}
+                  "text-sm font-light",
+                  theme === "terminal" 
+                    ? "text-green-300" 
+                    : theme === "seeker" || theme === "seeker-2"
+                    ? "text-white"
+                    : "text-[#71717A]"
+                )}
                 >
                   content.xyz
                 </CardDescription>
@@ -268,15 +302,28 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
                 "border-b mb-6",
                 theme === "dark" || theme === "solana-dark"
                   ? "border-slate-600"
+                  : theme === "seeker"
+                  ? ""
+                  : theme === "seeker-2"
+                  ? ""
                   : "border-slate-200"
               )}
+              style={
+                theme === "seeker"
+                  ? { borderBottom: "1px solid #FFFFFF1F" }
+                  : theme === "seeker-2"
+                  ? { borderBottom: "1px solid #FFFFFF1F" }
+                  : undefined
+              }
             ></div>
 
             <div className="text-center">
               <h2
                 className={cn(
                   "text-2xl font-normal mb-2",
-                  theme === "dark" || theme === "solana-dark"
+                  theme === "dark" || theme === "solana-dark" || theme === "seeker"
+                    ? "text-white"
+                    : theme === "seeker-2"
                     ? "text-white"
                     : "text-slate-900"
                 )}
@@ -286,7 +333,9 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
               <p
                 className={cn(
                   "text-sm font-light",
-                  theme === "dark" || theme === "solana-dark"
+                  theme === "dark" || theme === "solana-dark" || theme === "seeker"
+                    ? "text-white"
+                    : theme === "seeker-2"
                     ? "text-white"
                     : "text-slate-600"
                 )}
@@ -317,130 +366,131 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
 
             {/* Payment Details */}
             {showPaymentDetails && (
-              <div
-                className={cn("p-6", themeConfig.paymentDetails)}
-                style={
-                  theme === "dark" || theme === "solana-dark"
-                    ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                    : undefined
-                }
-              >
-                {/* Amount Section - Top Row */}
-                <div className="flex items-center justify-between mb-4">
-                  <span
-                    className={cn(
-                      "text-sm",
-                      theme === "dark" || theme === "solana-dark"
-                        ? "text-white"
-                        : "text-black"
-                    )}
-                  >
-                    Amount
-                  </span>
+              theme === "seeker" || theme === "seeker-2" ? (
+                <div
+                  className={cn("p-6", themeConfig.paymentDetails)}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.12)"
+                  }}
+                >
+                  {/* Amount Section - Top Row */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-sm text-white">
+                      Amount
+                    </span>
+                    <div
+                      className="text-xl font-bold"
+                      style={{ color: "#95D2E6" }}
+                    >
+                      $0.01
+                    </div>
+                  </div>
+
+                  {/* Separator Line */}
                   <div
-                    className={cn(
-                      "text-xl font-bold",
-                      theme === "light" || theme === "solana-light"
-                        ? "text-purple-600"
-                        : "text-[#21ECAB]"
-                    )}
-                  >
-                    $0.01
+                    className="border-t mb-4"
+                    style={{ borderTop: "1px solid #FFFFFF1F" }}
+                  ></div>
+
+                  {/* Other Details */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-white">
+                        Wallet
+                      </span>
+                      <div className="text-sm text-white">
+                        0x288D...2bD1
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-white">
+                        Available Balance
+                      </span>
+                      <div className="text-sm text-white">
+                        $5.210
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-white">
+                        Currency
+                      </span>
+                      <div className="text-sm text-white">
+                        USDC
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-white">
+                        Network
+                      </span>
+                      <div className="flex items-center space-x-2">
+                        <div 
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: "#95D2E6" }}
+                        ></div>
+                        <span className="text-sm text-white">
+                          Solana
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Separator Line */}
+              ) : (
                 <div
-                  className={cn(
-                    "border-t mb-4",
+                  className={cn("p-6", themeConfig.paymentDetails)}
+                  style={
                     theme === "dark" || theme === "solana-dark"
-                      ? "border-slate-600"
-                      : "border-slate-200"
-                  )}
-                ></div>
+                      ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
+                      : undefined
+                  }
+                >
+                  {/* Amount Section - Top Row */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span
+                      className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark"
+                          ? "text-white"
+                          : "text-black"
+                      )}
+                    >
+                      Amount
+                    </span>
+                    <div
+                      className={cn(
+                        "text-xl font-bold",
+                        theme === "light" || theme === "solana-light"
+                          ? "text-purple-600"
+                          : "text-[#21ECAB]"
+                      )}
+                    >
+                      $0.01
+                    </div>
+                  </div>
 
-                {/* Other Details */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-black"
-                      )}
-                    >
-                      Wallet
-                    </span>
-                    <div
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-slate-900"
-                      )}
-                    >
-                      0x288D...2bD1
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-black"
-                      )}
-                    >
-                      Available Balance
-                    </span>
-                    <div
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-slate-900"
-                      )}
-                    >
-                      $5.210
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-black"
-                      )}
-                    >
-                      Currency
-                    </span>
-                    <div
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-slate-900"
-                      )}
-                    >
-                      USDC
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={cn(
-                        "text-sm",
-                        theme === "dark" || theme === "solana-dark"
-                          ? "text-white"
-                          : "text-black"
-                      )}
-                    >
-                      Network
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  {/* Separator Line */}
+                  <div
+                    className={cn(
+                      "border-t mb-4",
+                      theme === "dark" || theme === "solana-dark"
+                        ? "border-slate-600"
+                        : "border-slate-200"
+                    )}
+                  ></div>
+
+                  {/* Other Details */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
                       <span
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-black"
+                        )}
+                      >
+                        Wallet
+                      </span>
+                      <div
                         className={cn(
                           "text-sm",
                           theme === "dark" || theme === "solana-dark"
@@ -448,12 +498,83 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
                             : "text-slate-900"
                         )}
                       >
-                        Solana
+                        0x288D...2bD1
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-black"
+                        )}
+                      >
+                        Available Balance
                       </span>
+                      <div
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-slate-900"
+                        )}
+                      >
+                        $5.210
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-black"
+                        )}
+                      >
+                        Currency
+                      </span>
+                      <div
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-slate-900"
+                        )}
+                      >
+                        USDC
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark"
+                            ? "text-white"
+                            : "text-black"
+                        )}
+                      >
+                        Network
+                      </span>
+                      <div className="flex items-center space-x-2">
+                        <div 
+                          className={cn("w-2 h-2 rounded-full", "bg-green-500")}
+                        ></div>
+                        <span
+                          className={cn(
+                            "text-sm",
+                            theme === "dark" || theme === "solana-dark"
+                              ? "text-white"
+                              : "text-slate-900"
+                          )}
+                        >
+                          Solana
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )
             )}
 
             {/* Payment Status */}
@@ -482,7 +603,10 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className={cn("text-sm", themeConfig.securityMessage)}>
+              <span 
+                className={cn("text-sm", themeConfig.securityMessage)}
+                style={theme === "seeker" ? { color: "#FFFFFF66" } : theme === "seeker-2" ? { color: "#FFFFFF66" } : undefined}
+              >
                 Secure payment powered by Solana
               </span>
             </div>
@@ -510,6 +634,18 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
                       boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
                       ...customStyles?.button,
                     }
+                  : theme === "seeker"
+                  ? {
+                      background: "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
+                      backgroundColor: "transparent",
+                      ...customStyles?.button,
+                    }
+                  : theme === "seeker-2"
+                  ? {
+                      background: "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
+                      backgroundColor: "transparent",
+                      ...customStyles?.button,
+                    }
                   : customStyles?.button
               }
             />
@@ -527,19 +663,22 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             {/* Helper Text */}
             <div className="text-center">
               <p className={cn("text-sm", themeConfig.helperText)}>
-                Don't have USDC?{" "}
+                <span style={theme === "seeker" ? { color: "#FFFFFF66" } : theme === "seeker-2" ? { color: "#FFFFFF66" } : undefined}>
+                  Don't have USDC?{" "}
+                </span>
                 <a
                   href="#"
                   className={cn(
-                    "font-medium text-[#4ADE80]",
-                    themeConfig.helperLink
+                    "font-medium",
+                    theme === "seeker" ? "text-[#4ADE80]" : theme === "seeker-2" ? "text-[#4ADE80]" : themeConfig.helperLink || "text-[#4ADE80]"
                   )}
+                  style={theme === "seeker" ? { color: "#4ADE80" } : theme === "seeker-2" ? { color: "#4ADE80" } : undefined}
                 >
                   Get it here
                   <svg
                     className={cn(
                       "inline w-3 h-3 ml-1",
-                      theme === "light" ? "text-purple-600" : "text-[#4ADE80]"
+                      theme === "light" ? "text-purple-600" : theme === "seeker" ? "text-[#4ADE80]" : theme === "seeker-2" ? "text-[#4ADE80]" : "text-[#4ADE80]"
                     )}
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -555,7 +694,6 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             </div>
           </CardContent>
         </Card>
-      </div>
     </div>
   );
 };
