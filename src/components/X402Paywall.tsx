@@ -1,5 +1,17 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { 
+  useWallet,
+  ConnectionProvider,
+  WalletProvider,
+} from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { clusterApiUrl } from "@solana/web3.js";
 import { fetchUSDCBalance } from "@/lib/balance";
 import {
   Card,
@@ -12,13 +24,13 @@ import { PaymentButton } from "./PaymentButton";
 import { PaymentStatus } from "./PaymentStatus";
 import { WalletSection } from "./WalletSection";
 import { useX402Payment } from "@/hooks/useX402Payment";
-import { X402PaywallProps } from "@/types";
+import { X402PaywallProps, WalletAdapter } from "@/types";
 import { cn } from "@/lib/utils";
-
-export const X402Paywall: React.FC<X402PaywallProps> = ({
+// Internal component that actually uses the wallet context
+const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' | 'providerNetwork' | 'providerEndpoint'>> = ({
   amount,
   description,
-  wallet,
+  wallet: walletProp,
   network = "solana-devnet",
   rpcUrl,
   apiEndpoint,
@@ -30,14 +42,19 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   classNames,
   customStyles,
   maxPaymentAmount,
-  // enablePaymentCaching = false, // TODO: Implement in future
-  // autoRetry = false, // TODO: Implement in future
   onPaymentStart,
   onPaymentSuccess,
   onPaymentError,
   onWalletConnect,
   children,
 }) => {
+  // Use provided wallet or get from context
+  const walletContext = useWallet();
+  const wallet: WalletAdapter = walletProp || {
+    publicKey: walletContext.publicKey ? { toString: () => walletContext.publicKey!.toString() } : undefined,
+    signTransaction: walletContext.signTransaction || (async (tx) => tx),
+  };
+
   const [isPaid, setIsPaid] = useState(false);
   const [walletBalance, setWalletBalance] = useState<string>("0.00");
 
@@ -50,6 +67,37 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
     facilitatorUrl,
     maxPaymentAmount,
   });
+
+  // Handle disconnect using context if no custom handler
+  const handleDisconnect = () => {
+    if (onDisconnect) {
+      onDisconnect();
+    } else if (!walletProp && walletContext.disconnect) {
+      walletContext.disconnect();
+    }
+  };
+
+  // Apply theme class to body for wallet modal styling
+  useEffect(() => {
+    // Remove old theme classes
+    document.body.className = document.body.className
+      .replace(/wallet-modal-theme-\w+/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    
+    // Add new theme class
+    if (theme) {
+      document.body.className += ` wallet-modal-theme-${theme}`;
+    }
+
+    // Cleanup: remove theme class when component unmounts
+    return () => {
+      document.body.className = document.body.className
+        .replace(/wallet-modal-theme-\w+/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    };
+  }, [theme]);
 
   // Fetch balance when wallet connects
   useEffect(() => {
@@ -350,7 +398,8 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
             {/* Wallet Info */}
             <WalletSection
               wallet={wallet}
-              onDisconnect={onDisconnect}
+              balance={walletBalance}
+              onDisconnect={handleDisconnect}
               theme={theme}
               className={cn(
                 "mb-4",
@@ -696,6 +745,47 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
         </Card>
     </div>
   );
+};
+
+// Main exported component - automatically sets up providers if needed
+export const X402Paywall: React.FC<X402PaywallProps> = ({
+  autoSetupProviders = true,
+  providerNetwork = WalletAdapterNetwork.Mainnet,
+  providerEndpoint,
+  ...props
+}) => {
+  // Try to detect if providers exist by attempting to use the context
+  // Note: useWallet() will throw if providers don't exist, but we can't catch that in render
+  // So we'll wrap content and let React error boundary handle it, or just always wrap
+  
+  // If auto-setup is enabled, wrap with providers
+  if (autoSetupProviders) {
+    const endpoint = useMemo(
+      () => providerEndpoint || clusterApiUrl(providerNetwork),
+      [providerEndpoint, providerNetwork]
+    );
+
+    const wallets = useMemo(
+      () => [
+        new PhantomWalletAdapter(),
+        new SolflareWalletAdapter(),
+      ],
+      []
+    );
+
+    return (
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect={false}>
+          <WalletModalProvider>
+            <X402PaywallContent {...props} />
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    );
+  }
+
+  // Auto-setup disabled - just render content (assumes providers exist)
+  return <X402PaywallContent {...props} />;
 };
 
 X402Paywall.displayName = "X402Paywall";

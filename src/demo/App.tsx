@@ -25,7 +25,7 @@ import {
   CardTitle,
 } from "../components/ui/card";
 
-// Import wallet adapter styles
+// Import wallet adapter styles (must be BEFORE globals.css for proper override)
 import "@solana/wallet-adapter-react-ui/styles.css";
 type Theme =
   | "solana-light"
@@ -40,6 +40,9 @@ function DemoContent() {
   const { publicKey, signTransaction, disconnect } = useWallet();
   const [currentTheme, setCurrentTheme] = useState<Theme>("solana-light");
   const walletButtonRef = useRef<HTMLDivElement>(null);
+
+  // Theme is now managed entirely within X402Paywall
+  // The currentTheme state is just for the demo UI theme switcher
 
   const walletAdapter = useMemo(() => {
     if (!publicKey || !signTransaction) return null;
@@ -672,6 +675,12 @@ function App() {
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
     []
   );
+
+  // Theme management is now handled entirely within X402Paywall component
+  // Users can simply pass theme="dark" to X402Paywall and it will handle:
+  // - Paywall component styling
+  // - Wallet modal styling (via body class)
+  // - All theme-related logic
 
   return (
     <ConnectionProvider endpoint={endpoint}>
