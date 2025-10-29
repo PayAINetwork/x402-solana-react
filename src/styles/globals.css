@@ -71,34 +71,6 @@
   }
 }
 
-/* ========================================
-   WALLET MODAL THEME STYLING
-   ========================================
-   Add your theme-specific wallet modal CSS here.
-   The body element will have a class like:
-   - wallet-modal-theme-dark
-   - wallet-modal-theme-solana-light
-   - wallet-modal-theme-seeker
-   etc.
-   
-   Key CSS classes to target:
-   - .wallet-adapter-modal-wrapper (the modal box)
-   - .wallet-adapter-modal-title
-   - .wallet-adapter-modal-list li (wallet items)
-   - .wallet-adapter-button (wallet buttons)
-   - .wallet-adapter-modal-button-close (close button)
-   ======================================== */
-
-/* ========================================
-   HOW TO OVERRIDE WALLET ADAPTER STYLES
-   ========================================
-   The wallet adapter CSS loads FIRST, then your globals.css loads.
-   To override, use:
-   1. More specific selectors (body.wallet-modal-theme-X)
-   2.  flag for priority
-   3. Target the exact same classes used in node_modules/@solana/wallet-adapter-react-ui/styles.css
-   ======================================== */
-
 /* Example: Dark Theme Overrides */
 body.wallet-modal-theme-dark .wallet-adapter-modal-wrapper {
   border: 2px solid transparent;
@@ -160,19 +132,3 @@ body.wallet-modal-theme-dark .wallet-adapter-modal-list li:not(:last-child) {
 body.wallet-modal-theme-dark .wallet-adapter-modal-button-close {
   background: rgba(255, 255, 255, 0.12);
 }
-
-/* ========================================
-   SPECIFICITY TIPS:
-   ========================================
-   
-   Original CSS: .wallet-adapter-modal-wrapper { background: #10141f; }
-   
-   Your override needs HIGHER specificity:
-   ✓ body.wallet-modal-theme-dark .wallet-adapter-modal-wrapper
-   
-   Combine with  for guaranteed override:
-   ✓ body.wallet-modal-theme-dark .wallet-adapter-modal-wrapper { background: red; }
-   
-   ======================================== */
-
-/* Add your theme-specific overrides below: */

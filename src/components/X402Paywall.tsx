@@ -21,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PaymentButton } from "./PaymentButton";
-import { PaymentStatus } from "./PaymentStatus";
 import { WalletSection } from "./WalletSection";
 import { useX402Payment } from "@/hooks/useX402Payment";
 import { X402PaywallProps, WalletAdapter } from "@/types";
@@ -42,6 +41,8 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
   classNames,
   customStyles,
   maxPaymentAmount,
+  // enablePaymentCaching = false, // TODO: Implement in future
+  // autoRetry = false, // TODO: Implement in future
   onPaymentStart,
   onPaymentSuccess,
   onPaymentError,
@@ -50,16 +51,21 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
 }) => {
   // Use provided wallet or get from context
   const walletContext = useWallet();
-  const wallet: WalletAdapter = walletProp || {
-    publicKey: walletContext.publicKey ? { toString: () => walletContext.publicKey!.toString() } : undefined,
-    signTransaction: walletContext.signTransaction || (async (tx) => tx),
-  };
+  
+  // Create reactive wallet object that updates when context changes
+  const reactiveWallet: WalletAdapter = useMemo(() => {
+    if (walletProp) return walletProp;
+    return {
+      publicKey: walletContext.publicKey ? { toString: () => walletContext.publicKey!.toString() } : undefined,
+      signTransaction: walletContext.signTransaction || (async (tx) => tx),
+    };
+  }, [walletProp, walletContext.publicKey, walletContext.signTransaction]);
 
   const [isPaid, setIsPaid] = useState(false);
   const [walletBalance, setWalletBalance] = useState<string>("0.00");
 
-  const { pay, isLoading, status, error, transactionId } = useX402Payment({
-    wallet,
+  const { pay, isLoading, status, error, transactionId, reset } = useX402Payment({
+    wallet: reactiveWallet,
     network,
     rpcUrl,
     apiEndpoint,
@@ -99,16 +105,21 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
     };
   }, [theme]);
 
-  // Fetch balance when wallet connects
+  // Fetch balance when wallet connects - react to walletContext changes
   useEffect(() => {
-    const walletAddress = wallet.publicKey?.toString() || wallet.address;
-    if (walletAddress) {
+    const walletAddress = walletContext.publicKey?.toString() || walletProp?.publicKey?.toString() || walletProp?.address;
+    if (walletAddress && walletContext.connected) {
+      console.log('Wallet connected:', walletAddress);
       onWalletConnect?.(walletAddress);
 
       // Fetch USDC balance
       fetchUSDCBalance(walletAddress, network, rpcUrl).then(setWalletBalance);
     }
-  }, [wallet, network, onWalletConnect]);
+    // Reset balance if wallet disconnects
+    if (!walletContext.connected && !walletProp) {
+      setWalletBalance("0.00");
+    }
+  }, [walletContext.publicKey, walletContext.connected, walletContext.connecting, walletProp, network, rpcUrl, onWalletConnect]);
 
   // Handle payment success
   useEffect(() => {
@@ -134,6 +145,9 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
   if (isPaid) {
     return <>{children}</>;
   }
+
+  // Show failure screen when there's an error (for all themes)
+  const showFailureScreen = error && (theme === "dark" || theme === "solana-dark" || theme === "light" || theme === "solana-light" || theme === "seeker" || theme === "seeker-2");
 
   // Theme-based styling configuration
   const getThemeConfig = () => {
@@ -365,40 +379,314 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
               }
             ></div>
 
-            <div className="text-center">
-              <h2
-                className={cn(
-                  "text-2xl font-normal mb-2",
-                  theme === "dark" || theme === "solana-dark" || theme === "seeker"
-                    ? "text-white"
-                    : theme === "seeker-2"
-                    ? "text-white"
-                    : "text-slate-900"
-                )}
-              >
-                Payment Required
-              </h2>
-              <p
-                className={cn(
-                  "text-sm font-light",
-                  theme === "dark" || theme === "solana-dark" || theme === "seeker"
-                    ? "text-white"
-                    : theme === "seeker-2"
-                    ? "text-white"
-                    : "text-slate-600"
-                )}
-              >
-                Access to protected content on base-sepolia. To access this
-                content, please pay $0.01 Base Sepolia USDC
-              </p>
-            </div>
+            {!showFailureScreen && (
+              <div className="text-center">
+                <h2
+                  className={cn(
+                    "text-2xl font-normal mb-2",
+                    theme === "dark" || theme === "solana-dark" || theme === "seeker"
+                      ? "text-white"
+                      : theme === "seeker-2"
+                      ? "text-white"
+                      : "text-slate-900"
+                  )}
+                >
+                  Payment Required
+                </h2>
+                <p
+                  className={cn(
+                    "text-sm font-light",
+                    theme === "dark" || theme === "solana-dark" || theme === "seeker"
+                      ? "text-white"
+                      : theme === "seeker-2"
+                      ? "text-white"
+                      : "text-slate-600"
+                  )}
+                >
+                  Access to protected content on base-sepolia. To access this
+                  content, please pay $0.01 Base Sepolia USDC
+                </p>
+              </div>
+            )}
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {/* Failure Screen for all themes */}
+            {showFailureScreen ? (
+              <>
+                {/* Failure Icon */}
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      strokeWidth="3"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Payment Failed Title */}
+                <div className="text-center mb-2">
+                  <h3 className={cn(
+                    "text-2xl font-semibold",
+                    theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                      ? "text-white"
+                      : "text-slate-900"
+                  )}>Payment Failed</h3>
+                </div>
+
+                {/* Error Message */}
+                <p className={cn(
+                  "text-center text-sm mb-6",
+                  theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                    ? "text-gray-400"
+                    : "text-slate-600"
+                )}>
+                  {error?.message || "It looks like your wallet doesn't have enough funds or the transaction was declined. Please review the details and try again."}
+                </p>
+
+                {/* Payment Details Box */}
+                <div className={cn(
+                  "rounded-lg p-6",
+                  theme === "dark" || theme === "solana-dark"
+                    ? "bg-[#0000001F] border border-slate-600"
+                    : theme === "seeker" || theme === "seeker-2"
+                    ? "bg-[rgba(0,0,0,0.12)] border border-white/10"
+                    : "bg-slate-50 border border-slate-200"
+                )}>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>Amount Paid</span>
+                      <span className={cn(
+                        "text-sm font-semibold",
+                        theme === "light" || theme === "solana-light"
+                          ? "text-purple-600"
+                          : "text-green-500"
+                      )}>
+                        ${amount.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>Wallet</span>
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>
+                        {reactiveWallet?.publicKey?.toString()
+                          ? `${reactiveWallet.publicKey.toString().slice(0, 6)}...${reactiveWallet.publicKey.toString().slice(-4)}`
+                          : reactiveWallet?.address
+                          ? `${reactiveWallet.address.slice(0, 6)}...${reactiveWallet.address.slice(-4)}`
+                          : "Not connected"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>Available Balance</span>
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>
+                        ${walletBalance}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>Currency</span>
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>USDC</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={cn(
+                        "text-sm",
+                        theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                          ? "text-white"
+                          : "text-slate-900"
+                      )}>Network</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span className={cn(
+                          "text-sm",
+                          theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                            ? "text-white"
+                            : "text-slate-900"
+                        )}>Solana</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Orange Warning Banner */}
+                <div className={cn(
+                  "rounded-lg p-4 flex items-start space-x-3",
+                  theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                    ? "bg-orange-900/50 border border-orange-700"
+                    : "bg-orange-50 border border-orange-200"
+                )}>
+                  <div className="flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className={cn(
+                    "text-sm",
+                    theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                      ? "text-white"
+                      : "text-orange-800"
+                  )}>
+                    Make sure your Solana wallet has enough USDC to cover the amount before retrying the transaction.
+                  </p>
+                </div>
+
+                {/* Try Again Button */}
+                <PaymentButton
+                  amount={amount}
+                  description={description}
+                  onClick={() => {
+                    // Reset error and retry
+                    reset();
+                    handlePayment();
+                  }}
+                  loading={isLoading}
+                  disabled={isLoading || !reactiveWallet?.publicKey}
+                  className={cn(
+                    "w-full h-12",
+                    theme === "dark" || theme === "solana-dark"
+                      ? theme === "dark"
+                        ? "bg-[#FFFFFF1F] rounded-full"
+                        : "bg-solana-gradient rounded-full"
+                      : theme === "light"
+                      ? "bg-black hover:bg-gray-800 text-white font-light rounded-full"
+                      : theme === "solana-light"
+                      ? "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full"
+                      : theme === "seeker" || theme === "seeker-2"
+                      ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full"
+                      : "bg-solana-gradient rounded-full",
+                    classNames?.button
+                  )}
+                  style={
+                    theme === "dark"
+                      ? {
+                          backgroundColor: "#FFFFFF1F",
+                          boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
+                          ...customStyles?.button,
+                        }
+                      : theme === "light"
+                      ? customStyles?.button
+                      : theme === "solana-light"
+                      ? customStyles?.button
+                      : theme === "seeker"
+                      ? {
+                          background: "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
+                          backgroundColor: "transparent",
+                          ...customStyles?.button,
+                        }
+                      : theme === "seeker-2"
+                      ? {
+                          background: "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
+                          backgroundColor: "transparent",
+                          ...customStyles?.button,
+                        }
+                      : customStyles?.button
+                  }
+                  customText="Try Again"
+                />
+
+                {/* Helper Text */}
+                <div className="text-center">
+                  <p className={cn(
+                    "text-sm",
+                    theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                      ? "text-white"
+                      : "text-slate-900"
+                  )}>
+                    <span className={cn(
+                      theme === "dark" || theme === "solana-dark" || theme === "seeker" || theme === "seeker-2"
+                        ? "text-gray-400"
+                        : "text-slate-600"
+                    )}>Don't have USDC? </span>
+                    <a
+                      href="https://www.coinbase.com/how-to-buy/usdc"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "font-medium hover:opacity-80",
+                        theme === "light" || theme === "solana-light"
+                          ? "text-purple-600"
+                          : "text-green-400 hover:text-green-300"
+                      )}
+                    >
+                      Get it here
+                      <svg
+                        className={cn(
+                          "inline w-3 h-3 ml-1",
+                          theme === "light" || theme === "solana-light"
+                            ? "text-purple-600"
+                            : "text-green-400"
+                        )}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
             {/* Wallet Info */}
             <WalletSection
-              wallet={wallet}
-              balance={walletBalance}
+              wallet={reactiveWallet}
               onDisconnect={handleDisconnect}
               theme={theme}
               className={cn(
@@ -626,16 +914,6 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
               )
             )}
 
-            {/* Payment Status */}
-            {status !== "idle" && (
-              <PaymentStatus
-                status={status}
-                message={error?.message}
-                className={classNames?.status}
-                style={customStyles?.status}
-              />
-            )}
-
             {/* Security Message */}
             <div className="flex items-center justify-center space-x-2">
               <svg
@@ -666,7 +944,7 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
               description={description}
               onClick={handlePayment}
               loading={isLoading}
-              disabled={isLoading}
+              disabled={isLoading || !reactiveWallet?.publicKey}
               className={cn(
                 "w-full h-12",
                 theme === "dark" || theme === "solana-dark"
@@ -741,6 +1019,8 @@ const X402PaywallContent: React.FC<Omit<X402PaywallProps, 'autoSetupProviders' |
                 </a>
               </p>
             </div>
+              </>
+            )}
           </CardContent>
         </Card>
     </div>
