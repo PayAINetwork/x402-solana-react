@@ -43,6 +43,7 @@ export interface X402PaywallProps {
 
   // UI Configuration
   theme?: ThemePreset;
+  logoUrl?: string; // Custom logo URL or path (defaults to Solana logo)
   showBalance?: boolean;
   showNetworkInfo?: boolean;
   showPaymentDetails?: boolean;

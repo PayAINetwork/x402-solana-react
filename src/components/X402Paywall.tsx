@@ -45,6 +45,7 @@ const X402PaywallContent: React.FC<
   treasuryAddress,
   facilitatorUrl,
   theme = "solana-light",
+  logoUrl = "https://raw.githubusercontent.com/PayAINetwork/x402-solana-react/main/src/components/ui/SolanaLogo.svg",
   showPaymentDetails = true,
   onDisconnect,
   classNames,
@@ -462,8 +463,8 @@ const X402PaywallContent: React.FC<
               <div className="w-auto h-auto rounded-full p-[2px] flex items-center justify-center overflow-hidden">
                 <div className="w-full h-full rounded-full flex items-center justify-center">
                   <img
-                    src="/src/components/ui/SolanaLogo.svg"
-                    alt="Solana"
+                    src={logoUrl}
+                    alt="Logo"
                     className="w-12 h-auto"
                   />
                 </div>
@@ -839,8 +840,8 @@ const X402PaywallContent: React.FC<
             <div className="w-auto h-auto rounded-full p-[2px] flex items-center justify-center overflow-hidden">
               <div className="w-full h-full rounded-full flex items-center justify-center">
                 <img
-                  src="/src/components/ui/SolanaLogo.svg"
-                  alt="Solana"
+                  src={logoUrl}
+                  alt="Logo"
                   className="w-12 h-auto"
                 />
               </div>
