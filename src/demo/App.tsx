@@ -12,16 +12,22 @@ import {
 // Import wallet adapter styles (must be BEFORE globals.css for proper override)
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-type Theme = "solana-light" | "solana-dark" | "dark" | "light" | "seeker" | "terminal" | "seeker-2";
+type Theme =
+  | "solana-light"
+  | "solana-dark"
+  | "dark"
+  | "light"
+  | "seeker"
+  | "terminal"
+  | "seeker-2";
 
 function DemoContent() {
-  const [currentTheme, setCurrentTheme] = useState<Theme>("light");
+  const [currentTheme] = useState<Theme>("light");
   const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
-
 
   return (
     <>
-      {/* Theme Switcher - Floating in top right */}
+      {/* Theme Switcher temporarily disabled
       <div className="fixed top-4 right-4 z-50">
         <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-slate-200">
           <h3 className="text-sm font-semibold text-slate-700 mb-3">Theme</h3>
@@ -43,6 +49,7 @@ function DemoContent() {
           </div>
         </div>
       </div>
+      */}
 
       <X402Paywall
         amount={0.01}

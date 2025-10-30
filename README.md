@@ -50,7 +50,20 @@ import '@payai/x402-solana-react/styles';
 import '@solana/wallet-adapter-react-ui/styles.css';
 ```
 
-### 2. Wallet Provider Setup (Optional)
+### 2. Environment Variables (Optional - Recommended for Production)
+
+For production use, configure a custom RPC endpoint to avoid rate limiting on public RPCs:
+
+Create a `.env` file (you can copy from the included `.env.example`) and set your RPC URL:
+
+```
+# Your Helius/QuickNode/Alchemy RPC URL
+VITE_SOLANA_RPC_URL=https://mainnet.helius-rpc.com/?api-key=your_api_key_here
+```
+
+Restart the dev server after changing `.env` so Vite picks up updates.
+
+### 3. Wallet Provider Setup (Optional)
 
 **Option A: Auto-Setup (Recommended)** 🎉
 

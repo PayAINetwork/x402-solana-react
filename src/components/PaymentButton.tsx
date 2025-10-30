@@ -11,7 +11,7 @@ export const PaymentButton = React.forwardRef<
   (
     {
       amount,
-      description,
+      description: _description,
       onClick,
       disabled = false,
       loading = false,
