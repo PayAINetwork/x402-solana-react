@@ -12,12 +12,18 @@ import {
 // Import wallet adapter styles (must be BEFORE globals.css for proper override)
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-type Theme = "solana-light" | "solana-dark" | "dark" | "light" | "seeker" | "terminal" | "seeker-2";
+type Theme =
+  | "solana-light"
+  | "solana-dark"
+  | "dark"
+  | "light"
+  | "seeker"
+  | "terminal"
+  | "seeker-2";
 
 function DemoContent() {
   const [currentTheme, setCurrentTheme] = useState<Theme>("light");
   const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
-
 
   return (
     <>
