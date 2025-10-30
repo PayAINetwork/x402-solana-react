@@ -47,7 +47,22 @@ Import the component styles in your main file (e.g., `main.tsx` or `App.tsx`):
 import 'x402-solana-react/styles';
 ```
 
-### 2. Wallet Provider Setup
+### 2. Environment Variables (Helius RPC)
+
+Create a `.env` file (you can copy from the included `.env.example`) and set these values:
+
+```
+# Your Helius API key
+VITE_HELIUS_API_KEY=your_helius_api_key_here
+
+# RPC URL
+# VITE_SOLANA_RPC_URL=solana_rpc_url_here
+
+```
+
+Restart the dev server after changing `.env` so Vite picks up updates.
+
+### 3. Wallet Provider Setup
 
 Wrap your app with Solana wallet providers:
 
@@ -160,7 +175,7 @@ npm install
 
 # Copy environment variables
 cp .env.example .env
-# Edit .env and add your Helius API key
+# Edit .env and set VITE_HELIUS_API_KEY and VITE_SOLANA_RPC_URL
 
 # Start development server
 npm run dev
