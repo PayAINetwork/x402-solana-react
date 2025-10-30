@@ -16,7 +16,7 @@ function CustomStyledPaywall() {
       description="Premium Features Access"
       wallet={wallet}
       network="solana-devnet"
-      theme="custom"
+      theme="seeker-2"
       // Custom Tailwind classes
       classNames={{
         container: 'bg-gradient-to-br from-purple-900 to-blue-900',

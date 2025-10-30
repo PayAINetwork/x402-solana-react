@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { VersionedTransaction } from '@solana/web3.js';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { ComponentClassNames, ComponentStyles, ThemePreset } from './theme';
 
 /**
@@ -28,18 +29,24 @@ export interface X402PaywallProps {
   // Core payment configuration
   amount: number;
   description: string;
-  wallet: WalletAdapter;
+  wallet?: WalletAdapter; // Optional - will use useWallet() if not provided
   network?: SolanaNetwork;
   rpcUrl?: string;
   apiEndpoint?: string;
   treasuryAddress?: string;
   facilitatorUrl?: string;
+  
+  // Auto-setup wallet providers (only used if providers don't exist)
+  autoSetupProviders?: boolean; // Default: true - automatically set up providers if missing
+  providerNetwork?: WalletAdapterNetwork; // Network for auto-setup providers
+  providerEndpoint?: string; // Custom endpoint for auto-setup providers
 
   // UI Configuration
   theme?: ThemePreset;
   showBalance?: boolean;
   showNetworkInfo?: boolean;
   showPaymentDetails?: boolean;
+  onDisconnect?: () => void;
 
   // Styling Options
   classNames?: ComponentClassNames;
@@ -71,6 +78,7 @@ export interface PaymentButtonProps {
   loading?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  customText?: string;
 }
 
 /**
@@ -92,6 +100,8 @@ export interface WalletSectionProps {
   balance?: string;
   network?: SolanaNetwork;
   showBalance?: boolean;
+  onDisconnect?: () => void;
+  theme?: ThemePreset;
   className?: string;
   style?: React.CSSProperties;
 }

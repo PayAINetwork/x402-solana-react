@@ -16,7 +16,8 @@ function getUSDCMint(network: SolanaNetwork): string {
  */
 function getRpcUrl(network: SolanaNetwork): string {
   return network === 'solana'
-    ? 'https://api.mainnet-beta.solana.com'
+    ? `https://mainnet.helius-rpc.com/?api-key=${process.env.VITE_HELIUS_API_KEY}` // Recommended to have a custom rpc url to avoid rate limits
+    // ?  'https://api.mainnet-beta.solana.com'
     : 'https://api.devnet.solana.com';
 }
 

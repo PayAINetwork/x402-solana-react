@@ -81,7 +81,7 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
         const defaultEndpoint = 'https://x402.payai.network/api/solana/paid-content';
         const apiEndpoint = config.apiEndpoint || defaultEndpoint;
         const isEchoMerchant = apiEndpoint === defaultEndpoint;
-        
+
         console.log('Initiating x402 payment:', {
           endpoint: apiEndpoint,
           isDemo: isEchoMerchant,
@@ -112,13 +112,22 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
           throw new Error(`Payment request failed: ${response.statusText}`);
         }
 
-        const result = await response.json();
+        // Try to parse as JSON, but handle HTML responses gracefully
+        let result;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          result = await response.json();
+        } else {
+          // For HTML or other content types, just get the text
+          const text = await response.text();
+          result = { content: text };
+        }
         console.log('Payment successful:', result);
 
         // Extract transaction ID from response
         const paymentResponse = response.headers.get('X-PAYMENT-RESPONSE');
         let txId = `tx_${Date.now()}`;
-        
+
         if (paymentResponse) {
           try {
             const decoded = JSON.parse(atob(paymentResponse));
