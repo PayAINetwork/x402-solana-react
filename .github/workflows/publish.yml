@@ -1,0 +1,112 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run type checking
+        run: npm run typecheck
+      
+      - name: Run linting
+        run: npm run lint
+      
+      - name: Build package
+        run: npm run build
+      
+      - name: Check if version changed
+        id: check
+        run: |
+          git fetch origin main
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          
+          # Check if this is the first commit or if package.json changed
+          if git diff HEAD^ HEAD --name-only | grep -q "package.json"; then
+            PREVIOUS_VERSION=$(git show HEAD^:package.json | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf-8')).version")
+            
+            if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+              echo "version_changed=true" >> $GITHUB_OUTPUT
+              echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            else
+              echo "version_changed=false" >> $GITHUB_OUTPUT
+              echo "Version unchanged: $CURRENT_VERSION"
+            fi
+          else
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+            echo "package.json not modified"
+          fi
+      
+      - name: Publish to NPM
+        if: steps.check.outputs.version_changed == 'true'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Get package version
+        if: steps.check.outputs.version_changed == 'true'
+        id: package-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      
+      - name: Check if should create release
+        if: steps.check.outputs.version_changed == 'true'
+        id: should-release
+        run: |
+          VERSION="${{ steps.package-version.outputs.version }}"
+          # Only create GitHub releases for non-beta/alpha/rc versions
+          # And only for minor/major versions (x.y.0), not patches
+          if [[ ! "$VERSION" =~ (beta|alpha|rc) ]]; then
+            # Check if it's a minor or major release (ends with .0)
+            if [[ "$VERSION" =~ \.[0-9]+\.0$ ]] || [[ "$VERSION" =~ ^[0-9]+\.0\.0$ ]]; then
+              echo "create_release=true" >> $GITHUB_OUTPUT
+              echo "Creating GitHub release for version $VERSION"
+            else
+              echo "create_release=false" >> $GITHUB_OUTPUT
+              echo "Skipping GitHub release for patch version $VERSION"
+            fi
+          else
+            echo "create_release=false" >> $GITHUB_OUTPUT
+            echo "Skipping GitHub release for pre-release version $VERSION"
+          fi
+      
+      - name: Create GitHub Release
+        if: steps.check.outputs.version_changed == 'true' && steps.should-release.outputs.create_release == 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.package-version.outputs.version }}
+          release_name: Release v${{ steps.package-version.outputs.version }}
+          body: |
+            Release of version ${{ steps.package-version.outputs.version }}
+            
+            Published to NPM: https://www.npmjs.com/package/@payai/x402-solana-react/v/${{ steps.package-version.outputs.version }}
+          draft: false
+          prerelease: false
+      
+      - name: Skip publish
+        if: steps.check.outputs.version_changed == 'false'
+        run: echo "Skipping publish - version not changed in package.json"
+
