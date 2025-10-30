@@ -16,6 +16,8 @@ type Theme = "solana-light" | "solana-dark" | "dark" | "light" | "seeker" | "ter
 
 function DemoContent() {
   const [currentTheme, setCurrentTheme] = useState<Theme>("light");
+  const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
+
 
   return (
     <>
@@ -30,11 +32,10 @@ function DemoContent() {
                 onClick={() => setCurrentTheme(theme)}
                 variant={currentTheme === theme ? "default" : "outline"}
                 size="sm"
-                className={`text-xs ${
-                  currentTheme === theme
-                    ? "bg-blue-600 hover:bg-blue-700 text-white"
-                    : "text-slate-600 hover:bg-slate-50"
-                }`}
+                className={`text-xs ${currentTheme === theme
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "text-slate-600 hover:bg-slate-50"
+                  }`}
               >
                 {theme.charAt(0).toUpperCase() + theme.slice(1)}
               </Button>
@@ -46,9 +47,9 @@ function DemoContent() {
       <X402Paywall
         amount={0.01}
         description="Premium Demo Content Access"
-        network="solana-devnet"
+        network="solana" // or "solana-devnet"
         theme={currentTheme}
-        rpcUrl={undefined} // Uses default devnet RPC
+        rpcUrl={rpcUrl} // Recommended to have a custom rpc url to avoid rate limits
         showBalance={true}
         showNetworkInfo={true}
         onPaymentSuccess={(txId) => {
