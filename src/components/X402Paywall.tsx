@@ -98,9 +98,10 @@ const X402PaywallContent: React.FC<
   };
 
   // Check if wallet is connected (either from prop or context)
+  // Use a permissive check so we transition as soon as the adapter reports connected
   const isWalletConnected = walletProp
-    ? walletProp.publicKey || walletProp.address
-    : walletContext.connected && walletContext.publicKey;
+    ? Boolean(walletProp.publicKey || walletProp.address)
+    : Boolean(walletContext.connected || walletContext.publicKey);
 
   // Apply theme class to body for wallet modal styling
   useEffect(() => {
@@ -1728,7 +1729,7 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
 
     return (
       <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect={false}>
+        <WalletProvider wallets={wallets} autoConnect={true}>
           <WalletModalProvider>
             <X402PaywallContent {...props} />
           </WalletModalProvider>
