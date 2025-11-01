@@ -789,7 +789,7 @@ const X402PaywallContent: React.FC<
           theme === "dark"
             ? {
               background:
-                "radial-gradient(circle at center, #ec4899 0%, #3b82f6 50%, #9333ea 100%)",
+                "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
               ...customStyles?.container,
             }
             : theme === "light"
