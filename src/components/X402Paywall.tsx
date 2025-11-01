@@ -791,26 +791,38 @@ const X402PaywallContent: React.FC<
               background:
                 "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
               ...customStyles?.container,
+            }:
+          theme === "solana-dark"
+          ? {
+            background:
+              "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
+            ...customStyles?.container,
+          }
+          : theme === "light"
+            ? {
+              background:
+                "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+              ...customStyles?.container,
+          }
+          : theme === "solana-light"
+          ? {
+            background:
+              "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+            ...customStyles?.container,
+        }
+          : theme === "seeker"
+            ? {
+              background:
+                "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
+              ...customStyles?.container,
+          }
+          : theme === "seeker-2"
+            ? {
+              background:
+                "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
+              ...customStyles?.container,
             }
-            : theme === "light"
-              ? {
-                background:
-                  "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
-                ...customStyles?.container,
-              }
-              : theme === "seeker"
-                ? {
-                  background:
-                    "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
-                  ...customStyles?.container,
-                }
-                : theme === "seeker-2"
-                  ? {
-                    background:
-                      "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
-                    ...customStyles?.container,
-                  }
-                  : customStyles?.container
+          : customStyles?.container
         }
       >
         <Card

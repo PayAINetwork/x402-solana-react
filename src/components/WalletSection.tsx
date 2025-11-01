@@ -55,7 +55,7 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
             <div>
               <div
                 className={cn(
-                  "text-xs font-medium drop-shadow-sm shadow-sm",
+                  "text-xs font-medium",
                   theme === "light" || theme === "solana-light"
                     ? "text-[#71717A]"
                     : "text-[#FFFFFF66]"
