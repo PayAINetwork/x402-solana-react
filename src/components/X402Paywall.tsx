@@ -419,25 +419,25 @@ const X402PaywallContent: React.FC<
                   "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
                 ...customStyles?.container,
               }
-              : theme === "light"
-                ? {
-                  background:
-                    "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
-                  ...customStyles?.container,
-                }
-                : theme === "seeker"
-                  ? {
-                    background:
-                      "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
-                    ...customStyles?.container,
-                  }
-                  : theme === "seeker-2"
-                    ? {
-                      background:
-                        "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
-                      ...customStyles?.container,
-                    }
-                    : customStyles?.container
+            : theme === "light"
+              ? {
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+                ...customStyles?.container,
+              }
+            : theme === "seeker"
+              ? {
+                background:
+                  "linear-gradient(to top,#21645E 0%, #0D2734 50%, #001214 100%)",
+                ...customStyles?.container,
+              }
+            : theme === "seeker-2"
+              ? {
+                background:
+                "#0D1615",
+              ...customStyles?.container,
+              }
+            : customStyles?.container
           }
         >
           <Card
@@ -600,7 +600,7 @@ const X402PaywallContent: React.FC<
                         : undefined
                     }
                   >
-                    ${amount.toFixed(2)}
+                    {"$" + amount.toFixed(2)}
                   </div>
                 </div>
 
@@ -756,10 +756,23 @@ const X402PaywallContent: React.FC<
               <div className="text-center">
                 <p className={cn("text-sm", connectThemeConfig.helperText)}>
                   Don't have USDC?{" "}
-                  <a href="#" className="font-medium text-[#4ADE80] underline">
+                  <a
+                    href="#"
+                    className={cn(
+                      "font-medium underline",
+                      theme === "seeker" || theme === "seeker-2"
+                        ? "text-[#95D2E6]"
+                        : "text-[#4ADE80]"
+                    )}
+                  >
                     Get it here
                     <svg
-                      className="inline w-3 h-3 ml-1 text-[#4ADE80]"
+                      className={cn(
+                        "inline w-3 h-3 ml-1",
+                        theme === "seeker" || theme === "seeker-2"
+                          ? "text-[#95D2E6]"
+                          : "text-[#4ADE80]"
+                      )}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -813,13 +826,13 @@ const X402PaywallContent: React.FC<
           : theme === "seeker"
             ? {
               background:
-                "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
+                "linear-gradient(to top,#21645E 0%, #0D2734 50%, #001214 100%)",
               ...customStyles?.container,
           }
           : theme === "seeker-2"
             ? {
               background:
-                "radial-gradient(25% 200% at 50% 50%, #6CCEC6 0%, rgba(19, 77, 128, 0) 30%), radial-gradient(20% 20% at 50% 100%, rgba(66, 202, 189, 0.8) 0%, rgba(33, 100, 94, 0.8) 0%), linear-gradient(180deg, #001214 5%, #0D2734 100%)",
+                "#0D1615",
               ...customStyles?.container,
             }
           : customStyles?.container
@@ -1030,7 +1043,7 @@ const X402PaywallContent: React.FC<
                             : "text-green-500"
                         )}
                       >
-                        ${amount.toFixed(2)}
+                        {"$" + amount.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
@@ -1296,7 +1309,9 @@ const X402PaywallContent: React.FC<
                         "font-medium hover:opacity-80",
                         theme === "light" || theme === "solana-light"
                           ? "text-purple-600"
-                          : "text-green-400 hover:text-green-300"
+                          : theme === "seeker" || theme === "seeker-2"
+                            ? "text-[#95D2E6] hover:text-[#95D2E6]"
+                            : "text-green-400 hover:text-green-300"
                       )}
                     >
                       Get it here
@@ -1305,7 +1320,9 @@ const X402PaywallContent: React.FC<
                           "inline w-3 h-3 ml-1",
                           theme === "light" || theme === "solana-light"
                             ? "text-purple-600"
-                            : "text-green-400"
+                            : theme === "seeker" || theme === "seeker-2"
+                              ? "text-[#95D2E6]"
+                              : "text-green-400"
                         )}
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -1335,7 +1352,12 @@ const X402PaywallContent: React.FC<
                   style={
                     theme === "dark" || theme === "solana-dark"
                       ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                      : undefined
+                      : theme === "seeker" || theme === "seeker-2"
+                        ? { 
+                            backgroundColor: "rgba(0, 0, 0, 0.12)",
+                            boxShadow: "0px 0px 16px 4px #000000 inset"
+                          }
+                        : undefined
                   }
                 />
 
@@ -1346,6 +1368,7 @@ const X402PaywallContent: React.FC<
                       className={cn("p-6", themeConfig.paymentDetails)}
                       style={{
                         backgroundColor: "rgba(0, 0, 0, 0.12)",
+                        boxShadow: "0px 0px 16px 4px #000000 inset",
                       }}
                     >
                       {/* Amount Section - Top Row */}
@@ -1355,7 +1378,7 @@ const X402PaywallContent: React.FC<
                           className="text-xl font-bold"
                           style={{ color: "#95D2E6" }}
                         >
-                          {amount.toFixed(2)}
+                          {"$" + amount.toFixed(2)}
                         </div>
                       </div>
 
@@ -1439,7 +1462,7 @@ const X402PaywallContent: React.FC<
                               : "text-[#21ECAB]"
                           )}
                         >
-                          ${amount.toFixed(2)}
+                          {"$" + amount.toFixed(2)}
                         </div>
                       </div>
 
@@ -1666,16 +1689,16 @@ const X402PaywallContent: React.FC<
                       className={cn(
                         "font-medium",
                         theme === "seeker"
-                          ? "text-[#4ADE80]"
+                          ? "text-[#95D2E6]"
                           : theme === "seeker-2"
-                            ? "text-[#4ADE80]"
+                            ? "text-[#95D2E6]"
                             : themeConfig.helperLink || "text-[#4ADE80]"
                       )}
                       style={
                         theme === "seeker"
-                          ? { color: "#4ADE80" }
+                          ? { color: "#95D2E6" }
                           : theme === "seeker-2"
-                            ? { color: "#4ADE80" }
+                            ? { color: "#95D2E6" }
                             : undefined
                       }
                     >
@@ -1686,9 +1709,9 @@ const X402PaywallContent: React.FC<
                           theme === "light"
                             ? "text-purple-600"
                             : theme === "seeker"
-                              ? "text-[#4ADE80]"
+                              ? "text-[#95D2E6]"
                               : theme === "seeker-2"
-                                ? "text-[#4ADE80]"
+                                ? "text-[#95D2E6]"
                                 : "text-[#4ADE80]"
                         )}
                         fill="currentColor"

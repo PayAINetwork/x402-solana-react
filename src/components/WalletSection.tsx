@@ -37,8 +37,7 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
   return (
     <div
       className={cn(
-        "rounded-lg p-4 border",
-        theme === "seeker" ? "border-[#FFFFFF1F]" : theme === "seeker-2" ? "border-[#FFFFFF1F]" : "bg-slate-50 border-slate-200",
+        "rounded-lg p-4",
         className
       )}
       style={style}
