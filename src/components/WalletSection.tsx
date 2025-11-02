@@ -37,7 +37,8 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
   return (
     <div
       className={cn(
-        "rounded-lg p-4",
+        theme === "terminal" ? "rounded-none" : "rounded-lg",
+        "p-4",
         className
       )}
       style={style}
@@ -46,8 +47,22 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Wallet Picture */}
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">
+            <div
+              className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center",
+                theme === "terminal"
+                  ? "bg-green-400"
+                  : "bg-gradient-to-r from-blue-500 to-purple-500"
+              )}
+            >
+              <span
+                className={cn(
+                  "font-semibold text-sm",
+                  theme === "terminal"
+                    ? "text-black font-vt323"
+                    : "text-white font-mono"
+                )}
+              >
                 {walletAddress.slice(0, 2).toUpperCase()}
               </span>
             </div>
@@ -57,17 +72,24 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                   "text-xs font-medium",
                   theme === "light" || theme === "solana-light"
                     ? "text-[#71717A]"
+                    : theme === "terminal"
+                    ? ""
                     : "text-[#FFFFFF66]"
                 )}
+                style={
+                  theme === "terminal" ? { color: "#FFFFFF66" } : undefined
+                }
               >
                 Connected Wallet
               </div>
               <div
                 className={cn(
-                  "text-sm font-mono",
+                  "text-sm",
                   theme === "light" || theme === "solana-light"
                     ? "text-black"
-                    : "text-white"
+                    : theme === "terminal"
+                    ? "text-white font-vt323"
+                    : "text-white font-mono"
                 )}
               >
                 {formatAddress(walletAddress)}
@@ -80,8 +102,11 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
               "text-sm font-medium transition-colors",
               theme === "light" || theme === "solana-light"
                 ? "text-red-500 hover:text-red-700"
+                : theme === "terminal"
+                ? "hover:opacity-80 font-vt323"
                 : "text-[#FFFFFF66] hover:opacity-80"
             )}
+            style={theme === "terminal" ? { color: "#FFFFFF66" } : undefined}
           >
             Disconnect
           </button>
@@ -89,14 +114,33 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
 
         {showBalance && balance && (
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-600">
+            <span
+              className={cn(
+                "text-sm font-medium",
+                theme === "terminal" ? "text-white" : "text-slate-600"
+              )}
+            >
               USDC Balance
             </span>
             <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-slate-900">
+              <span
+                className={cn(
+                  "text-lg font-bold",
+                  theme === "terminal"
+                    ? "text-white font-vt323"
+                    : "text-slate-900"
+                )}
+              >
                 {balance}
               </span>
-              <span className="text-xs font-semibold text-slate-500 bg-slate-200 px-2 py-1 rounded-md">
+              <span
+                className={cn(
+                  "text-xs font-semibold px-2 py-1 rounded-md",
+                  theme === "terminal"
+                    ? "text-white bg-green-400 font-vt323"
+                    : "text-slate-500 bg-slate-200"
+                )}
+              >
                 USDC
               </span>
             </div>
@@ -105,10 +149,22 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
 
         {network && (
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-600">Network</span>
+            <span
+              className={cn(
+                "text-sm font-medium",
+                theme === "terminal" ? "text-white" : "text-slate-600"
+              )}
+            >
+              Network
+            </span>
             <Badge
               variant="outline"
-              className="text-xs border-slate-300 text-slate-700"
+              className={cn(
+                "text-xs",
+                theme === "terminal"
+                  ? "border-green-400/30 text-white font-vt323"
+                  : "border-slate-300 text-slate-700"
+              )}
             >
               {getNetworkLabel()}
             </Badge>
