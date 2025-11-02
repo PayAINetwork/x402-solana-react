@@ -37,7 +37,9 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
   return (
     <div
       className={cn(
-        theme === "terminal" ? "rounded-none" : "rounded-lg",
+        theme === "terminal" || theme === "terminal-light"
+          ? "rounded-none"
+          : "rounded-lg",
         "p-4",
         className
       )}
@@ -74,10 +76,16 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                     ? "text-[#71717A]"
                     : theme === "terminal"
                     ? ""
+                    : theme === "terminal-light"
+                    ? ""
                     : "text-[#FFFFFF66]"
                 )}
                 style={
-                  theme === "terminal" ? { color: "#FFFFFF66" } : undefined
+                  theme === "terminal"
+                    ? { color: "#FFFFFF66" }
+                    : theme === "terminal-light"
+                    ? { color: "#71717A" }
+                    : undefined
                 }
               >
                 Connected Wallet
@@ -89,6 +97,8 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                     ? "text-black"
                     : theme === "terminal"
                     ? "text-white font-vt323"
+                    : theme === "terminal-light"
+                    ? "text-black font-vt323"
                     : "text-white font-mono"
                 )}
               >
@@ -104,9 +114,17 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                 ? "text-red-500 hover:text-red-700"
                 : theme === "terminal"
                 ? "hover:opacity-80 font-vt323"
+                : theme === "terminal-light"
+                ? "hover:opacity-80 font-vt323"
                 : "text-[#FFFFFF66] hover:opacity-80"
             )}
-            style={theme === "terminal" ? { color: "#FFFFFF66" } : undefined}
+            style={
+              theme === "terminal"
+                ? { color: "#FFFFFF66" }
+                : theme === "terminal-light"
+                ? { color: "#71717A" }
+                : undefined
+            }
           >
             Disconnect
           </button>
