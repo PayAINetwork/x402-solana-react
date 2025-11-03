@@ -20,10 +20,11 @@ type Theme =
   | "seeker"
   | "terminal"
   | "seeker-2"
-  | "terminal-light";
+  | "terminal-light"
+  | "seeker-light";
 
 function DemoContent() {
-  const [currentTheme] = useState<Theme>("terminal-light");
+  const [currentTheme] = useState<Theme>("light");
   const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
 
   return (

@@ -187,7 +187,9 @@ const X402PaywallContent: React.FC<
       theme === "solana-light" ||
       theme === "seeker" ||
       theme === "seeker-2" ||
-      theme === "terminal");
+      theme === "seeker-light" ||
+      theme === "terminal" ||
+      theme === "terminal-light");
 
   // Theme-based styling configuration
   const getThemeConfig = () => {
@@ -233,6 +235,19 @@ const X402PaywallContent: React.FC<
           notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
           securityMessage: "text-white",
           helperText: "text-white",
+        };
+      case "seeker-light":
+        return {
+          container: "",
+          card: "backdrop-blur-sm border-emerald-200 rounded-xl",
+          icon: "bg-gradient-to-r from-emerald-500 to-teal-500",
+          title: "text-black",
+          button:
+            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
+          paymentDetails: "rounded-lg",
+          notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
+          securityMessage: "text-black",
+          helperText: "text-black",
         };
       case "terminal":
         return {
@@ -358,6 +373,16 @@ const X402PaywallContent: React.FC<
             securityMessage: "text-white",
             helperText: "text-white",
           };
+        case "seeker-light":
+          return {
+            container: "",
+            card: "backdrop-blur-sm border-emerald-200 rounded-xl",
+            button:
+              "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
+            paymentDetails: "rounded-lg",
+            securityMessage: "text-black",
+            helperText: "text-black",
+          };
         case "terminal":
           return {
             container: "",
@@ -457,6 +482,12 @@ const X402PaywallContent: React.FC<
                 background: "#0D1615",
                 ...customStyles?.container,
               }
+            : theme === "seeker-light"
+            ? {
+                background:
+                  "linear-gradient(240.08deg, #B8CCD3 -0.56%, #FFFFFF 119.23%)",
+                ...customStyles?.container,
+              }
             : theme === "terminal"
             ? {
                 backgroundColor: "#0D1615",
@@ -525,6 +556,11 @@ const X402PaywallContent: React.FC<
                   backdropFilter: "blur(12px)",
                   ...customStyles?.card,
                 }
+              : theme === "seeker-light"
+              ? {
+                  backgroundColor: "#FFFFFF",
+                  ...customStyles?.card,
+                }
               : customStyles?.card
           }
         >
@@ -578,6 +614,8 @@ const X402PaywallContent: React.FC<
                       theme === "seeker" ||
                       theme === "seeker-2"
                       ? "text-white"
+                      : theme === "seeker-light"
+                      ? "text-black"
                       : theme === "terminal"
                       ? "text-white font-vt323"
                       : theme === "terminal-light"
@@ -597,6 +635,8 @@ const X402PaywallContent: React.FC<
                       ? ""
                       : theme === "seeker" || theme === "seeker-2"
                       ? "text-white"
+                      : theme === "seeker-light"
+                      ? ""
                       : theme === "dark" || theme === "solana-dark"
                       ? "text-white"
                       : "text-[#71717A]",
@@ -606,6 +646,8 @@ const X402PaywallContent: React.FC<
                     theme === "terminal"
                       ? { color: "#FFFFFF66" }
                       : theme === "terminal-light"
+                      ? { color: "#71717A" }
+                      : theme === "seeker-light"
                       ? { color: "#71717A" }
                       : undefined
                   }
@@ -690,6 +732,8 @@ const X402PaywallContent: React.FC<
                   ? { backgroundColor: "#FFFFFF", border: "1px solid #E4E4E7" }
                   : theme === "seeker" || theme === "seeker-2"
                   ? { backgroundColor: "rgba(0, 0, 0, 0.12)" }
+                  : theme === "seeker-light"
+                  ? { backgroundColor: "#F4F4F5" }
                   : theme === "dark" || theme === "solana-dark"
                   ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
                   : undefined
@@ -704,6 +748,8 @@ const X402PaywallContent: React.FC<
                       theme === "seeker" ||
                       theme === "seeker-2"
                       ? "text-white"
+                      : theme === "seeker-light"
+                      ? "text-black"
                       : theme === "terminal"
                       ? "text-white"
                       : theme === "terminal-light"
@@ -720,6 +766,8 @@ const X402PaywallContent: React.FC<
                       ? "text-purple-600"
                       : theme === "seeker" || theme === "seeker-2"
                       ? ""
+                      : theme === "seeker-light"
+                      ? ""
                       : theme === "terminal"
                       ? ""
                       : theme === "terminal-light"
@@ -733,6 +781,8 @@ const X402PaywallContent: React.FC<
                       ? { color: "#009192" }
                       : theme === "seeker" || theme === "seeker-2"
                       ? { color: "#95D2E6" }
+                      : theme === "seeker-light"
+                      ? { color: "#00BECC" }
                       : undefined
                   }
                 >
@@ -774,6 +824,8 @@ const X402PaywallContent: React.FC<
                         theme === "seeker" ||
                         theme === "seeker-2"
                         ? "text-white"
+                        : theme === "seeker-light"
+                        ? "text-black"
                         : theme === "terminal"
                         ? "text-white"
                         : theme === "terminal-light"
@@ -791,6 +843,8 @@ const X402PaywallContent: React.FC<
                         theme === "seeker" ||
                         theme === "seeker-2"
                         ? "text-white"
+                        : theme === "seeker-light"
+                        ? "text-black"
                         : theme === "terminal"
                         ? "text-white"
                         : theme === "terminal-light"
@@ -810,6 +864,8 @@ const X402PaywallContent: React.FC<
                         theme === "seeker" ||
                         theme === "seeker-2"
                         ? "text-white"
+                        : theme === "seeker-light"
+                        ? "text-black"
                         : theme === "terminal"
                         ? "text-white"
                         : theme === "terminal-light"
@@ -823,7 +879,9 @@ const X402PaywallContent: React.FC<
                     <div
                       className={cn(
                         "w-2 h-2 rounded-full",
-                        theme === "terminal" || theme === "terminal-light"
+                        theme === "terminal" ||
+                          theme === "terminal-light" ||
+                          theme === "seeker-light"
                           ? ""
                           : "bg-green-500"
                       )}
@@ -832,6 +890,8 @@ const X402PaywallContent: React.FC<
                           ? { backgroundColor: "#32FEFF" }
                           : theme === "terminal-light"
                           ? { backgroundColor: "#009192" }
+                          : theme === "seeker-light"
+                          ? { backgroundColor: "#00BECC" }
                           : undefined
                       }
                     ></div>
@@ -862,13 +922,17 @@ const X402PaywallContent: React.FC<
               <svg
                 className={cn(
                   "w-4 h-4",
-                  theme === "terminal" ? "" : "text-green-500"
+                  theme === "terminal" || theme === "seeker-light"
+                    ? ""
+                    : "text-green-500"
                 )}
                 style={
                   theme === "terminal"
                     ? { color: "#32FEFF" }
                     : theme === "terminal-light"
                     ? { color: "#009192" }
+                    : theme === "seeker-light"
+                    ? { color: "#00BECC" }
                     : undefined
                 }
                 fill="none"
@@ -886,7 +950,11 @@ const X402PaywallContent: React.FC<
               <span
                 className={cn("text-sm", connectThemeConfig.securityMessage)}
                 style={
-                  theme === "terminal-light" ? { color: "#000000" } : undefined
+                  theme === "terminal-light"
+                    ? { color: "#000000" }
+                    : theme === "seeker-light"
+                    ? { color: "#000000" }
+                    : undefined
                 }
               >
                 Secure payment powered by Solana
@@ -928,6 +996,12 @@ const X402PaywallContent: React.FC<
                           "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
                         backgroundColor: "transparent",
                       }
+                    : theme === "seeker-light"
+                    ? {
+                        background:
+                          "linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)",
+                        backgroundColor: "transparent",
+                      }
                     : undefined
                 }
               />
@@ -943,6 +1017,8 @@ const X402PaywallContent: React.FC<
                     "font-medium underline",
                     theme === "seeker" || theme === "seeker-2"
                       ? "text-[#95D2E6]"
+                      : theme === "seeker-light"
+                      ? "hover:opacity-90"
                       : theme === "terminal" || theme === "terminal-light"
                       ? "hover:opacity-90"
                       : "text-[#4ADE80]"
@@ -952,6 +1028,8 @@ const X402PaywallContent: React.FC<
                       ? { color: "#32FEFF" }
                       : theme === "terminal-light"
                       ? { color: "#009192" }
+                      : theme === "seeker-light"
+                      ? { color: "#00BECC" }
                       : undefined
                   }
                 >
@@ -961,6 +1039,8 @@ const X402PaywallContent: React.FC<
                       "inline w-3 h-3 ml-1",
                       theme === "seeker" || theme === "seeker-2"
                         ? "text-[#95D2E6]"
+                        : theme === "seeker-light"
+                        ? ""
                         : theme === "terminal" || theme === "terminal-light"
                         ? ""
                         : "text-[#4ADE80]"
@@ -970,6 +1050,8 @@ const X402PaywallContent: React.FC<
                         ? { color: "#32FEFF" }
                         : theme === "terminal-light"
                         ? { color: "#009192" }
+                        : theme === "seeker-light"
+                        ? { color: "#00BECC" }
                         : undefined
                     }
                     fill="currentColor"
@@ -1031,6 +1113,12 @@ const X402PaywallContent: React.FC<
           : theme === "seeker-2"
           ? {
               background: "#0D1615",
+              ...customStyles?.container,
+            }
+          : theme === "seeker-light"
+          ? {
+              background:
+                "linear-gradient(240.08deg, #B8CCD3 -0.56%, #FFFFFF 119.23%)",
               ...customStyles?.container,
             }
           : theme === "terminal"
@@ -1098,6 +1186,11 @@ const X402PaywallContent: React.FC<
                 backdropFilter: "blur(12px)",
                 ...customStyles?.card,
               }
+            : theme === "seeker-light"
+            ? {
+                backgroundColor: "#FFFFFF",
+                ...customStyles?.card,
+              }
             : customStyles?.card
         }
       >
@@ -1163,12 +1256,16 @@ const X402PaywallContent: React.FC<
                     ? ""
                     : theme === "seeker" || theme === "seeker-2"
                     ? "text-white"
+                    : theme === "seeker-light"
+                    ? ""
                     : "text-[#71717A]"
                 )}
                 style={
                   theme === "terminal"
                     ? { color: "#FFFFFF66" }
                     : theme === "terminal-light"
+                    ? { color: "#71717A" }
+                    : theme === "seeker-light"
                     ? { color: "#71717A" }
                     : undefined
                 }
@@ -1212,6 +1309,8 @@ const X402PaywallContent: React.FC<
                     ? "text-white"
                     : theme === "seeker-2"
                     ? "text-white"
+                    : theme === "seeker-light"
+                    ? "text-black"
                     : theme === "terminal"
                     ? "text-white font-vt323"
                     : theme === "terminal-light"
@@ -1230,6 +1329,8 @@ const X402PaywallContent: React.FC<
                     ? "text-white"
                     : theme === "seeker-2"
                     ? "text-white"
+                    : theme === "seeker-light"
+                    ? ""
                     : theme === "terminal"
                     ? ""
                     : theme === "terminal-light"
@@ -1240,6 +1341,8 @@ const X402PaywallContent: React.FC<
                   theme === "terminal"
                     ? { color: "#FFFFFF66" }
                     : theme === "terminal-light"
+                    ? { color: "#71717A" }
+                    : theme === "seeker-light"
                     ? { color: "#71717A" }
                     : undefined
                 }
@@ -1625,6 +1728,8 @@ const X402PaywallContent: React.FC<
                     ? "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full"
                     : theme === "seeker" || theme === "seeker-2"
                     ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full"
+                    : theme === "seeker-light"
+                    ? "text-white rounded-full"
                     : theme === "terminal" || theme === "terminal-light"
                     ? "text-black hover:opacity-90 font-vt323 rounded-none"
                     : "bg-solana-gradient rounded-full",
@@ -1660,6 +1765,13 @@ const X402PaywallContent: React.FC<
                     ? {
                         background:
                           "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
+                        backgroundColor: "transparent",
+                        ...customStyles?.button,
+                      }
+                    : theme === "seeker-light"
+                    ? {
+                        background:
+                          "linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)",
                         backgroundColor: "transparent",
                         ...customStyles?.button,
                       }
@@ -1703,6 +1815,8 @@ const X402PaywallContent: React.FC<
                         ? "text-purple-600"
                         : theme === "seeker" || theme === "seeker-2"
                         ? "text-[#95D2E6] hover:text-[#95D2E6]"
+                        : theme === "seeker-light"
+                        ? "hover:opacity-90"
                         : theme === "terminal" || theme === "terminal-light"
                         ? "hover:opacity-90"
                         : "text-green-400 hover:text-green-300"
@@ -1712,6 +1826,8 @@ const X402PaywallContent: React.FC<
                         ? { color: "#32FEFF" }
                         : theme === "terminal-light"
                         ? { color: "#000000" }
+                        : theme === "seeker-light"
+                        ? { color: "#00BECC" }
                         : undefined
                     }
                   >
@@ -1723,6 +1839,8 @@ const X402PaywallContent: React.FC<
                           ? "text-purple-600"
                           : theme === "seeker" || theme === "seeker-2"
                           ? "text-[#95D2E6]"
+                          : theme === "seeker-light"
+                          ? ""
                           : theme === "terminal" || theme === "terminal-light"
                           ? ""
                           : "text-green-400"
@@ -1732,6 +1850,8 @@ const X402PaywallContent: React.FC<
                           ? { color: "#32FEFF" }
                           : theme === "terminal-light"
                           ? { color: "#000000" }
+                          : theme === "seeker-light"
+                          ? { color: "#00BECC" }
                           : undefined
                       }
                       fill="currentColor"
@@ -1778,6 +1898,10 @@ const X402PaywallContent: React.FC<
                     ? {
                         backgroundColor: "rgba(0, 0, 0, 0.12)",
                         boxShadow: "0px 0px 16px 4px #000000 inset",
+                      }
+                    : theme === "seeker-light"
+                    ? {
+                        backgroundColor: "#F4F4F5",
                       }
                     : undefined
                 }
@@ -1869,6 +1993,10 @@ const X402PaywallContent: React.FC<
                             backgroundColor: "#FFFFFF",
                             border: "1px solid #E4E4E7",
                           }
+                        : theme === "seeker-light"
+                        ? {
+                            backgroundColor: "#F4F4F5",
+                          }
                         : theme === "dark" || theme === "solana-dark"
                         ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
                         : undefined
@@ -1882,6 +2010,8 @@ const X402PaywallContent: React.FC<
                           theme === "terminal"
                             ? "text-white"
                             : theme === "terminal-light"
+                            ? "text-black"
+                            : theme === "seeker-light"
                             ? "text-black"
                             : theme === "dark" || theme === "solana-dark"
                             ? "text-white"
@@ -1897,6 +2027,8 @@ const X402PaywallContent: React.FC<
                             ? ""
                             : theme === "terminal-light"
                             ? ""
+                            : theme === "seeker-light"
+                            ? ""
                             : theme === "light" || theme === "solana-light"
                             ? "text-purple-600"
                             : "text-[#21ECAB]"
@@ -1906,6 +2038,8 @@ const X402PaywallContent: React.FC<
                             ? { color: "#32FEFF" }
                             : theme === "terminal-light"
                             ? { color: "#009192" }
+                            : theme === "seeker-light"
+                            ? { color: "#00BECC" }
                             : undefined
                         }
                       >
@@ -1940,6 +2074,8 @@ const X402PaywallContent: React.FC<
                             "text-sm",
                             theme === "terminal-light"
                               ? "text-black"
+                              : theme === "seeker-light"
+                              ? "text-black"
                               : theme === "terminal"
                               ? "text-white"
                               : theme === "dark" || theme === "solana-dark"
@@ -1952,7 +2088,9 @@ const X402PaywallContent: React.FC<
                         <div
                           className={cn(
                             "text-sm",
-                            theme === "terminal-light"
+                            theme === "seeker-light"
+                              ? "text-black"
+                              : theme === "terminal-light"
                               ? "text-black font-vt323"
                               : theme === "terminal"
                               ? "text-white font-vt323"
@@ -1981,6 +2119,8 @@ const X402PaywallContent: React.FC<
                             "text-sm",
                             theme === "terminal-light"
                               ? "text-black"
+                              : theme === "seeker-light"
+                              ? "text-black"
                               : theme === "terminal"
                               ? "text-white"
                               : theme === "dark" || theme === "solana-dark"
@@ -1995,6 +2135,8 @@ const X402PaywallContent: React.FC<
                             "text-sm",
                             theme === "terminal-light"
                               ? "text-black font-vt323"
+                              : theme === "seeker-light"
+                              ? "text-black"
                               : theme === "terminal"
                               ? "text-white font-vt323"
                               : theme === "dark" || theme === "solana-dark"
@@ -2011,6 +2153,8 @@ const X402PaywallContent: React.FC<
                             "text-sm",
                             theme === "terminal-light"
                               ? "text-black"
+                              : theme === "seeker-light"
+                              ? "text-black"
                               : theme === "terminal"
                               ? "text-white"
                               : theme === "dark" || theme === "solana-dark"
@@ -2025,6 +2169,8 @@ const X402PaywallContent: React.FC<
                             "text-sm",
                             theme === "terminal-light"
                               ? "text-black font-vt323"
+                              : theme === "seeker-light"
+                              ? "text-black"
                               : theme === "terminal"
                               ? "text-white font-vt323"
                               : theme === "dark" || theme === "solana-dark"
@@ -2041,6 +2187,8 @@ const X402PaywallContent: React.FC<
                             "text-sm",
                             theme === "terminal-light"
                               ? "text-black"
+                              : theme === "seeker-light"
+                              ? "text-black"
                               : theme === "terminal"
                               ? "text-white"
                               : theme === "dark" || theme === "solana-dark"
@@ -2054,7 +2202,9 @@ const X402PaywallContent: React.FC<
                           <div
                             className={cn(
                               "w-2 h-2 rounded-full",
-                              theme === "terminal" || theme === "terminal-light"
+                              theme === "terminal" ||
+                                theme === "terminal-light" ||
+                                theme === "seeker-light"
                                 ? ""
                                 : "bg-green-500"
                             )}
@@ -2063,6 +2213,8 @@ const X402PaywallContent: React.FC<
                                 ? { backgroundColor: "#32FEFF" }
                                 : theme === "terminal-light"
                                 ? { backgroundColor: "#009192" }
+                                : theme === "seeker-light"
+                                ? { backgroundColor: "#00BECC" }
                                 : undefined
                             }
                           ></div>
@@ -2073,6 +2225,8 @@ const X402PaywallContent: React.FC<
                                 : "text-sm",
                               theme === "terminal-light"
                                 ? "text-black font-vt323"
+                                : theme === "seeker-light"
+                                ? "text-black"
                                 : theme === "terminal"
                                 ? "text-white font-vt323"
                                 : theme === "dark" || theme === "solana-dark"
@@ -2093,7 +2247,9 @@ const X402PaywallContent: React.FC<
                 <svg
                   className={cn(
                     "w-4 h-4",
-                    theme === "terminal" || theme === "terminal-light"
+                    theme === "terminal" ||
+                      theme === "terminal-light" ||
+                      theme === "seeker-light"
                       ? ""
                       : "text-green-500"
                   )}
@@ -2102,6 +2258,8 @@ const X402PaywallContent: React.FC<
                       ? { color: "#32FEFF" }
                       : theme === "terminal-light"
                       ? { color: "#009192" }
+                      : theme === "seeker-light"
+                      ? { color: "#00BECC" }
                       : undefined
                   }
                   fill="none"
@@ -2124,6 +2282,8 @@ const X402PaywallContent: React.FC<
                       : theme === "seeker-2"
                       ? { color: "#FFFFFF66" }
                       : theme === "terminal-light"
+                      ? { color: "#000000" }
+                      : theme === "seeker-light"
                       ? { color: "#000000" }
                       : undefined
                   }
@@ -2177,6 +2337,13 @@ const X402PaywallContent: React.FC<
                         backgroundColor: "transparent",
                         ...customStyles?.button,
                       }
+                    : theme === "seeker-light"
+                    ? {
+                        background:
+                          "linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)",
+                        backgroundColor: "transparent",
+                        ...customStyles?.button,
+                      }
                     : customStyles?.button
                 }
               />
@@ -2213,6 +2380,8 @@ const X402PaywallContent: React.FC<
                         ? "text-[#95D2E6]"
                         : theme === "seeker-2"
                         ? "text-[#95D2E6]"
+                        : theme === "seeker-light"
+                        ? "hover:opacity-90"
                         : theme === "terminal" || theme === "terminal-light"
                         ? "hover:opacity-90"
                         : themeConfig.helperLink || "text-[#4ADE80]"
@@ -2226,6 +2395,8 @@ const X402PaywallContent: React.FC<
                         ? { color: "#95D2E6" }
                         : theme === "seeker-2"
                         ? { color: "#95D2E6" }
+                        : theme === "seeker-light"
+                        ? { color: "#00BECC" }
                         : undefined
                     }
                   >
@@ -2239,6 +2410,8 @@ const X402PaywallContent: React.FC<
                           ? "text-[#95D2E6]"
                           : theme === "seeker-2"
                           ? "text-[#95D2E6]"
+                          : theme === "seeker-light"
+                          ? ""
                           : theme === "terminal" || theme === "terminal-light"
                           ? ""
                           : "text-[#4ADE80]"
@@ -2248,6 +2421,8 @@ const X402PaywallContent: React.FC<
                           ? { color: "#32FEFF" }
                           : theme === "terminal-light"
                           ? { color: "#009192" }
+                          : theme === "seeker-light"
+                          ? { color: "#00BECC" }
                           : undefined
                       }
                       fill="currentColor"

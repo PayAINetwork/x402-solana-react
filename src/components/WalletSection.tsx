@@ -78,12 +78,16 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                     ? ""
                     : theme === "terminal-light"
                     ? ""
+                    : theme === "seeker-light"
+                    ? ""
                     : "text-[#FFFFFF66]"
                 )}
                 style={
                   theme === "terminal"
                     ? { color: "#FFFFFF66" }
                     : theme === "terminal-light"
+                    ? { color: "#71717A" }
+                    : theme === "seeker-light"
                     ? { color: "#71717A" }
                     : undefined
                 }
@@ -99,6 +103,8 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                     ? "text-white font-vt323"
                     : theme === "terminal-light"
                     ? "text-black font-vt323"
+                    : theme === "seeker-light"
+                    ? "text-black"
                     : "text-white font-mono"
                 )}
               >
@@ -116,12 +122,16 @@ export const WalletSection: React.FC<WalletSectionProps> = ({
                 ? "hover:opacity-80 font-vt323"
                 : theme === "terminal-light"
                 ? "hover:opacity-80 font-vt323"
+                : theme === "seeker-light"
+                ? "hover:opacity-80"
                 : "text-[#FFFFFF66] hover:opacity-80"
             )}
             style={
               theme === "terminal"
                 ? { color: "#FFFFFF66" }
                 : theme === "terminal-light"
+                ? { color: "#71717A" }
+                : theme === "seeker-light"
                 ? { color: "#71717A" }
                 : undefined
             }
