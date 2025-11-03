@@ -1015,7 +1015,9 @@ const X402PaywallContent: React.FC<
                   href="#"
                   className={cn(
                     "font-medium underline",
-                    theme === "seeker" || theme === "seeker-2"
+                    theme === "light" || theme === "solana-light"
+                      ? "text-purple-600"
+                      : theme === "seeker" || theme === "seeker-2"
                       ? "text-[#95D2E6]"
                       : theme === "seeker-light"
                       ? "hover:opacity-90"
@@ -1037,7 +1039,9 @@ const X402PaywallContent: React.FC<
                   <svg
                     className={cn(
                       "inline w-3 h-3 ml-1",
-                      theme === "seeker" || theme === "seeker-2"
+                      theme === "light" || theme === "solana-light"
+                        ? "text-purple-600"
+                        : theme === "seeker" || theme === "seeker-2"
                         ? "text-[#95D2E6]"
                         : theme === "seeker-light"
                         ? ""
