@@ -647,7 +647,11 @@ const X402PaywallContent: React.FC<
                     classNames?.text
                   )}
                   style={
-                    theme === "terminal" ? { color: "#FFFFFF99" } : undefined
+                    theme === "terminal"
+                      ? { color: "#FFFFFF99" }
+                      : theme === "terminal-light"
+                      ? { color: "#71717A" }
+                      : undefined
                   }
                 >
                   content.xyz
@@ -711,10 +715,16 @@ const X402PaywallContent: React.FC<
                     ? "text-white"
                     : theme === "terminal"
                     ? ""
+                    : theme === "terminal-light"
+                    ? ""
                     : "text-slate-600"
                 )}
                 style={
-                  theme === "terminal" ? { color: "#FFFFFF99" } : undefined
+                  theme === "terminal"
+                    ? { color: "#FFFFFF99" }
+                    : theme === "terminal-light"
+                    ? { color: "#71717A" }
+                    : undefined
                 }
               >
                 Access to protected content. To access this content, please pay
@@ -744,6 +754,10 @@ const X402PaywallContent: React.FC<
                       backgroundColor: "#0B2D2D",
                       border: "1px solid #22EBAD33",
                     }
+                  : theme === "terminal-light"
+                  ? {
+                      border: "1px solid #E4E4E7",
+                    }
                   : theme === "dark" || theme === "solana-dark"
                   ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
                   : theme === "light" || theme === "solana-light"
@@ -764,6 +778,8 @@ const X402PaywallContent: React.FC<
                       ? "text-black"
                       : theme === "terminal"
                       ? "text-white"
+                      : theme === "terminal-light"
+                      ? "text-black"
                       : "text-slate-900"
                   )}
                 >
@@ -780,6 +796,8 @@ const X402PaywallContent: React.FC<
                       ? ""
                       : theme === "terminal"
                       ? ""
+                      : theme === "terminal-light"
+                      ? ""
                       : "text-[#21ECAB]"
                   )}
                   style={
@@ -789,6 +807,8 @@ const X402PaywallContent: React.FC<
                       ? { color: "#00BECC" }
                       : theme === "terminal"
                       ? { color: "#32FEFF" }
+                      : theme === "terminal-light"
+                      ? { color: "#009192" }
                       : undefined
                   }
                 >
@@ -830,6 +850,8 @@ const X402PaywallContent: React.FC<
                         ? "text-white"
                         : theme === "terminal"
                         ? "text-white"
+                        : theme === "terminal-light"
+                        ? "text-black"
                         : "text-slate-900"
                     )}
                   >
@@ -845,6 +867,8 @@ const X402PaywallContent: React.FC<
                         ? "text-white"
                         : theme === "terminal"
                         ? "text-white"
+                        : theme === "terminal-light"
+                        ? "text-black"
                         : "text-slate-900"
                     )}
                   >
@@ -862,6 +886,8 @@ const X402PaywallContent: React.FC<
                         ? "text-white"
                         : theme === "terminal"
                         ? "text-white"
+                        : theme === "terminal-light"
+                        ? "text-black"
                         : "text-slate-900"
                     )}
                   >
@@ -885,6 +911,8 @@ const X402PaywallContent: React.FC<
                           ? { backgroundColor: "#00BECC" }
                           : theme === "terminal"
                           ? { backgroundColor: "#32FEFF" }
+                          : theme === "terminal-light"
+                          ? { backgroundColor: "#009192" }
                           : undefined
                       }
                     ></div>
@@ -898,6 +926,8 @@ const X402PaywallContent: React.FC<
                           ? "text-white"
                           : theme === "terminal"
                           ? "text-white"
+                          : theme === "terminal-light"
+                          ? "text-black"
                           : "text-slate-900"
                       )}
                     >
@@ -944,7 +974,7 @@ const X402PaywallContent: React.FC<
                   theme === "terminal"
                     ? { color: "#FFFFFF99" }
                     : theme === "terminal-light"
-                    ? { color: "#000000" }
+                    ? { color: "#71717A" }
                     : theme === "seeker-light"
                     ? { color: "#000000" }
                     : undefined
@@ -984,6 +1014,11 @@ const X402PaywallContent: React.FC<
                         backgroundColor: "#32FEFF",
                         color: "#000000",
                       }
+                    : theme === "terminal-light"
+                    ? {
+                        backgroundColor: "#000000",
+                        color: "#FFFFFF",
+                      }
                     : theme === "seeker" || theme === "seeker-2"
                     ? {
                         background:
@@ -1006,7 +1041,11 @@ const X402PaywallContent: React.FC<
               <p
                 className={cn("text-sm", connectThemeConfig.helperText)}
                 style={
-                  theme === "terminal" ? { color: "#FFFFFF99" } : undefined
+                  theme === "terminal"
+                    ? { color: "#FFFFFF99" }
+                    : theme === "terminal-light"
+                    ? { color: "#71717A" }
+                    : undefined
                 }
               >
                 Don't have USDC?{" "}
@@ -1028,7 +1067,7 @@ const X402PaywallContent: React.FC<
                     theme === "terminal"
                       ? { color: "#32FEFF" }
                       : theme === "terminal-light"
-                      ? { color: "#009192" }
+                      ? { color: "#000000" }
                       : theme === "seeker-light"
                       ? { color: "#00BECC" }
                       : undefined
@@ -1052,7 +1091,7 @@ const X402PaywallContent: React.FC<
                       theme === "terminal"
                         ? { color: "#32FEFF" }
                         : theme === "terminal-light"
-                        ? { color: "#009192" }
+                        ? { color: "#000000" }
                         : theme === "seeker-light"
                         ? { color: "#00BECC" }
                         : undefined
@@ -1808,6 +1847,10 @@ const X402PaywallContent: React.FC<
                         backgroundColor: "#0B2D2D",
                         border: "1px solid #22EBAD33",
                       }
+                    : theme === "terminal-light"
+                    ? {
+                        border: "1px solid #E4E4E7",
+                      }
                     : theme === "dark" || theme === "solana-dark"
                     ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
                     : theme === "seeker"
@@ -1916,6 +1959,10 @@ const X402PaywallContent: React.FC<
                         ? {
                             backgroundColor: "#0B2D2D",
                             border: "1px solid #22EBAD33",
+                          }
+                        : theme === "terminal-light"
+                        ? {
+                            border: "1px solid #E4E4E7",
                           }
                         : theme === "dark" || theme === "solana-dark"
                         ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
@@ -2208,7 +2255,7 @@ const X402PaywallContent: React.FC<
                       : theme === "seeker-2"
                       ? { color: "#FFFFFF66" }
                       : theme === "terminal-light"
-                      ? { color: "#000000" }
+                      ? { color: "#71717A" }
                       : theme === "seeker-light"
                       ? { color: "#000000" }
                       : undefined
@@ -2239,6 +2286,12 @@ const X402PaywallContent: React.FC<
                     ? {
                         backgroundColor: "#32FEFF",
                         color: "#000000",
+                        ...customStyles?.button,
+                      }
+                    : theme === "terminal-light"
+                    ? {
+                        backgroundColor: "#000000",
+                        color: "#FFFFFF",
                         ...customStyles?.button,
                       }
                     : theme === "dark"
@@ -2289,6 +2342,8 @@ const X402PaywallContent: React.FC<
                     style={
                       theme === "terminal"
                         ? { color: "#FFFFFF99" }
+                        : theme === "terminal-light"
+                        ? { color: "#71717A" }
                         : theme === "seeker"
                         ? { color: "#FFFFFF66" }
                         : theme === "seeker-2"
@@ -2317,6 +2372,8 @@ const X402PaywallContent: React.FC<
                     style={
                       theme === "terminal"
                         ? { color: "#32FEFF" }
+                        : theme === "terminal-light"
+                        ? { color: "#000000" }
                         : theme === "seeker"
                         ? { color: "#95D2E6" }
                         : theme === "seeker-2"
@@ -2346,7 +2403,7 @@ const X402PaywallContent: React.FC<
                         theme === "terminal"
                           ? { color: "#32FEFF" }
                           : theme === "terminal-light"
-                          ? { color: "#009192" }
+                          ? { color: "#000000" }
                           : theme === "seeker-light"
                           ? { color: "#00BECC" }
                           : undefined
