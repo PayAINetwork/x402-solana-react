@@ -899,7 +899,8 @@ const X402PaywallContent: React.FC<
                     <div
                       className={cn(
                         "w-2 h-2 rounded-full",
-                        theme === "seeker-2" ||
+                        theme === "seeker" ||
+                          theme === "seeker-2" ||
                           theme === "seeker-light" ||
                           theme === "terminal" ||
                           theme === "terminal-light"
@@ -907,7 +908,9 @@ const X402PaywallContent: React.FC<
                           : "bg-green-500"
                       )}
                       style={
-                        theme === "seeker-2"
+                        theme === "seeker"
+                          ? { backgroundColor: "#95D2E6" }
+                          : theme === "seeker-2"
                           ? { backgroundColor: "#95D2E6" }
                           : theme === "seeker-light"
                           ? { backgroundColor: "#00BECC" }
