@@ -419,6 +419,12 @@ const X402PaywallContent: React.FC<
                   "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
                 ...customStyles?.container,
               }
+            : theme === "solana-dark"
+            ? {
+                background:
+                  "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
+                ...customStyles?.container,
+              }
             : theme === "light"
             ? {
                 background:

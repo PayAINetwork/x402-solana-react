@@ -24,7 +24,7 @@ type Theme =
   | "seeker-light";
 
 function DemoContent() {
-  const [currentTheme] = useState<Theme>("dark");
+  const [currentTheme] = useState<Theme>("solana-dark");
   const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
 
   return (
