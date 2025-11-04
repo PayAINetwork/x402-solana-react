@@ -576,7 +576,7 @@ const X402PaywallContent: React.FC<
                 "flex items-center space-x-4 mb-6 p-4",
                 theme === "terminal" || theme === "terminal-light"
                   ? "-mx-6 -mt-6 relative"
-                  : theme === "light"
+                  : theme === "light" || theme === "seeker-light"
                   ? "mb-3"
                   : "mb-6"
               )}
@@ -678,6 +678,8 @@ const X402PaywallContent: React.FC<
                         borderBottom: "1px solid #FFFFFF1F",
                         marginBottom: "1rem",
                       }
+                    : theme === "seeker-light"
+                    ? { marginBottom: "1rem" }
                     : theme === "light" || theme === "solana-light"
                     ? { marginBottom: "1rem" }
                     : theme === "dark" || theme === "solana-dark"
@@ -1243,7 +1245,7 @@ const X402PaywallContent: React.FC<
               "flex items-center space-x-4 mb-6 p-4",
               theme === "terminal" || theme === "terminal-light"
                 ? "-mx-6 -mt-6 relative"
-                : theme === "light"
+                : theme === "light" || theme === "seeker-light"
                 ? "mb-3"
                 : "mb-6"
             )}
@@ -1339,6 +1341,8 @@ const X402PaywallContent: React.FC<
                       borderBottom: "1px solid #FFFFFF1F",
                       marginBottom: "1rem",
                     }
+                  : theme === "seeker-light"
+                  ? { marginBottom: "1rem" }
                   : theme === "light" || theme === "solana-light"
                   ? { marginBottom: "1rem" }
                   : theme === "dark" || theme === "solana-dark"
