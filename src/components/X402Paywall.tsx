@@ -585,8 +585,10 @@ const X402PaywallContent: React.FC<
                   : connectThemeConfig.paymentDetails
               )}
               style={
-                theme === "seeker" || theme === "seeker-2"
+                theme === "seeker"
                   ? { backgroundColor: "rgba(0, 0, 0, 0.12)" }
+                  : theme === "seeker-2"
+                  ? { backgroundColor: "#171A1A" }
                   : theme === "dark" || theme === "solana-dark"
                   ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
                   : theme === "light" || theme === "solana-light"
@@ -699,7 +701,17 @@ const X402PaywallContent: React.FC<
                     Network
                   </span>
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <div
+                      className={cn(
+                        "w-2 h-2 rounded-full",
+                        theme === "seeker-2" ? "" : "bg-green-500"
+                      )}
+                      style={
+                        theme === "seeker-2"
+                          ? { backgroundColor: "#95D2E6" }
+                          : undefined
+                      }
+                    ></div>
                     <span
                       className={cn(
                         "text-sm",
@@ -1388,11 +1400,13 @@ const X402PaywallContent: React.FC<
                 style={
                   theme === "dark" || theme === "solana-dark"
                     ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                    : theme === "seeker" || theme === "seeker-2"
+                    : theme === "seeker"
                     ? {
                         backgroundColor: "rgba(0, 0, 0, 0.12)",
                         boxShadow: "0px 0px 16px 4px #000000 inset",
                       }
+                    : theme === "seeker-2"
+                    ? { backgroundColor: "#171A1A" }
                     : theme === "light" || theme === "solana-light"
                     ? { backgroundColor: "#F4F4F5", border: "none" }
                     : undefined
@@ -1404,10 +1418,15 @@ const X402PaywallContent: React.FC<
                 (theme === "seeker" || theme === "seeker-2" ? (
                   <div
                     className={cn("p-6", themeConfig.paymentDetails)}
-                    style={{
-                      backgroundColor: "rgba(0, 0, 0, 0.12)",
-                      boxShadow: "0px 0px 16px 4px #000000 inset",
-                    }}
+                    style={
+                      theme === "seeker"
+                        ? {
+                            backgroundColor: "rgba(0, 0, 0, 0.12)",
+                          }
+                        : theme === "seeker-2"
+                        ? { backgroundColor: "#171A1A" }
+                        : undefined
+                    }
                   >
                     {/* Amount Section - Top Row */}
                     <div className="flex items-center justify-between mb-4">
