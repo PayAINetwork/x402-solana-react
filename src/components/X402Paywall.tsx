@@ -804,11 +804,15 @@ const X402PaywallContent: React.FC<
                     : theme === "seeker" || theme === "seeker-2"
                     ? ""
                     : theme === "terminal"
-                    ? "border-green-400/20"
+                    ? ""
                     : "border-slate-200"
                 )}
                 style={
-                  theme === "seeker" || theme === "seeker-2"
+                  theme === "terminal"
+                    ? {
+                        borderTop: "1px solid #22EBAD1F",
+                      }
+                    : theme === "seeker" || theme === "seeker-2"
                     ? { borderTop: "1px solid #FFFFFF1F" }
                     : undefined
                 }
@@ -1975,8 +1979,17 @@ const X402PaywallContent: React.FC<
                         "border-t mb-4",
                         theme === "dark" || theme === "solana-dark"
                           ? "border-slate-600"
+                          : theme === "terminal"
+                          ? ""
                           : "border-slate-200"
                       )}
+                      style={
+                        theme === "terminal"
+                          ? {
+                              borderTop: "1px solid #22EBAD1F",
+                            }
+                          : undefined
+                      }
                     ></div>
 
                     {/* Other Details */}
