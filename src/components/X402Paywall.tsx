@@ -519,6 +519,8 @@ const X402PaywallContent: React.FC<
                   ? { borderBottom: "1px solid #FFFFFF1F" }
                   : theme === "light"
                   ? { marginBottom: "2rem" }
+                  : theme === "dark" || theme === "solana-dark"
+                  ? { marginBottom: "2rem" }
                   : undefined
               }
             ></div>
@@ -931,6 +933,8 @@ const X402PaywallContent: React.FC<
                 ? { borderBottom: "1px solid #FFFFFF1F" }
                 : theme === "light"
                 ? { marginBottom: "1rem" }
+                : theme === "dark" || theme === "solana-dark"
+                ? { marginBottom: "2rem" }
                 : undefined
             }
           ></div>
