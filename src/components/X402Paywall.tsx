@@ -528,7 +528,10 @@ const X402PaywallContent: React.FC<
               )}
               style={
                 theme === "seeker" || theme === "seeker-2"
-                  ? { borderBottom: "1px solid #FFFFFF1F" }
+                  ? {
+                      borderBottom: "1px solid #FFFFFF1F",
+                      marginBottom: "1rem",
+                    }
                   : theme === "light" || theme === "solana-light"
                   ? { marginBottom: "1rem" }
                   : theme === "dark" || theme === "solana-dark"
@@ -940,7 +943,7 @@ const X402PaywallContent: React.FC<
             )}
             style={
               theme === "seeker" || theme === "seeker-2"
-                ? { borderBottom: "1px solid #FFFFFF1F" }
+                ? { borderBottom: "1px solid #FFFFFF1F", marginBottom: "1rem" }
                 : theme === "light" || theme === "solana-light"
                 ? { marginBottom: "1rem" }
                 : theme === "dark" || theme === "solana-dark"
