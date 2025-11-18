@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 /**
  * Theme preset options
  */
-export type ThemePreset = 'solana-light' | 'solana-dark' | 'dark' | 'light' | 'seeker' | 'terminal' | 'seeker-2';
+export type ThemePreset = 'solana-light' | 'solana-dark' | 'dark' | 'light' | 'seeker' | 'terminal' | 'terminal-light' | 'seeker-2' | 'seeker-light' | 'system';
 
 /**
  * Component styling configuration

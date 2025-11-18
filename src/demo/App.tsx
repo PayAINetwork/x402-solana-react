@@ -18,11 +18,15 @@ type Theme =
   | "dark"
   | "light"
   | "seeker"
+  | "seeker-2"
+  | "seeker-light"
   | "terminal"
-  | "seeker-2";
+  | "terminal-light"
+  | "system";
 
 function DemoContent() {
-  const [currentTheme] = useState<Theme>("solana-light");
+  const [currentTheme] = useState<Theme>("terminal");
+
   const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
 
   return (

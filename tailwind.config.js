@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			'vt323': ['VT323', 'monospace'],
+  		},
   		colors: {
   			solana: {
   				primary: '#9945FF',
