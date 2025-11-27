@@ -4,29 +4,76 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Classic theme
 
+<table>
+<tr>
+<td width="50%">
+
 ![Classic Light Theme Preview](./example-images/light.png)
+
+</td>
+<td width="50%">
 
 ![Classic Dark Theme Preview](./example-images/dark.png)
 
+</td>
+</tr>
+</table>
+
 ## Solana theme
+
+<table>
+<tr>
+<td width="50%">
 
 ![Solana Light Theme Preview](./example-images/solana-light.png)
 
+</td>
+<td width="50%">
+
 ![Solana Dark Theme Preview](./example-images/solana-dark.png)
+
+</td>
+</tr>
+</table>
 
 ## Seeker theme
 
+<table>
+<tr>
+<td width="33.33%">
+
 ![Seeker Light Theme Preview](./example-images/seeker-light.png)
+
+</td>
+<td width="33.33%">
 
 ![Seeker Theme Preview](./example-images/seeker.png)
 
+</td>
+<td width="33.33%">
+
 ![Seeker-2 Theme Preview](./example-images/seeker-2.png)
+
+</td>
+</tr>
+</table>
 
 ## Terminal theme
 
+<table>
+<tr>
+<td width="50%">
+
 ![Terminal Light Theme Preview](./example-images/terminal-light.png)
 
+</td>
+<td width="50%">
+
 ![Terminal Dark Theme Preview](./example-images/terminal-dark.png)
+
+</td>
+</tr>
+</table>
 
 ## 🚀 Features
 
