@@ -4,16 +4,16 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Classic theme
 
-<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
+<table>
 <tr>
-<td width="50%" style="border: none;">
+<td width="50%">
 
-![Classic Light Theme Preview](./example-images/light.png)
+<img src="./example-images/light.png" alt="Classic Light Theme Preview" style="width: 100%; height: auto;">
 
 </td>
-<td width="50%" style="border: none;">
+<td width="50%">
 
-![Classic Dark Theme Preview](./example-images/dark.png)
+<img src="./example-images/dark.png" alt="Classic Dark Theme Preview" style="width: 100%; height: auto;">
 
 </td>
 </tr>
@@ -21,16 +21,16 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Solana theme
 
-<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
+<table>
 <tr>
-<td width="50%" style="border: none;">
+<td width="50%">
 
-![Solana Light Theme Preview](./example-images/solana-light.png)
+<img src="./example-images/solana-light.png" alt="Solana Light Theme Preview" style="width: 100%; height: auto;">
 
 </td>
-<td width="50%" style="border: none;">
+<td width="50%">
 
-![Solana Dark Theme Preview](./example-images/solana-dark.png)
+<img src="./example-images/solana-dark.png" alt="Solana Dark Theme Preview" style="width: 100%; height: auto;">
 
 </td>
 </tr>
@@ -38,21 +38,21 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Seeker theme
 
-<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
+<table>
 <tr>
-<td width="33.33%" style="border: none;">
+<td width="33.33%">
 
-![Seeker Light Theme Preview](./example-images/seeker-light.png)
-
-</td>
-<td width="33.33%" style="border: none;">
-
-![Seeker Theme Preview](./example-images/seeker.png)
+<img src="./example-images/seeker-light.png" alt="Seeker Light Theme Preview" style="width: 100%; height: auto;">
 
 </td>
-<td width="33.33%" style="border: none;">
+<td width="33.33%">
 
-![Seeker-2 Theme Preview](./example-images/seeker-2.png)
+<img src="./example-images/seeker.png" alt="Seeker Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+<td width="33.33%">
+
+<img src="./example-images/seeker-2.png" alt="Seeker-2 Theme Preview" style="width: 100%; height: auto;">
 
 </td>
 </tr>
@@ -60,16 +60,16 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Terminal theme
 
-<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
+<table>
 <tr>
-<td width="50%" style="border: none;">
+<td width="50%">
 
-![Terminal Light Theme Preview](./example-images/terminal-light.png)
+<img src="./example-images/terminal-light.png" alt="Terminal Light Theme Preview" style="width: 100%; height: auto;">
 
 </td>
-<td width="50%" style="border: none;">
+<td width="50%">
 
-![Terminal Dark Theme Preview](./example-images/terminal-dark.png)
+<img src="./example-images/terminal-dark.png" alt="Terminal Dark Theme Preview" style="width: 100%; height: auto;">
 
 </td>
 </tr>
