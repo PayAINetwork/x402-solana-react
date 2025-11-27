@@ -4,14 +4,14 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Classic theme
 
-<table>
+<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
 <tr>
-<td width="50%">
+<td width="50%" style="border: none;">
 
 ![Classic Light Theme Preview](./example-images/light.png)
 
 </td>
-<td width="50%">
+<td width="50%" style="border: none;">
 
 ![Classic Dark Theme Preview](./example-images/dark.png)
 
@@ -21,14 +21,14 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Solana theme
 
-<table>
+<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
 <tr>
-<td width="50%">
+<td width="50%" style="border: none;">
 
 ![Solana Light Theme Preview](./example-images/solana-light.png)
 
 </td>
-<td width="50%">
+<td width="50%" style="border: none;">
 
 ![Solana Dark Theme Preview](./example-images/solana-dark.png)
 
@@ -38,19 +38,19 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Seeker theme
 
-<table>
+<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
 <tr>
-<td width="33.33%">
+<td width="33.33%" style="border: none;">
 
 ![Seeker Light Theme Preview](./example-images/seeker-light.png)
 
 </td>
-<td width="33.33%">
+<td width="33.33%" style="border: none;">
 
 ![Seeker Theme Preview](./example-images/seeker.png)
 
 </td>
-<td width="33.33%">
+<td width="33.33%" style="border: none;">
 
 ![Seeker-2 Theme Preview](./example-images/seeker-2.png)
 
@@ -60,14 +60,14 @@ A reusable React component library that provides drop-in paywall functionality f
 
 ## Terminal theme
 
-<table>
+<table border="0" cellpadding="0" cellspacing="0" style="border: none;">
 <tr>
-<td width="50%">
+<td width="50%" style="border: none;">
 
 ![Terminal Light Theme Preview](./example-images/terminal-light.png)
 
 </td>
-<td width="50%">
+<td width="50%" style="border: none;">
 
 ![Terminal Dark Theme Preview](./example-images/terminal-dark.png)
 
