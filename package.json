@@ -1,6 +1,6 @@
 {
   "name": "@payai/x402-solana-react",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Reusable React paywall components for Solana using the x402 payment protocol",
   "type": "module",
   "main": "./dist/index.js",
@@ -84,5 +84,9 @@
   "bugs": {
     "url": "https://github.com/payainetwork/x402-solana-react/issues"
   },
-  "homepage": "https://github.com/payainetwork/x402-solana-react#readme"
+  "homepage": "https://github.com/payainetwork/x402-solana-react#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }

@@ -61,9 +61,7 @@ jobs:
       
       - name: Publish to NPM
         if: steps.check.outputs.version_changed == 'true'
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
       
       - name: Get package version
         if: steps.check.outputs.version_changed == 'true'
