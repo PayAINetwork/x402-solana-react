@@ -2,12 +2,85 @@
 
 A reusable React component library that provides drop-in paywall functionality for Solana-based applications using the x402 payment protocol.
 
+## Classic theme
+
+<table>
+<tr>
+<td width="50%">
+
+<img src="./example-images/light.png" alt="Classic Light Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+<td width="50%">
+
+<img src="./example-images/dark.png" alt="Classic Dark Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+</tr>
+</table>
+
+## Solana theme
+
+<table>
+<tr>
+<td width="50%">
+
+<img src="./example-images/solana-light.png" alt="Solana Light Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+<td width="50%">
+
+<img src="./example-images/solana-dark.png" alt="Solana Dark Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+</tr>
+</table>
+
+## Seeker theme
+
+<table>
+<tr>
+<td width="33.33%">
+
+<img src="./example-images/seeker-light.png" alt="Seeker Light Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+<td width="33.33%">
+
+<img src="./example-images/seeker.png" alt="Seeker Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+<td width="33.33%">
+
+<img src="./example-images/seeker-2.png" alt="Seeker-2 Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+</tr>
+</table>
+
+## Terminal theme
+
+<table>
+<tr>
+<td width="50%">
+
+<img src="./example-images/terminal-light.png" alt="Terminal Light Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+<td width="50%">
+
+<img src="./example-images/terminal-dark.png" alt="Terminal Dark Theme Preview" style="width: 100%; height: auto;">
+
+</td>
+</tr>
+</table>
+
 ## 🚀 Features
 
 - ✅ **Drop-in React Components**: Easy integration with existing apps
 - ✅ **Auto-Setup Providers**: Automatically configures wallet providers (or use your own)
 - ✅ **Solana Native**: Built specifically for Solana blockchain
-- ✅ **Multi-Wallet Support**: Works with Phantom, Solflare, and more  
+- ✅ **Multi-Wallet Support**: Works with Phantom, Solflare, and more
 - ✅ **Multiple Themes**: Light, Dark, Solana, Seeker, Terminal themes
 - ✅ **Tailwind CSS**: Utility-first styling with customization
 - ✅ **shadcn/ui**: Accessible, beautiful components
@@ -27,7 +100,7 @@ A reusable React component library that provides drop-in paywall functionality f
 npm install @payai/x402-solana-react
 # or
 yarn add @payai/x402-solana-react
-# or  
+# or
 pnpm add @payai/x402-solana-react
 ```
 
@@ -46,8 +119,8 @@ npm install @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana
 Import the required styles in your main file (e.g., `main.tsx` or `App.tsx`):
 
 ```tsx
-import '@payai/x402-solana-react/styles';
-import '@solana/wallet-adapter-react-ui/styles.css';
+import "@payai/x402-solana-react/styles";
+import "@solana/wallet-adapter-react-ui/styles.css";
 ```
 
 ### 2. Environment Variables (Optional - Recommended for Production)
@@ -70,7 +143,7 @@ Restart the dev server after changing `.env` so Vite picks up updates.
 The component automatically sets up wallet providers for you! Just use it directly:
 
 ```tsx
-import { X402Paywall } from '@payai/x402-solana-react';
+import { X402Paywall } from "@payai/x402-solana-react";
 
 function App() {
   return (
@@ -90,19 +163,22 @@ function App() {
 Wrap your app with Solana wallet providers:
 
 ```tsx
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { clusterApiUrl } from '@solana/web3.js';
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { clusterApiUrl } from "@solana/web3.js";
 
 function App() {
   const network = WalletAdapterNetwork.Mainnet;
   const endpoint = clusterApiUrl(network);
-  const wallets = [
-    new PhantomWalletAdapter(),
-    new SolflareWalletAdapter(),
-  ];
+  const wallets = [new PhantomWalletAdapter(), new SolflareWalletAdapter()];
 
   return (
     <ConnectionProvider endpoint={endpoint}>
@@ -128,9 +204,9 @@ function App() {
 ### Simplest Example (Auto-Setup)
 
 ```tsx
-import { X402Paywall } from '@payai/x402-solana-react';
-import '@payai/x402-solana-react/styles';
-import '@solana/wallet-adapter-react-ui/styles.css';
+import { X402Paywall } from "@payai/x402-solana-react";
+import "@payai/x402-solana-react/styles";
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 function PremiumPage() {
   return (
@@ -138,7 +214,7 @@ function PremiumPage() {
       amount={0.02}
       description="Premium AI Chat Access"
       network="solana" // Use 'solana' for mainnet, 'solana-devnet' for testing
-      onPaymentSuccess={(txId) => console.log('Payment successful!', txId)}
+      onPaymentSuccess={(txId) => console.log("Payment successful!", txId)}
     >
       <PremiumContent />
     </X402Paywall>
@@ -149,7 +225,7 @@ function PremiumPage() {
 ### With Custom RPC (Recommended for Production)
 
 ```tsx
-import { X402Paywall } from '@payai/x402-solana-react';
+import { X402Paywall } from "@payai/x402-solana-react";
 
 function PremiumPage() {
   // Set via environment variable: VITE_SOLANA_RPC_URL
@@ -162,11 +238,11 @@ function PremiumPage() {
       network="solana"
       rpcUrl={rpcUrl} // Avoids rate limiting on public RPCs
       onPaymentSuccess={(txId) => {
-        console.log('Payment successful!', txId);
+        console.log("Payment successful!", txId);
         // Update your backend, show success message, etc.
       }}
       onPaymentError={(error) => {
-        console.error('Payment failed:', error);
+        console.error("Payment failed:", error);
       }}
     >
       <PremiumContent />
@@ -192,11 +268,11 @@ The component comes with multiple built-in themes:
 ### Theme Example
 
 ```tsx
-import { X402Paywall } from '@payai/x402-solana-react';
-import { useState } from 'react';
+import { X402Paywall } from "@payai/x402-solana-react";
+import { useState } from "react";
 
 function PremiumPage() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
 
   return (
     <X402Paywall
@@ -204,7 +280,7 @@ function PremiumPage() {
       description="Premium Features"
       network="solana"
       theme={theme} // Try: 'light', 'dark', 'solana-light', 'solana-dark', etc.
-      onPaymentSuccess={(txId) => console.log('Paid!', txId)}
+      onPaymentSuccess={(txId) => console.log("Paid!", txId)}
     >
       <AdvancedFeatures />
     </X402Paywall>
@@ -218,16 +294,16 @@ You can customize further using `classNames` and `customStyles` props:
 
 ```tsx
 <X402Paywall
-  amount={5.00}
+  amount={5.0}
   description="Premium Features"
   network="solana"
   theme="dark"
   classNames={{
     container: "bg-gradient-to-r from-purple-600 to-blue-600",
-    button: "bg-white text-purple-600 hover:bg-gray-50 font-bold"
+    button: "bg-white text-purple-600 hover:bg-gray-50 font-bold",
   }}
   customStyles={{
-    button: { boxShadow: '0 10px 30px rgba(153, 69, 255, 0.4)' }
+    button: { boxShadow: "0 10px 30px rgba(153, 69, 255, 0.4)" },
   }}
 >
   <AdvancedFeatures />
@@ -238,31 +314,31 @@ You can customize further using `classNames` and `customStyles` props:
 
 ### X402Paywall Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `amount` | `number` | ✅ | - | Payment amount in USDC |
-| `description` | `string` | ✅ | - | Payment description |
-| `children` | `ReactNode` | ✅ | - | Protected content to show after payment |
-| `network` | `'solana' \| 'solana-devnet'` | ❌ | `'solana-devnet'` | Solana network to use |
-| `wallet` | `WalletAdapter` | ❌ | - | Optional wallet adapter (auto-uses context if not provided) |
-| `rpcUrl` | `string` | ❌ | - | Custom RPC URL (recommended to avoid rate limits) |
-| `autoSetupProviders` | `boolean` | ❌ | `true` | Automatically setup wallet providers |
-| `providerNetwork` | `WalletAdapterNetwork` | ❌ | Auto-detected | Network for auto-setup providers |
-| `providerEndpoint` | `string` | ❌ | - | Custom endpoint for auto-setup providers |
-| `treasuryAddress` | `string` | ❌ | - | Custom treasury address |
-| `facilitatorUrl` | `string` | ❌ | - | Custom facilitator URL |
-| `theme` | `ThemePreset` | ❌ | `'solana-light'` | Visual theme (see Themes section) |
-| `showBalance` | `boolean` | ❌ | `true` | Show wallet USDC balance |
-| `showNetworkInfo` | `boolean` | ❌ | `true` | Show network information |
-| `showPaymentDetails` | `boolean` | ❌ | `true` | Show payment details section |
-| `maxPaymentAmount` | `number` | ❌ | - | Maximum allowed payment amount |
-| `classNames` | `ComponentClassNames` | ❌ | - | Custom CSS classes for components |
-| `customStyles` | `ComponentStyles` | ❌ | - | Custom inline styles for components |
-| `onPaymentStart` | `() => void` | ❌ | - | Callback when payment starts |
-| `onPaymentSuccess` | `(txId: string) => void` | ❌ | - | Callback on successful payment |
-| `onPaymentError` | `(error: Error) => void` | ❌ | - | Callback on payment error |
-| `onWalletConnect` | `(publicKey: string) => void` | ❌ | - | Callback when wallet connects |
-| `onDisconnect` | `() => void` | ❌ | - | Callback when wallet disconnects |
+| Prop                 | Type                          | Required | Default           | Description                                                 |
+| -------------------- | ----------------------------- | -------- | ----------------- | ----------------------------------------------------------- |
+| `amount`             | `number`                      | ✅       | -                 | Payment amount in USDC                                      |
+| `description`        | `string`                      | ✅       | -                 | Payment description                                         |
+| `children`           | `ReactNode`                   | ✅       | -                 | Protected content to show after payment                     |
+| `network`            | `'solana' \| 'solana-devnet'` | ❌       | `'solana-devnet'` | Solana network to use                                       |
+| `wallet`             | `WalletAdapter`               | ❌       | -                 | Optional wallet adapter (auto-uses context if not provided) |
+| `rpcUrl`             | `string`                      | ❌       | -                 | Custom RPC URL (recommended to avoid rate limits)           |
+| `autoSetupProviders` | `boolean`                     | ❌       | `true`            | Automatically setup wallet providers                        |
+| `providerNetwork`    | `WalletAdapterNetwork`        | ❌       | Auto-detected     | Network for auto-setup providers                            |
+| `providerEndpoint`   | `string`                      | ❌       | -                 | Custom endpoint for auto-setup providers                    |
+| `treasuryAddress`    | `string`                      | ❌       | -                 | Custom treasury address                                     |
+| `facilitatorUrl`     | `string`                      | ❌       | -                 | Custom facilitator URL                                      |
+| `theme`              | `ThemePreset`                 | ❌       | `'solana-light'`  | Visual theme (see Themes section)                           |
+| `showBalance`        | `boolean`                     | ❌       | `true`            | Show wallet USDC balance                                    |
+| `showNetworkInfo`    | `boolean`                     | ❌       | `true`            | Show network information                                    |
+| `showPaymentDetails` | `boolean`                     | ❌       | `true`            | Show payment details section                                |
+| `maxPaymentAmount`   | `number`                      | ❌       | -                 | Maximum allowed payment amount                              |
+| `classNames`         | `ComponentClassNames`         | ❌       | -                 | Custom CSS classes for components                           |
+| `customStyles`       | `ComponentStyles`             | ❌       | -                 | Custom inline styles for components                         |
+| `onPaymentStart`     | `() => void`                  | ❌       | -                 | Callback when payment starts                                |
+| `onPaymentSuccess`   | `(txId: string) => void`      | ❌       | -                 | Callback on successful payment                              |
+| `onPaymentError`     | `(error: Error) => void`      | ❌       | -                 | Callback on payment error                                   |
+| `onWalletConnect`    | `(publicKey: string) => void` | ❌       | -                 | Callback when wallet connects                               |
+| `onDisconnect`       | `() => void`                  | ❌       | -                 | Callback when wallet disconnects                            |
 
 See [full API documentation](./docs/API_REFERENCE.md) for complete reference.
 
@@ -305,36 +381,42 @@ npm run lint
 ### Common Issues
 
 **"Wallet not connected"**
+
 - Ensure wallet provider is properly configured
 - Check that wallet extension is installed and unlocked
 - Verify network matches (mainnet vs devnet)
 
 **"Insufficient USDC balance"**
+
 - Check wallet has enough USDC for payment + gas
 - On devnet: Use [Solana Faucet](https://faucet.solana.com/) for SOL
 - Get devnet USDC from test token faucets like [Circle](https://faucet.circle.com/)
 
 **"RPC rate limit exceeded"**
+
 - Use a custom RPC provider (Helius, QuickNode, Alchemy)
 - Set `VITE_SOLANA_RPC_URL` in `.env` file
 - Pass via `rpcUrl` prop: `rpcUrl={import.meta.env.VITE_SOLANA_RPC_URL}`
 - For production, always use a paid RPC endpoint
 
 **"Transaction failed"**
+
 - Verify network connectivity
 - Check Solana network status
 - Ensure sufficient SOL for transaction fees
 
 **Styling not working**
+
 - Make sure you imported both required stylesheets:
   ```tsx
-  import '@payai/x402-solana-react/styles';
-  import '@solana/wallet-adapter-react-ui/styles.css';
+  import "@payai/x402-solana-react/styles";
+  import "@solana/wallet-adapter-react-ui/styles.css";
   ```
 - Check browser console for CSS loading errors
 - Verify Tailwind CSS is configured if using custom classes
 
 **"process is not defined" error**
+
 - Use Vite's `import.meta.env` instead of `process.env`
 - Example: `import.meta.env.VITE_SOLANA_RPC_URL`
 
@@ -343,6 +425,7 @@ npm run lint
 **Ready for Production** - Fully functional x402 paywall components with PayAI facilitator integration.
 
 ### Features Complete
+
 - ✅ Core paywall component with Solana integration
 - ✅ Payment processing via x402 protocol
 - ✅ Multi-wallet support (Phantom, Solflare, etc.)
