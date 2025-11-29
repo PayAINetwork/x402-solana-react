@@ -58,7 +58,7 @@ function DemoContent() {
       <X402Paywall
         amount={0.01}
         description="Premium Demo Content Access"
-        network="solana-devnet" // or "solana-devnet"
+        network="solana" // or "solana-devnet"
         theme={currentTheme}
         rpcUrl={rpcUrl} // Recommended to have a custom rpc url to avoid rate limits
         showBalance={true}
