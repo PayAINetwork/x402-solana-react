@@ -325,9 +325,11 @@ You can customize further using `classNames` and `customStyles` props:
 | `autoSetupProviders` | `boolean`                     | ❌       | `true`            | Automatically setup wallet providers                        |
 | `providerNetwork`    | `WalletAdapterNetwork`        | ❌       | Auto-detected     | Network for auto-setup providers                            |
 | `providerEndpoint`   | `string`                      | ❌       | -                 | Custom endpoint for auto-setup providers                    |
+| `apiEndpoint`        | `string`                      | ❌       | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint      |
 | `treasuryAddress`    | `string`                      | ❌       | -                 | Custom treasury address                                     |
 | `facilitatorUrl`     | `string`                      | ❌       | -                 | Custom facilitator URL                                      |
 | `theme`              | `ThemePreset`                 | ❌       | `'solana-light'`  | Visual theme (see Themes section)                           |
+| `logoUrl`            | `string`                      | ❌       | -                 | Custom logo URL to display                                  |
 | `showBalance`        | `boolean`                     | ❌       | `true`            | Show wallet USDC balance                                    |
 | `showNetworkInfo`    | `boolean`                     | ❌       | `true`            | Show network information                                    |
 | `showPaymentDetails` | `boolean`                     | ❌       | `true`            | Show payment details section                                |

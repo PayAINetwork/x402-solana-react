@@ -40,6 +40,12 @@ The main paywall component that wraps protected content.
 | `network` | `'solana' \| 'solana-devnet'` | `'solana-devnet'` | Solana network to use |
 | `treasuryAddress` | `string` | `undefined` | Treasury wallet address for payments |
 | `facilitatorUrl` | `string` | `undefined` | x402 facilitator service URL |
+| `rpcUrl`| `string` | `undefined` | Custom RPC URL (recommended to avoid rate limits) |
+| `apiEndpoint` | `string` | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint |
+| `logoUrl` | `string` | - | Custom logo URL to display |
+| `autoSetupProviders` | `boolean` | `true` | Automatically setup wallet providers |
+| `providerNetwork` | `WalletAdapterNetwork` | `undefined` | Network for auto-setup providers |
+| `providerEndpoint` | `string` | `undefined` | Custom endpoint for auto-setup providers |
 | `theme` | `'solana' \| 'dark' \| 'light' \| 'seeker-2'` | `'solana'` | Visual theme preset |
 | `showBalance` | `boolean` | `true` | Show wallet balance |
 | `showNetworkInfo` | `boolean` | `true` | Show network information |
@@ -51,6 +57,7 @@ The main paywall component that wraps protected content.
 | `onPaymentSuccess` | `(txId: string) => void` | `undefined` | Callback when payment succeeds |
 | `onPaymentError` | `(error: Error) => void` | `undefined` | Callback when payment fails |
 | `onWalletConnect` | `(address: string) => void` | `undefined` | Callback when wallet connects |
+| `onDisconnect`| `() => void` | `undefined` | Callback when wallet disconnects |
 
 ---
 
