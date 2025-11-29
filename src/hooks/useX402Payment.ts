@@ -78,7 +78,14 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
         // Determine API endpoint
         // Default to PayAI Echo Merchant (free test endpoint that refunds payments)
         // Users can override with their own 402-protected endpoint
-        const defaultEndpoint = 'https://x402.payai.network/api/solana/paid-content';
+
+        let defaultEndpoint
+        if(config.network === 'solana') {
+          defaultEndpoint = 'https://x402.payai.network/api/solana/paid-content';
+        } else {
+          defaultEndpoint = 'https://x402.payai.network/api/solana-devnet/paid-content';
+        }
+
         const apiEndpoint = config.apiEndpoint || defaultEndpoint;
         const isEchoMerchant = apiEndpoint === defaultEndpoint;
 

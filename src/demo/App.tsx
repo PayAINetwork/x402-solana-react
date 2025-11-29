@@ -25,7 +25,7 @@ type Theme =
   | "system";
 
 function DemoContent() {
-  const [currentTheme] = useState<Theme>("terminal");
+  const [currentTheme] = useState<Theme>("terminal-light");
 
   const rpcUrl = import.meta.env.VITE_SOLANA_RPC_URL;
 
