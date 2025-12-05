@@ -12,7 +12,6 @@ The main paywall component that wraps protected content.
   description={string}
   wallet={WalletAdapter}
   network?={'solana' | 'solana-devnet'}
-  treasuryAddress?={string}
   facilitatorUrl?={string}
   theme?={'solana' | 'dark' | 'light' | 'seeker-2'}
   showBalance?={boolean}
@@ -38,7 +37,6 @@ The main paywall component that wraps protected content.
 | `description` | `string` | **required** | Description of what the payment is for |
 | `wallet` | `WalletAdapter` | **required** | Solana wallet adapter |
 | `network` | `'solana' \| 'solana-devnet'` | `'solana-devnet'` | Solana network to use |
-| `treasuryAddress` | `string` | `undefined` | Treasury wallet address for payments |
 | `facilitatorUrl` | `string` | `undefined` | x402 facilitator service URL |
 | `theme` | `'solana' \| 'dark' \| 'light' \| 'seeker-2'` | `'solana'` | Visual theme preset |
 | `showBalance` | `boolean` | `true` | Show wallet balance |
@@ -122,7 +120,6 @@ const {
 } = useX402Payment({
   wallet,
   network,
-  treasuryAddress?,
   facilitatorUrl?,
   maxPaymentAmount?
 });

@@ -33,7 +33,6 @@ export interface X402PaywallProps {
   network?: SolanaNetwork;
   rpcUrl?: string;
   apiEndpoint?: string;
-  treasuryAddress?: string;
   facilitatorUrl?: string;
   
   // Auto-setup wallet providers (only used if providers don't exist)

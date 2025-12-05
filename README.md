@@ -325,7 +325,6 @@ You can customize further using `classNames` and `customStyles` props:
 | `autoSetupProviders` | `boolean`                     | ❌       | `true`            | Automatically setup wallet providers                        |
 | `providerNetwork`    | `WalletAdapterNetwork`        | ❌       | Auto-detected     | Network for auto-setup providers                            |
 | `providerEndpoint`   | `string`                      | ❌       | -                 | Custom endpoint for auto-setup providers                    |
-| `treasuryAddress`    | `string`                      | ❌       | -                 | Custom treasury address                                     |
 | `facilitatorUrl`     | `string`                      | ❌       | -                 | Custom facilitator URL                                      |
 | `theme`              | `ThemePreset`                 | ❌       | `'solana-light'`  | Visual theme (see Themes section)                           |
 | `showBalance`        | `boolean`                     | ❌       | `true`            | Show wallet USDC balance                                    |

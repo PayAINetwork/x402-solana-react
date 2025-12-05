@@ -42,7 +42,6 @@ const X402PaywallContent: React.FC<
   network = "solana-devnet",
   rpcUrl,
   apiEndpoint,
-  treasuryAddress,
   facilitatorUrl,
   theme = "solana-light",
   logoUrl = "https://raw.githubusercontent.com/PayAINetwork/x402-solana-react/main/src/components/ui/SolanaLogo.svg",
@@ -95,7 +94,6 @@ const X402PaywallContent: React.FC<
       network,
       rpcUrl,
       apiEndpoint,
-      treasuryAddress,
       facilitatorUrl,
       maxPaymentAmount,
     });

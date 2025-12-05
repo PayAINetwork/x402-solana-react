@@ -7,7 +7,6 @@ export interface PaymentConfig {
   network: SolanaNetwork;
   rpcUrl?: string;
   apiEndpoint?: string;
-  treasuryAddress?: string;
   facilitatorUrl?: string;
   maxPaymentAmount?: number;
 }
