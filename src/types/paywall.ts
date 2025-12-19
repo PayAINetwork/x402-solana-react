@@ -59,7 +59,8 @@ export interface X402PaywallProps {
 
   // Callbacks
   onPaymentStart?: () => void;
-  onPaymentSuccess?: (transactionId: string) => void;
+  /** Called when payment succeeds. Receives transaction ID and optional response content from server. */
+  onPaymentSuccess?: (transactionId: string, responseContent?: string | null) => void;
   onPaymentError?: (error: Error) => void;
   onWalletConnect?: (publicKey: string) => void;
 
