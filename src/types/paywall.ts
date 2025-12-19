@@ -34,7 +34,7 @@ export interface X402PaywallProps {
   rpcUrl?: string;
   apiEndpoint?: string;
   facilitatorUrl?: string;
-  
+
   // Auto-setup wallet providers (only used if providers don't exist)
   autoSetupProviders?: boolean; // Default: true - automatically set up providers if missing
   providerNetwork?: WalletAdapterNetwork; // Network for auto-setup providers

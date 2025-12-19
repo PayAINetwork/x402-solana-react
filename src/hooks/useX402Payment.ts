@@ -8,7 +8,8 @@ export interface PaymentConfig {
   rpcUrl?: string;
   apiEndpoint?: string;
   facilitatorUrl?: string;
-  maxPaymentAmount?: number;
+  /** Maximum payment amount in USDC (V2 protocol) */
+  amount?: number;
   /** Enable verbose logging for debugging (default: false) */
   verbose?: boolean;
 }
@@ -58,10 +59,8 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
         setError(null);
 
         // Validate amount against max if set
-        if (config.maxPaymentAmount && amount > config.maxPaymentAmount) {
-          throw new Error(
-            `Payment amount ${amount} exceeds maximum allowed ${config.maxPaymentAmount}`
-          );
+        if (config.amount && amount > config.amount) {
+          throw new Error(`Payment amount ${amount} exceeds maximum allowed ${config.amount}`);
         }
 
         // Get wallet address
@@ -76,9 +75,7 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
           wallet: config.wallet,
           network: config.network,
           rpcUrl: config.rpcUrl,
-          maxPaymentAmount: config.maxPaymentAmount
-            ? BigInt(Math.floor(config.maxPaymentAmount * 1_000_000))
-            : undefined,
+          amount: config.amount ? BigInt(Math.floor(config.amount * 1_000_000)) : undefined,
           verbose: config.verbose,
         });
 

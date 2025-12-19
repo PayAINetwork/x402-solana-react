@@ -75,7 +75,7 @@ const X402PaywallContent: React.FC<
     rpcUrl,
     apiEndpoint,
     facilitatorUrl,
-    maxPaymentAmount,
+    amount: maxPaymentAmount,
   });
 
   // Handle disconnect using context if no custom handler
