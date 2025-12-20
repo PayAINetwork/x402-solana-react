@@ -1445,8 +1445,8 @@ const X402PaywallContent: React.FC<
                     : undefined
                 }
               >
-                Access to protected content on base-sepolia. To access this
-                content, please pay $0.01 Base Sepolia USDC
+                Access to protected content on Solana {networkLabel}. To access this
+                content, please pay ${amount.toFixed(2)} USDC
               </p>
             </div>
           )}
