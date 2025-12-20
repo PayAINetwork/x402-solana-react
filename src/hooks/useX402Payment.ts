@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createX402Client } from 'x402-solana/client';
+import { createX402Client } from '@payai/x402-solana/client';
 import { WalletAdapter, SolanaNetwork, PaymentStatus } from '@/types';
 
 export interface PaymentConfig {
