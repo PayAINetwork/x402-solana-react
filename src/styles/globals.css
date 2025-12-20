@@ -1,67 +1,115 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@custom-variant dark (&:is(.dark *));
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    /* Solana primary purple */
-    --primary: 273 100% 64%;
-    --primary-foreground: 0 0% 100%;
-    /* Solana secondary green */
-    --secondary: 161 100% 52%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 273 100% 64%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 273 100% 64%;
-    --chart-1: 273 100% 64%;
-    --chart-2: 161 100% 52%;
-    --chart-3: 161 100% 41%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 0 84.2% 60.2%;
-    --radius: 0.75rem
-  }
-  .dark {
-    --background: 222 47% 1%;
-    --foreground: 0 0% 98%;
-    --card: 222 47% 5%;
-    --card-foreground: 0 0% 98%;
-    --popover: 222 47% 5%;
-    --popover-foreground: 0 0% 98%;
-    /* Solana primary purple for dark mode */
-    --primary: 273 100% 64%;
-    --primary-foreground: 0 0% 100%;
-    /* Solana secondary green for dark mode */
-    --secondary: 161 100% 52%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 273 100% 64%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 273 100% 64%;
-    --chart-1: 273 100% 64%;
-    --chart-2: 161 100% 52%;
-    --chart-3: 161 100% 41%;
-    --chart-4: 273 70% 50%;
-    --chart-5: 0 62.8% 30.6%
-  }
+/* Tailwind v4 theme configuration - converting from tailwind.config.js */
+@theme inline {
+  /* Font family */
+  --font-vt323: 'VT323', monospace;
+
+  /* Solana brand colors */
+  --color-solana-primary: #9945ff;
+  --color-solana-secondary: #14f195;
+  --color-solana-dark: #000212;
+  --color-solana-success: #00d18c;
+  --color-solana-error: #ff6b6b;
+  --color-solana-warning: #ffb800;
+
+  /* Theme colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Border radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+
+  /* Custom animations */
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 3.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 3.9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 3.9%);
+  /* Solana primary purple */
+  --primary: hsl(273 100% 64%);
+  --primary-foreground: hsl(0 0% 100%);
+  /* Solana secondary green */
+  --secondary: hsl(161 100% 52%);
+  --secondary-foreground: hsl(0 0% 9%);
+  --muted: hsl(0 0% 96.1%);
+  --muted-foreground: hsl(0 0% 45.1%);
+  --accent: hsl(273 100% 64%);
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 89.8%);
+  --input: hsl(0 0% 89.8%);
+  --ring: hsl(273 100% 64%);
+  --chart-1: hsl(273 100% 64%);
+  --chart-2: hsl(161 100% 52%);
+  --chart-3: hsl(161 100% 41%);
+  --chart-4: hsl(43 74% 66%);
+  --chart-5: hsl(0 84.2% 60.2%);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: hsl(222 47% 1%);
+  --foreground: hsl(0 0% 98%);
+  --card: hsl(222 47% 5%);
+  --card-foreground: hsl(0 0% 98%);
+  --popover: hsl(222 47% 5%);
+  --popover-foreground: hsl(0 0% 98%);
+  /* Solana primary purple for dark mode */
+  --primary: hsl(273 100% 64%);
+  --primary-foreground: hsl(0 0% 100%);
+  /* Solana secondary green for dark mode */
+  --secondary: hsl(161 100% 52%);
+  --secondary-foreground: hsl(0 0% 9%);
+  --muted: hsl(0 0% 14.9%);
+  --muted-foreground: hsl(0 0% 63.9%);
+  --accent: hsl(273 100% 64%);
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 14.9%);
+  --input: hsl(0 0% 14.9%);
+  --ring: hsl(273 100% 64%);
+  --chart-1: hsl(273 100% 64%);
+  --chart-2: hsl(161 100% 52%);
+  --chart-3: hsl(161 100% 41%);
+  --chart-4: hsl(273 70% 50%);
+  --chart-5: hsl(0 62.8% 30.6%);
 }
 
 @layer base {
@@ -71,6 +119,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom gradient utilities (not available in @theme) */
+@utility bg-solana-gradient {
+  background-image: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
+}
+
+@utility bg-solana-gradient-vertical {
+  background-image: linear-gradient(180deg, #9945ff 0%, #14f195 100%);
+}
+
+@utility bg-solana-gradient-radial {
+  background-image: radial-gradient(circle, #9945ff 0%, #14f195 100%);
 }
 
 /* Dark theme now uses default wallet adapter styles (same as light theme) */

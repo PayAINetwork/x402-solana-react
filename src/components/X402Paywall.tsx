@@ -1,50 +1,31 @@
-import * as React from "react";
-import { useState, useEffect, useMemo } from "react";
-import {
-  useWallet,
-  ConnectionProvider,
-  WalletProvider,
-} from "@solana/wallet-adapter-react";
-import {
-  WalletModalProvider,
-  WalletMultiButton,
-} from "@solana/wallet-adapter-react-ui";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
-import { fetchUSDCBalance } from "@/lib/balance";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { PaymentButton } from "./PaymentButton";
-import { WalletSection } from "./WalletSection";
-import { useX402Payment } from "@/hooks/useX402Payment";
-import { X402PaywallProps, WalletAdapter, ThemePreset } from "@/types";
-import { cn } from "@/lib/utils";
-import { useRef } from "react";
+import * as React from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useWallet, ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { clusterApiUrl } from '@solana/web3.js';
+import { fetchUSDCBalance } from '@/lib/balance';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { PaymentButton } from './PaymentButton';
+import { WalletSection } from './WalletSection';
+import { useX402Payment } from '@/hooks/useX402Payment';
+import { X402PaywallProps, WalletAdapter, ThemePreset } from '@/types';
+import { cn } from '@/lib/utils';
+import { useRef } from 'react';
 // Internal component that actually uses the wallet context
 const X402PaywallContent: React.FC<
-  Omit<
-    X402PaywallProps,
-    "autoSetupProviders" | "providerNetwork" | "providerEndpoint"
-  >
+  Omit<X402PaywallProps, 'autoSetupProviders' | 'providerNetwork' | 'providerEndpoint'>
 > = ({
   amount,
   description,
   wallet: walletProp,
-  network = "solana-devnet",
+  network = 'solana-devnet',
   rpcUrl,
   apiEndpoint,
   facilitatorUrl,
-  theme = "solana-light",
-  logoUrl = "https://raw.githubusercontent.com/PayAINetwork/x402-solana-react/main/src/components/ui/SolanaLogo.svg",
+  theme = 'solana-light',
+  logoUrl = 'https://raw.githubusercontent.com/PayAINetwork/x402-solana-react/main/src/components/ui/SolanaLogo.svg',
   showPaymentDetails = true,
   onDisconnect,
   classNames,
@@ -73,30 +54,29 @@ const X402PaywallContent: React.FC<
   }, [walletProp, walletContext.publicKey, walletContext.signTransaction]);
 
   const [isPaid, setIsPaid] = useState(false);
-  const [walletBalance, setWalletBalance] = useState<string>("0.00");
+  const [walletBalance, setWalletBalance] = useState<string>('0.00');
   const [resolvedTheme, setResolvedTheme] = useState<ThemePreset>(() => {
-    if (theme === "system") {
+    if (theme === 'system') {
       // Check system preference on initial render
-      if (typeof window !== "undefined" && window.matchMedia) {
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        return prefersDark ? "dark" : "light";
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        return prefersDark ? 'dark' : 'light';
       }
-      return "dark"; // Default to dark if we can't detect
+      return 'dark'; // Default to dark if we can't detect
     }
     return theme;
   });
   const walletButtonRef = useRef<HTMLDivElement>(null);
-  const networkLabel = network === "solana" ? "Mainnet" : "Devnet";
+  const networkLabel = network === 'solana' ? 'Mainnet' : 'Devnet';
 
-  const { pay, isLoading, status, error, transactionId, reset } =
-    useX402Payment({
-      wallet: reactiveWallet,
-      network,
-      rpcUrl,
-      apiEndpoint,
-      facilitatorUrl,
-      maxPaymentAmount,
-    });
+  const { pay, isLoading, status, error, transactionId, responseContent, reset } = useX402Payment({
+    wallet: reactiveWallet,
+    network,
+    rpcUrl,
+    apiEndpoint,
+    facilitatorUrl,
+    amount: maxPaymentAmount,
+  });
 
   // Handle disconnect using context if no custom handler
   const handleDisconnect = () => {
@@ -115,20 +95,20 @@ const X402PaywallContent: React.FC<
 
   // Resolve "system" theme based on user's system preference
   useEffect(() => {
-    if (theme === "system") {
-      if (typeof window !== "undefined" && window.matchMedia) {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        
+    if (theme === 'system') {
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
         // Set initial value
         const updateTheme = () => {
-          setResolvedTheme(mediaQuery.matches ? "dark" : "light");
+          setResolvedTheme(mediaQuery.matches ? 'dark' : 'light');
         };
-        
+
         // Listen for changes
         if (mediaQuery.addEventListener) {
-          mediaQuery.addEventListener("change", updateTheme);
+          mediaQuery.addEventListener('change', updateTheme);
           updateTheme(); // Set initial value
-          return () => mediaQuery.removeEventListener("change", updateTheme);
+          return () => mediaQuery.removeEventListener('change', updateTheme);
         } else if (mediaQuery.addListener) {
           // Fallback for older browsers
           mediaQuery.addListener(updateTheme);
@@ -140,7 +120,7 @@ const X402PaywallContent: React.FC<
         }
       } else {
         // Can't detect, default to dark
-        setResolvedTheme("dark");
+        setResolvedTheme('dark');
       }
     } else {
       // Not system theme, use theme directly
@@ -152,12 +132,12 @@ const X402PaywallContent: React.FC<
   useEffect(() => {
     // Remove old theme classes
     document.body.className = document.body.className
-      .replace(/wallet-modal-theme-\w+/g, "")
-      .replace(/\s+/g, " ")
+      .replace(/wallet-modal-theme-\w+/g, '')
+      .replace(/\s+/g, ' ')
       .trim();
 
     // Add new theme class (use resolved theme for system, or original theme otherwise)
-    const themeForClass = theme === "system" ? resolvedTheme : theme;
+    const themeForClass = theme === 'system' ? resolvedTheme : theme;
     if (themeForClass) {
       document.body.className += ` wallet-modal-theme-${themeForClass}`;
     }
@@ -165,8 +145,8 @@ const X402PaywallContent: React.FC<
     // Cleanup: remove theme class when component unmounts
     return () => {
       document.body.className = document.body.className
-        .replace(/wallet-modal-theme-\w+/g, "")
-        .replace(/\s+/g, " ")
+        .replace(/wallet-modal-theme-\w+/g, '')
+        .replace(/\s+/g, ' ')
         .trim();
     };
   }, [theme, resolvedTheme]);
@@ -178,7 +158,7 @@ const X402PaywallContent: React.FC<
       walletProp?.publicKey?.toString() ||
       walletProp?.address;
     if (walletAddress && walletContext.connected) {
-      console.log("Wallet connected:", walletAddress);
+      console.log('Wallet connected:', walletAddress);
       onWalletConnect?.(walletAddress);
 
       // Fetch USDC balance
@@ -186,7 +166,7 @@ const X402PaywallContent: React.FC<
     }
     // Reset balance if wallet disconnects
     if (!walletContext.connected && !walletProp) {
-      setWalletBalance("0.00");
+      setWalletBalance('0.00');
     }
   }, [
     walletContext.publicKey,
@@ -200,11 +180,11 @@ const X402PaywallContent: React.FC<
 
   // Handle payment success
   useEffect(() => {
-    if (status === "success" && transactionId) {
+    if (status === 'success' && transactionId) {
       setIsPaid(true);
-      onPaymentSuccess?.(transactionId);
+      onPaymentSuccess?.(transactionId, responseContent);
     }
-  }, [status, transactionId, onPaymentSuccess]);
+  }, [status, transactionId, responseContent, onPaymentSuccess]);
 
   // Handle payment error
   useEffect(() => {
@@ -226,156 +206,143 @@ const X402PaywallContent: React.FC<
   // Show failure screen when there's an error (for all themes)
   const showFailureScreen =
     error &&
-    (resolvedTheme === "dark" ||
-      resolvedTheme === "solana-dark" ||
-      resolvedTheme === "light" ||
-      resolvedTheme === "solana-light" ||
-      resolvedTheme === "seeker" ||
-      resolvedTheme === "seeker-2" ||
-      resolvedTheme === "seeker-light" ||
-      resolvedTheme === "terminal" ||
-      resolvedTheme === "terminal-light");
+    (resolvedTheme === 'dark' ||
+      resolvedTheme === 'solana-dark' ||
+      resolvedTheme === 'light' ||
+      resolvedTheme === 'solana-light' ||
+      resolvedTheme === 'seeker' ||
+      resolvedTheme === 'seeker-2' ||
+      resolvedTheme === 'seeker-light' ||
+      resolvedTheme === 'terminal' ||
+      resolvedTheme === 'terminal-light');
 
   // Theme-based styling configuration
   const getThemeConfig = () => {
     switch (resolvedTheme) {
-      case "solana-dark":
+      case 'solana-dark':
         return {
-          container: "",
-          card: "!bg-[#171719] border-0 text-white rounded-xl",
-          icon: "bg-slate-600",
-          title: "",
-          button: "bg-solana-gradient hover:opacity-90 text-white rounded-full",
-          paymentDetails:
-            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
-          walletSection:
-            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
-          notice: "bg-amber-900/50 border-amber-700 text-white rounded-lg",
-          securityMessage: "text-slate-400",
-          helperText: "text-white",
+          container: '',
+          card: '!bg-[#171719] border-0 text-white rounded-xl',
+          icon: 'bg-slate-600',
+          title: '',
+          button: 'bg-solana-gradient hover:opacity-90 text-white rounded-full',
+          paymentDetails: 'bg-[#0000001F] border-slate-600 text-white rounded-lg',
+          walletSection: 'bg-[#0000001F] border-slate-600 text-white rounded-lg',
+          notice: 'bg-amber-900/50 border-amber-700 text-white rounded-lg',
+          securityMessage: 'text-slate-400',
+          helperText: 'text-white',
           helperLink: undefined,
         };
-      case "seeker":
+      case 'seeker':
         return {
-          container: "",
-          card: "backdrop-blur-sm border-emerald-200 rounded-xl",
-          icon: "bg-gradient-to-r from-emerald-500 to-teal-500",
-          title: "text-white",
+          container: '',
+          card: 'backdrop-blur-sm border-emerald-200 rounded-xl',
+          icon: 'bg-gradient-to-r from-emerald-500 to-teal-500',
+          title: 'text-white',
           button:
-            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
-          paymentDetails: "rounded-lg",
-          notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
-          securityMessage: "text-white",
-          helperText: "text-white",
+            'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full',
+          paymentDetails: 'rounded-lg',
+          notice: 'bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg',
+          securityMessage: 'text-white',
+          helperText: 'text-white',
         };
-      case "seeker-2":
+      case 'seeker-2':
         return {
-          container: "",
-          card: "backdrop-blur-sm border-emerald-200 rounded-xl",
-          icon: "bg-gradient-to-r from-emerald-500 to-teal-500",
-          title: "text-white",
+          container: '',
+          card: 'backdrop-blur-sm border-emerald-200 rounded-xl',
+          icon: 'bg-gradient-to-r from-emerald-500 to-teal-500',
+          title: 'text-white',
           button:
-            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
-          paymentDetails: "rounded-lg",
-          notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
-          securityMessage: "text-white",
-          helperText: "text-white",
+            'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full',
+          paymentDetails: 'rounded-lg',
+          notice: 'bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg',
+          securityMessage: 'text-white',
+          helperText: 'text-white',
         };
-      case "seeker-light":
+      case 'seeker-light':
         return {
-          container: "",
-          card: "backdrop-blur-sm border-emerald-200 rounded-xl",
-          icon: "bg-gradient-to-r from-emerald-500 to-teal-500",
-          title: "text-black",
+          container: '',
+          card: 'backdrop-blur-sm border-emerald-200 rounded-xl',
+          icon: 'bg-gradient-to-r from-emerald-500 to-teal-500',
+          title: 'text-black',
           button:
-            "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
-          paymentDetails: "rounded-lg",
-          notice: "bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg",
-          securityMessage: "text-black",
-          helperText: "text-black",
+            'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full',
+          paymentDetails: 'rounded-lg',
+          notice: 'bg-cyan-50 border-cyan-200 text-cyan-800 rounded-lg',
+          securityMessage: 'text-black',
+          helperText: 'text-black',
         };
-      case "terminal":
+      case 'terminal':
         return {
-          container: "",
-          card: "backdrop-blur-sm border-green-400/30 text-white rounded-none font-vt323",
-          icon: "bg-green-400 text-black",
-          title: "text-white font-vt323",
-          button: "text-black hover:opacity-90 font-vt323 rounded-none",
-          paymentDetails:
-            "bg-gray-900/50 border-green-400/20 text-white rounded-none font-vt323",
-          notice:
-            "bg-yellow-900/50 border-yellow-400/30 text-white rounded-none font-vt323",
+          container: '',
+          card: 'backdrop-blur-sm border-green-400/30 text-white rounded-none font-vt323',
+          icon: 'bg-green-400 text-black',
+          title: 'text-white font-vt323',
+          button: 'text-black hover:opacity-90 font-vt323 rounded-none',
+          paymentDetails: 'bg-gray-900/50 border-green-400/20 text-white rounded-none font-vt323',
+          notice: 'bg-yellow-900/50 border-yellow-400/30 text-white rounded-none font-vt323',
         };
-      case "terminal-light":
+      case 'terminal-light':
         return {
-          container: "",
-          card: "backdrop-blur-sm border-[#E4E4E7] text-black rounded-none font-vt323",
-          icon: "bg-[#E4E4E7] text-black",
-          title: "text-black font-vt323",
-          button: "text-black hover:opacity-90 font-vt323 rounded-none",
-          paymentDetails:
-            "bg-white/50 border-[#E4E4E7] text-black rounded-none font-vt323",
-          notice:
-            "bg-yellow-50 border-yellow-200 text-yellow-800 rounded-none font-vt323",
+          container: '',
+          card: 'backdrop-blur-sm border-[#E4E4E7] text-black rounded-none font-vt323',
+          icon: 'bg-[#E4E4E7] text-black',
+          title: 'text-black font-vt323',
+          button: 'text-black hover:opacity-90 font-vt323 rounded-none',
+          paymentDetails: 'bg-white/50 border-[#E4E4E7] text-black rounded-none font-vt323',
+          notice: 'bg-yellow-50 border-yellow-200 text-yellow-800 rounded-none font-vt323',
         };
-      case "solana-light":
+      case 'solana-light':
         return {
-          container:
-            "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
-          card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
-          icon: "bg-gradient-to-r from-blue-600 to-purple-600",
-          title: "text-slate-900",
-          button:
-            "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full",
-          paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
-          notice: "text-slate-600",
-          walletSection: "bg-slate-50 border border-slate-200 rounded-xl",
-          securityMessage: "text-slate-600",
-          helperText: "text-slate-600",
-          helperLink: "text-purple-600 underline",
+          container: 'bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50',
+          card: 'bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl',
+          icon: 'bg-gradient-to-r from-blue-600 to-purple-600',
+          title: 'text-slate-900',
+          button: 'bg-solana-gradient hover:opacity-90 text-white font-light rounded-full',
+          paymentDetails: 'bg-slate-50 border border-slate-200 rounded-xl',
+          notice: 'text-slate-600',
+          walletSection: 'bg-slate-50 border border-slate-200 rounded-xl',
+          securityMessage: 'text-slate-600',
+          helperText: 'text-slate-600',
+          helperLink: 'text-purple-600 underline',
         };
-      case "dark":
+      case 'dark':
         return {
-          container: "",
-          card: "!bg-[#171719] border-slate-700 text-white rounded-xl",
-          icon: "bg-slate-600",
-          title: "",
-          button: "bg-slate-600 hover:bg-slate-700 rounded-full",
-          paymentDetails:
-            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
-          walletSection:
-            "bg-[#0000001F] border-slate-600 text-white rounded-lg",
-          notice: "bg-amber-900/50 border-amber-700 text-white rounded-lg",
-          securityMessage: "text-slate-400",
-          helperText: "text-white",
+          container: '',
+          card: '!bg-[#171719] border-slate-700 text-white rounded-xl',
+          icon: 'bg-slate-600',
+          title: '',
+          button: 'bg-slate-600 hover:bg-slate-700 rounded-full',
+          paymentDetails: 'bg-[#0000001F] border-slate-600 text-white rounded-lg',
+          walletSection: 'bg-[#0000001F] border-slate-600 text-white rounded-lg',
+          notice: 'bg-amber-900/50 border-amber-700 text-white rounded-lg',
+          securityMessage: 'text-slate-400',
+          helperText: 'text-white',
           helperLink: undefined,
         };
-      case "light":
+      case 'light':
         return {
-          container:
-            "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
-          card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
-          icon: "bg-gradient-to-r from-blue-600 to-purple-600",
-          title: "text-slate-900",
-          button:
-            "bg-black hover:bg-gray-800 text-white font-light rounded-full",
-          paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
-          notice: "text-slate-600",
-          walletSection: "bg-slate-50 border border-slate-200 rounded-xl",
-          securityMessage: "text-slate-600",
-          helperText: "text-slate-600",
-          helperLink: "text-purple-600 underline",
+          container: 'bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50',
+          card: 'bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl',
+          icon: 'bg-gradient-to-r from-blue-600 to-purple-600',
+          title: 'text-slate-900',
+          button: 'bg-black hover:bg-gray-800 text-white font-light rounded-full',
+          paymentDetails: 'bg-slate-50 border border-slate-200 rounded-xl',
+          notice: 'text-slate-600',
+          walletSection: 'bg-slate-50 border border-slate-200 rounded-xl',
+          securityMessage: 'text-slate-600',
+          helperText: 'text-slate-600',
+          helperLink: 'text-purple-600 underline',
         };
       default:
         return {
-          container:
-            "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
-          card: "bg-white/95 backdrop-blur-sm rounded-xl",
-          icon: "bg-slate-600",
-          title: "text-slate-900",
-          button: "bg-slate-600 hover:bg-slate-700 text-white rounded-full",
-          paymentDetails: "bg-slate-50 border-slate-200 rounded-lg",
-          notice: "bg-amber-50 border-amber-200 text-amber-800 rounded-lg",
+          container: 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900',
+          card: 'bg-white/95 backdrop-blur-sm rounded-xl',
+          icon: 'bg-slate-600',
+          title: 'text-slate-900',
+          button: 'bg-slate-600 hover:bg-slate-700 text-white rounded-full',
+          paymentDetails: 'bg-slate-50 border-slate-200 rounded-lg',
+          notice: 'bg-amber-50 border-amber-200 text-amber-800 rounded-lg',
         };
     }
   };
@@ -387,109 +354,101 @@ const X402PaywallContent: React.FC<
     // Theme config for connect wallet screen
     const getConnectWalletThemeConfig = () => {
       switch (resolvedTheme) {
-        case "solana-dark":
+        case 'solana-dark':
           return {
-            container: "",
-            card: "!bg-[#171719] border-0 text-white rounded-xl",
+            container: '',
+            card: '!bg-[#171719] border-0 text-white rounded-xl',
+            button: 'bg-solana-gradient hover:opacity-90 text-white rounded-full',
+            paymentDetails: 'bg-[#0000001F] border-slate-600 text-white rounded-lg',
+            securityMessage: 'text-slate-400',
+            helperText: 'text-white',
+          };
+        case 'seeker':
+          return {
+            container: '',
+            card: 'backdrop-blur-sm border-emerald-200 rounded-xl',
             button:
-              "bg-solana-gradient hover:opacity-90 text-white rounded-full",
-            paymentDetails:
-              "bg-[#0000001F] border-slate-600 text-white rounded-lg",
-            securityMessage: "text-slate-400",
-            helperText: "text-white",
+              'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full',
+            paymentDetails: 'rounded-lg',
+            securityMessage: 'text-white',
+            helperText: 'text-white',
           };
-        case "seeker":
+        case 'seeker-2':
           return {
-            container: "",
-            card: "backdrop-blur-sm border-emerald-200 rounded-xl",
+            container: '',
+            card: 'backdrop-blur-sm border-emerald-200 rounded-xl',
             button:
-              "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
-            paymentDetails: "rounded-lg",
-            securityMessage: "text-white",
-            helperText: "text-white",
+              'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full',
+            paymentDetails: 'rounded-lg',
+            securityMessage: 'text-white',
+            helperText: 'text-white',
           };
-        case "seeker-2":
+        case 'seeker-light':
           return {
-            container: "",
-            card: "backdrop-blur-sm border-emerald-200 rounded-xl",
+            container: '',
+            card: 'backdrop-blur-sm border-emerald-200 rounded-xl',
             button:
-              "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
-            paymentDetails: "rounded-lg",
-            securityMessage: "text-white",
-            helperText: "text-white",
+              'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full',
+            paymentDetails: 'rounded-lg',
+            securityMessage: 'text-black',
+            helperText: 'text-black',
           };
-        case "seeker-light":
+        case 'terminal':
           return {
-            container: "",
-            card: "backdrop-blur-sm border-emerald-200 rounded-xl",
-            button:
-              "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full",
-            paymentDetails: "rounded-lg",
-            securityMessage: "text-black",
-            helperText: "text-black",
+            container: '',
+            card: 'backdrop-blur-sm border-green-400/30 text-white rounded-none font-vt323',
+            button: 'text-black hover:opacity-90 font-vt323 rounded-none',
+            paymentDetails: 'bg-gray-900/50 border-green-400/20 text-white rounded-none font-vt323',
+            securityMessage: 'text-white font-vt323',
+            helperText: 'text-white font-vt323',
           };
-        case "terminal":
+        case 'terminal-light':
           return {
-            container: "",
-            card: "backdrop-blur-sm border-green-400/30 text-white rounded-none font-vt323",
-            button: "text-black hover:opacity-90 font-vt323 rounded-none",
-            paymentDetails:
-              "bg-gray-900/50 border-green-400/20 text-white rounded-none font-vt323",
-            securityMessage: "text-white font-vt323",
-            helperText: "text-white font-vt323",
+            container: '',
+            card: 'backdrop-blur-sm border-[#E4E4E7] text-black rounded-none font-vt323',
+            button: 'text-black hover:opacity-90 font-vt323 rounded-none',
+            paymentDetails: 'bg-white/50 border-[#E4E4E7] text-black rounded-none font-vt323',
+            securityMessage: 'text-black font-vt323',
+            helperText: 'text-black font-vt323',
           };
-        case "terminal-light":
-          return {
-            container: "",
-            card: "backdrop-blur-sm border-[#E4E4E7] text-black rounded-none font-vt323",
-            button: "text-black hover:opacity-90 font-vt323 rounded-none",
-            paymentDetails:
-              "bg-white/50 border-[#E4E4E7] text-black rounded-none font-vt323",
-            securityMessage: "text-black font-vt323",
-            helperText: "text-black font-vt323",
-          };
-        case "solana-light":
+        case 'solana-light':
           return {
             container:
-              "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
-            card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
-            button:
-              "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full",
-            paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
-            securityMessage: "text-slate-600",
-            helperText: "text-slate-600",
+              'bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50',
+            card: 'bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl',
+            button: 'bg-solana-gradient hover:opacity-90 text-white font-light rounded-full',
+            paymentDetails: 'bg-slate-50 border border-slate-200 rounded-xl',
+            securityMessage: 'text-slate-600',
+            helperText: 'text-slate-600',
           };
-        case "dark":
+        case 'dark':
           return {
-            container: "",
-            card: "!bg-[#171719] border-slate-700 text-white rounded-xl",
-            button: "bg-slate-600 hover:bg-slate-700 rounded-full",
-            paymentDetails:
-              "bg-[#0000001F] border-slate-600 text-white rounded-lg",
-            securityMessage: "text-slate-400",
-            helperText: "text-white",
+            container: '',
+            card: '!bg-[#171719] border-slate-700 text-white rounded-xl',
+            button: 'bg-slate-600 hover:bg-slate-700 rounded-full',
+            paymentDetails: 'bg-[#0000001F] border-slate-600 text-white rounded-lg',
+            securityMessage: 'text-slate-400',
+            helperText: 'text-white',
           };
-        case "light":
+        case 'light':
           return {
             container:
-              "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
-            card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
-            button:
-              "bg-black hover:bg-gray-800 text-white font-light rounded-full",
-            paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
-            securityMessage: "text-slate-600",
-            helperText: "text-slate-600",
+              'bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50',
+            card: 'bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl',
+            button: 'bg-black hover:bg-gray-800 text-white font-light rounded-full',
+            paymentDetails: 'bg-slate-50 border border-slate-200 rounded-xl',
+            securityMessage: 'text-slate-600',
+            helperText: 'text-slate-600',
           };
         default:
           return {
             container:
-              "bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50",
-            card: "bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl",
-            button:
-              "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full",
-            paymentDetails: "bg-slate-50 border border-slate-200 rounded-xl",
-            securityMessage: "text-slate-600",
-            helperText: "text-slate-600",
+              'bg-gradient-to-b from-white via-pink-50 via-purple-50 via-blue-50 to-cyan-50',
+            card: 'bg-white/95 backdrop-blur-sm border border-slate-200 shadow-2xl rounded-2xl',
+            button: 'bg-solana-gradient hover:opacity-90 text-white font-light rounded-full',
+            paymentDetails: 'bg-slate-50 border border-slate-200 rounded-xl',
+            securityMessage: 'text-slate-600',
+            helperText: 'text-slate-600',
           };
       }
     };
@@ -499,73 +458,71 @@ const X402PaywallContent: React.FC<
     return (
       <div
         className={cn(
-          "flex items-center justify-center min-h-screen p-4",
+          'flex items-center justify-center min-h-screen p-4',
           connectThemeConfig.container,
           classNames?.container
         )}
         style={
-          resolvedTheme === "dark"
+          resolvedTheme === 'dark'
             ? {
                 background:
-                  "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
+                  'linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "solana-dark"
+            : resolvedTheme === 'solana-dark'
             ? {
                 background:
-                  "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
+                  'linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "light"
+            : resolvedTheme === 'light'
             ? {
                 background:
-                  "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+                  'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "solana-light"
+            : resolvedTheme === 'solana-light'
             ? {
                 background:
-                  "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+                  'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "seeker"
+            : resolvedTheme === 'seeker'
             ? {
-                background:
-                  "linear-gradient(to top,#21645E 0%, #0D2734 50%, #001214 100%)",
+                background: 'linear-gradient(to top,#21645E 0%, #0D2734 50%, #001214 100%)',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "seeker-2"
+            : resolvedTheme === 'seeker-2'
             ? {
-                background: "#0D1615",
+                background: '#0D1615',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "seeker-light"
+            : resolvedTheme === 'seeker-light'
             ? {
-                background:
-                  "linear-gradient(240.08deg, #B8CCD3 -0.56%, #FFFFFF 119.23%)",
+                background: 'linear-gradient(240.08deg, #B8CCD3 -0.56%, #FFFFFF 119.23%)',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "terminal"
+            : resolvedTheme === 'terminal'
             ? {
-                backgroundColor: "#0D1615",
-                position: "relative",
+                backgroundColor: '#0D1615',
+                position: 'relative',
                 ...customStyles?.container,
               }
-            : resolvedTheme === "terminal-light"
+            : resolvedTheme === 'terminal-light'
             ? {
-                backgroundColor: "#F4F4F4",
-                position: "relative",
+                backgroundColor: '#F4F4F4',
+                position: 'relative',
                 ...customStyles?.container,
               }
             : customStyles?.container
         }
       >
-        {(resolvedTheme === "terminal" || resolvedTheme === "terminal-light") && (
+        {(resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light') && (
           <div
             className="absolute inset-0 pointer-events-none overflow-hidden"
             style={{
               backgroundImage:
-                resolvedTheme === "terminal"
+                resolvedTheme === 'terminal'
                   ? `
                 linear-gradient(to right, #22EBAD33 1px, transparent 1px),
                 linear-gradient(to bottom, #22EBAD33 1px, transparent 1px)
@@ -580,35 +537,35 @@ const X402PaywallContent: React.FC<
         )}
         <Card
           className={cn(
-            "w-full max-w-lg shadow-2xl border-0",
+            'w-full max-w-lg shadow-2xl border-0',
             connectThemeConfig.card,
             classNames?.card
           )}
           style={
-            resolvedTheme === "seeker"
-              ? { backgroundColor: "#171719", ...customStyles?.card }
-              : resolvedTheme === "seeker-2"
+            resolvedTheme === 'seeker'
+              ? { backgroundColor: '#171719', ...customStyles?.card }
+              : resolvedTheme === 'seeker-2'
               ? {
-                  backgroundColor: "rgba(29, 35, 35, 1)",
-                  backdropFilter: "blur(12px)",
+                  backgroundColor: 'rgba(29, 35, 35, 1)',
+                  backdropFilter: 'blur(12px)',
                   ...customStyles?.card,
                 }
-              : resolvedTheme === "seeker-light"
+              : resolvedTheme === 'seeker-light'
               ? {
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: '#FFFFFF',
                   ...customStyles?.card,
                 }
-              : resolvedTheme === "terminal"
+              : resolvedTheme === 'terminal'
               ? {
-                  backgroundColor: "#0D1615",
-                  border: "1px solid rgba(34, 235, 173, 0.2)",
+                  backgroundColor: '#0D1615',
+                  border: '1px solid rgba(34, 235, 173, 0.2)',
                   borderRadius: 0,
                   ...customStyles?.card,
                 }
-              : resolvedTheme === "terminal-light"
+              : resolvedTheme === 'terminal-light'
               ? {
-                  backgroundColor: "#FFFFFF",
-                  border: "1px solid #E4E4E7",
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E4E4E7',
                   borderRadius: 0,
                   ...customStyles?.card,
                 }
@@ -618,39 +575,39 @@ const X402PaywallContent: React.FC<
           <CardHeader className="pb-6">
             <div
               className={cn(
-                "flex items-center space-x-4 mb-6 p-4",
-                resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                  ? "-mx-6 -mt-6 relative"
-                  : resolvedTheme === "light" || resolvedTheme === "seeker-light"
-                  ? "mb-3"
-                  : "mb-6"
+                'flex items-center space-x-4 mb-6 p-4',
+                resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                  ? '-mx-6 -mt-6 relative'
+                  : resolvedTheme === 'light' || resolvedTheme === 'seeker-light'
+                  ? 'mb-3'
+                  : 'mb-6'
               )}
               style={
-                resolvedTheme === "terminal"
+                resolvedTheme === 'terminal'
                   ? {
-                      backgroundColor: "#1682601A",
-                      borderBottom: "1px solid rgba(34, 235, 173, 0.12)",
+                      backgroundColor: '#1682601A',
+                      borderBottom: '1px solid rgba(34, 235, 173, 0.12)',
                     }
-                  : resolvedTheme === "terminal-light"
+                  : resolvedTheme === 'terminal-light'
                   ? {
-                      backgroundColor: "#FAFAFA",
-                      borderBottom: "1px solid #E4E4E7",
+                      backgroundColor: '#FAFAFA',
+                      borderBottom: '1px solid #E4E4E7',
                     }
                   : undefined
               }
             >
               <div
                 className={cn(
-                  "w-auto p-[2px] flex items-center justify-center",
-                  resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                    ? "pr-4 mr-4 self-stretch -my-4"
-                    : "h-auto rounded-full overflow-hidden"
+                  'w-auto p-[2px] flex items-center justify-center',
+                  resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                    ? 'pr-4 mr-4 self-stretch -my-4'
+                    : 'h-auto rounded-full overflow-hidden'
                 )}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { borderRight: "1px solid rgba(34, 235, 173, 0.25)" }
-                    : resolvedTheme === "terminal-light"
-                    ? { borderRight: "1px solid #E4E4E7" }
+                  resolvedTheme === 'terminal'
+                    ? { borderRight: '1px solid rgba(34, 235, 173, 0.25)' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { borderRight: '1px solid #E4E4E7' }
                     : undefined
                 }
               >
@@ -661,17 +618,17 @@ const X402PaywallContent: React.FC<
               <div>
                 <CardTitle
                   className={cn(
-                    "text-l fw-bold pb-1",
-                    resolvedTheme === "dark" ||
-                      resolvedTheme === "solana-dark" ||
-                      resolvedTheme === "seeker" ||
-                      resolvedTheme === "seeker-2"
-                      ? "text-white"
-                      : resolvedTheme === "terminal"
-                      ? "text-white font-vt323"
-                      : resolvedTheme === "terminal-light"
-                      ? "text-black font-vt323"
-                      : "text-slate-900",
+                    'text-l fw-bold pb-1',
+                    resolvedTheme === 'dark' ||
+                      resolvedTheme === 'solana-dark' ||
+                      resolvedTheme === 'seeker' ||
+                      resolvedTheme === 'seeker-2'
+                      ? 'text-white'
+                      : resolvedTheme === 'terminal'
+                      ? 'text-white font-vt323'
+                      : resolvedTheme === 'terminal-light'
+                      ? 'text-black font-vt323'
+                      : 'text-slate-900',
                     classNames?.text
                   )}
                 >
@@ -679,23 +636,23 @@ const X402PaywallContent: React.FC<
                 </CardTitle>
                 <CardDescription
                   className={cn(
-                    "text-sm font-light",
-                    resolvedTheme === "terminal"
-                      ? ""
-                      : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                      ? "text-white"
-                      : resolvedTheme === "seeker-light"
-                      ? "text-black"
-                      : resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                      ? "text-white"
-                      : "text-[#71717A]",
+                    'text-sm font-light',
+                    resolvedTheme === 'terminal'
+                      ? ''
+                      : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                      ? 'text-white'
+                      : resolvedTheme === 'seeker-light'
+                      ? 'text-black'
+                      : resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                      ? 'text-white'
+                      : 'text-[#71717A]',
                     classNames?.text
                   )}
                   style={
-                    resolvedTheme === "terminal"
-                      ? { color: "#FFFFFF99" }
-                      : resolvedTheme === "terminal-light"
-                      ? { color: "#71717A" }
+                    resolvedTheme === 'terminal'
+                      ? { color: '#FFFFFF99' }
+                      : resolvedTheme === 'terminal-light'
+                      ? { color: '#71717A' }
                       : undefined
                   }
                 >
@@ -704,31 +661,31 @@ const X402PaywallContent: React.FC<
               </div>
             </div>
 
-            {theme !== "terminal" && theme !== "terminal-light" && (
+            {theme !== 'terminal' && theme !== 'terminal-light' && (
               <div
                 className={cn(
-                  "border-b",
-                  resolvedTheme === "light" ? "" : "mb-6",
-                  resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? "border-slate-600"
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                    ? ""
-                    : resolvedTheme === "seeker-light"
-                    ? ""
-                    : "border-slate-200"
+                  'border-b',
+                  resolvedTheme === 'light' ? '' : 'mb-6',
+                  resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? 'border-slate-600'
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                    ? ''
+                    : resolvedTheme === 'seeker-light'
+                    ? ''
+                    : 'border-slate-200'
                 )}
                 style={
-                  resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
+                  resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
                     ? {
-                        borderBottom: "1px solid #FFFFFF1F",
-                        marginBottom: "1rem",
+                        borderBottom: '1px solid #FFFFFF1F',
+                        marginBottom: '1rem',
                       }
-                    : resolvedTheme === "seeker-light"
-                    ? { marginBottom: "1rem" }
-                    : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                    ? { marginBottom: "1rem" }
-                    : resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? { marginBottom: "1rem" }
+                    : resolvedTheme === 'seeker-light'
+                    ? { marginBottom: '1rem' }
+                    : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                    ? { marginBottom: '1rem' }
+                    : resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? { marginBottom: '1rem' }
                     : undefined
                 }
               ></div>
@@ -737,45 +694,45 @@ const X402PaywallContent: React.FC<
             <div className="text-center">
               <h2
                 className={cn(
-                  "text-2xl font-normal mb-2",
-                  resolvedTheme === "dark" ||
-                    resolvedTheme === "solana-dark" ||
-                    resolvedTheme === "seeker" ||
-                    resolvedTheme === "seeker-2"
-                    ? "text-white"
-                    : resolvedTheme === "seeker-light"
-                    ? "text-black"
-                    : resolvedTheme === "terminal"
-                    ? "text-white font-vt323"
-                    : "text-slate-900"
+                  'text-2xl font-normal mb-2',
+                  resolvedTheme === 'dark' ||
+                    resolvedTheme === 'solana-dark' ||
+                    resolvedTheme === 'seeker' ||
+                    resolvedTheme === 'seeker-2'
+                    ? 'text-white'
+                    : resolvedTheme === 'seeker-light'
+                    ? 'text-black'
+                    : resolvedTheme === 'terminal'
+                    ? 'text-white font-vt323'
+                    : 'text-slate-900'
                 )}
               >
                 Payment Required
               </h2>
               <p
                 className={cn(
-                  "text-sm font-light",
-                  resolvedTheme === "dark" ||
-                    resolvedTheme === "solana-dark" ||
-                    resolvedTheme === "seeker" ||
-                    resolvedTheme === "seeker-2"
-                    ? "text-white"
-                    : resolvedTheme === "terminal"
-                    ? ""
-                    : resolvedTheme === "terminal-light"
-                    ? ""
-                    : "text-slate-600"
+                  'text-sm font-light',
+                  resolvedTheme === 'dark' ||
+                    resolvedTheme === 'solana-dark' ||
+                    resolvedTheme === 'seeker' ||
+                    resolvedTheme === 'seeker-2'
+                    ? 'text-white'
+                    : resolvedTheme === 'terminal'
+                    ? ''
+                    : resolvedTheme === 'terminal-light'
+                    ? ''
+                    : 'text-slate-600'
                 )}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { color: "#FFFFFF99" }
-                    : resolvedTheme === "terminal-light"
-                    ? { color: "#71717A" }
+                  resolvedTheme === 'terminal'
+                    ? { color: '#FFFFFF99' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { color: '#71717A' }
                     : undefined
                 }
               >
-                Access to protected content. To access this content, please pay
-                ${amount.toFixed(2)} USDC
+                Access to protected content. To access this content, please pay ${amount.toFixed(2)}{' '}
+                USDC
               </p>
             </div>
           </CardHeader>
@@ -784,103 +741,103 @@ const X402PaywallContent: React.FC<
             {/* Payment Details Preview */}
             <div
               className={cn(
-                "p-6",
-                resolvedTheme === "light" || resolvedTheme === "solana-light"
-                  ? "bg-[#F4F4F5] border-none rounded-xl"
+                'p-6',
+                resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                  ? 'bg-[#F4F4F5] border-none rounded-xl'
                   : connectThemeConfig.paymentDetails
               )}
               style={
-                resolvedTheme === "seeker"
-                  ? { backgroundColor: "rgba(0, 0, 0, 0.12)" }
-                  : resolvedTheme === "seeker-2"
-                  ? { backgroundColor: "#171A1A" }
-                  : resolvedTheme === "seeker-light"
-                  ? { backgroundColor: "#F4F4F5" }
-                  : resolvedTheme === "terminal"
+                resolvedTheme === 'seeker'
+                  ? { backgroundColor: 'rgba(0, 0, 0, 0.12)' }
+                  : resolvedTheme === 'seeker-2'
+                  ? { backgroundColor: '#171A1A' }
+                  : resolvedTheme === 'seeker-light'
+                  ? { backgroundColor: '#F4F4F5' }
+                  : resolvedTheme === 'terminal'
                   ? {
-                      backgroundColor: "#0B2D2D",
-                      border: "1px solid #22EBAD33",
+                      backgroundColor: '#0B2D2D',
+                      border: '1px solid #22EBAD33',
                     }
-                  : resolvedTheme === "terminal-light"
+                  : resolvedTheme === 'terminal-light'
                   ? {
-                      border: "1px solid #E4E4E7",
+                      border: '1px solid #E4E4E7',
                     }
-                  : resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                  ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                  : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                  ? { backgroundColor: "#F4F4F5", border: "none" }
+                  : resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                  ? { boxShadow: '0px 0px 16px 4px #000000 inset' }
+                  : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                  ? { backgroundColor: '#F4F4F5', border: 'none' }
                   : undefined
               }
             >
               <div className="flex items-center justify-between mb-4">
                 <span
                   className={cn(
-                    "text-sm",
-                    resolvedTheme === "dark" ||
-                      resolvedTheme === "solana-dark" ||
-                      resolvedTheme === "seeker" ||
-                      resolvedTheme === "seeker-2"
-                      ? "text-white"
-                      : resolvedTheme === "seeker-light"
-                      ? "text-black"
-                      : resolvedTheme === "terminal"
-                      ? "text-white"
-                      : resolvedTheme === "terminal-light"
-                      ? "text-black"
-                      : "text-slate-900"
+                    'text-sm',
+                    resolvedTheme === 'dark' ||
+                      resolvedTheme === 'solana-dark' ||
+                      resolvedTheme === 'seeker' ||
+                      resolvedTheme === 'seeker-2'
+                      ? 'text-white'
+                      : resolvedTheme === 'seeker-light'
+                      ? 'text-black'
+                      : resolvedTheme === 'terminal'
+                      ? 'text-white'
+                      : resolvedTheme === 'terminal-light'
+                      ? 'text-black'
+                      : 'text-slate-900'
                   )}
                 >
                   Amount
                 </span>
                 <div
                   className={cn(
-                    "text-xl font-bold",
-                    resolvedTheme === "light" || resolvedTheme === "solana-light"
-                      ? "text-purple-600"
-                      : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                      ? ""
-                      : resolvedTheme === "seeker-light"
-                      ? ""
-                      : resolvedTheme === "terminal"
-                      ? ""
-                      : resolvedTheme === "terminal-light"
-                      ? ""
-                      : "text-[#21ECAB]"
+                    'text-xl font-bold',
+                    resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                      ? 'text-purple-600'
+                      : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                      ? ''
+                      : resolvedTheme === 'seeker-light'
+                      ? ''
+                      : resolvedTheme === 'terminal'
+                      ? ''
+                      : resolvedTheme === 'terminal-light'
+                      ? ''
+                      : 'text-[#21ECAB]'
                   )}
                   style={
-                    resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                      ? { color: "#95D2E6" }
-                      : resolvedTheme === "seeker-light"
-                      ? { color: "#00BECC" }
-                      : resolvedTheme === "terminal"
-                      ? { color: "#32FEFF" }
-                      : resolvedTheme === "terminal-light"
-                      ? { color: "#009192" }
+                    resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                      ? { color: '#95D2E6' }
+                      : resolvedTheme === 'seeker-light'
+                      ? { color: '#00BECC' }
+                      : resolvedTheme === 'terminal'
+                      ? { color: '#32FEFF' }
+                      : resolvedTheme === 'terminal-light'
+                      ? { color: '#009192' }
                       : undefined
                   }
                 >
-                  {"$" + amount.toFixed(2)}
+                  {'$' + amount.toFixed(2)}
                 </div>
               </div>
 
               <div
                 className={cn(
-                  "border-t mb-4",
-                  resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? "border-slate-600"
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                    ? ""
-                    : resolvedTheme === "terminal"
-                    ? ""
-                    : "border-slate-200"
+                  'border-t mb-4',
+                  resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? 'border-slate-600'
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                    ? ''
+                    : resolvedTheme === 'terminal'
+                    ? ''
+                    : 'border-slate-200'
                 )}
                 style={
-                  resolvedTheme === "terminal"
+                  resolvedTheme === 'terminal'
                     ? {
-                        borderTop: "1px solid #22EBAD1F",
+                        borderTop: '1px solid #22EBAD1F',
                       }
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                    ? { borderTop: "1px solid #FFFFFF1F" }
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                    ? { borderTop: '1px solid #FFFFFF1F' }
                     : undefined
                 }
               ></div>
@@ -889,34 +846,34 @@ const X402PaywallContent: React.FC<
                 <div className="flex items-center justify-between">
                   <span
                     className={cn(
-                      "text-sm",
-                      resolvedTheme === "dark" ||
-                        resolvedTheme === "solana-dark" ||
-                        resolvedTheme === "seeker" ||
-                        resolvedTheme === "seeker-2"
-                        ? "text-white"
-                        : resolvedTheme === "terminal"
-                        ? "text-white"
-                        : resolvedTheme === "terminal-light"
-                        ? "text-black"
-                        : "text-slate-900"
+                      'text-sm',
+                      resolvedTheme === 'dark' ||
+                        resolvedTheme === 'solana-dark' ||
+                        resolvedTheme === 'seeker' ||
+                        resolvedTheme === 'seeker-2'
+                        ? 'text-white'
+                        : resolvedTheme === 'terminal'
+                        ? 'text-white'
+                        : resolvedTheme === 'terminal-light'
+                        ? 'text-black'
+                        : 'text-slate-900'
                     )}
                   >
                     Currency
                   </span>
                   <div
                     className={cn(
-                      "text-sm",
-                      resolvedTheme === "dark" ||
-                        resolvedTheme === "solana-dark" ||
-                        resolvedTheme === "seeker" ||
-                        resolvedTheme === "seeker-2"
-                        ? "text-white"
-                        : resolvedTheme === "terminal"
-                        ? "text-white"
-                        : resolvedTheme === "terminal-light"
-                        ? "text-black"
-                        : "text-slate-900"
+                      'text-sm',
+                      resolvedTheme === 'dark' ||
+                        resolvedTheme === 'solana-dark' ||
+                        resolvedTheme === 'seeker' ||
+                        resolvedTheme === 'seeker-2'
+                        ? 'text-white'
+                        : resolvedTheme === 'terminal'
+                        ? 'text-white'
+                        : resolvedTheme === 'terminal-light'
+                        ? 'text-black'
+                        : 'text-slate-900'
                     )}
                   >
                     USDC
@@ -925,17 +882,17 @@ const X402PaywallContent: React.FC<
                 <div className="flex items-center justify-between">
                   <span
                     className={cn(
-                      "text-sm",
-                      resolvedTheme === "dark" ||
-                        resolvedTheme === "solana-dark" ||
-                        resolvedTheme === "seeker" ||
-                        resolvedTheme === "seeker-2"
-                        ? "text-white"
-                        : resolvedTheme === "terminal"
-                        ? "text-white"
-                        : resolvedTheme === "terminal-light"
-                        ? "text-black"
-                        : "text-slate-900"
+                      'text-sm',
+                      resolvedTheme === 'dark' ||
+                        resolvedTheme === 'solana-dark' ||
+                        resolvedTheme === 'seeker' ||
+                        resolvedTheme === 'seeker-2'
+                        ? 'text-white'
+                        : resolvedTheme === 'terminal'
+                        ? 'text-white'
+                        : resolvedTheme === 'terminal-light'
+                        ? 'text-black'
+                        : 'text-slate-900'
                     )}
                   >
                     Network
@@ -943,45 +900,45 @@ const X402PaywallContent: React.FC<
                   <div className="flex items-center space-x-2">
                     <div
                       className={cn(
-                        "w-2 h-2 rounded-full",
-                        resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2" ||
-                          resolvedTheme === "seeker-light" ||
-                          resolvedTheme === "terminal" ||
-                          resolvedTheme === "terminal-light"
-                          ? ""
-                          : "bg-green-500"
+                        'w-2 h-2 rounded-full',
+                        resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2' ||
+                          resolvedTheme === 'seeker-light' ||
+                          resolvedTheme === 'terminal' ||
+                          resolvedTheme === 'terminal-light'
+                          ? ''
+                          : 'bg-green-500'
                       )}
                       style={
-                        resolvedTheme === "seeker"
-                          ? { backgroundColor: "#95D2E6" }
-                          : resolvedTheme === "seeker-2"
-                          ? { backgroundColor: "#95D2E6" }
-                          : resolvedTheme === "seeker-light"
-                          ? { backgroundColor: "#00BECC" }
-                          : resolvedTheme === "terminal"
-                          ? { backgroundColor: "#32FEFF" }
-                          : resolvedTheme === "terminal-light"
-                          ? { backgroundColor: "#009192" }
+                        resolvedTheme === 'seeker'
+                          ? { backgroundColor: '#95D2E6' }
+                          : resolvedTheme === 'seeker-2'
+                          ? { backgroundColor: '#95D2E6' }
+                          : resolvedTheme === 'seeker-light'
+                          ? { backgroundColor: '#00BECC' }
+                          : resolvedTheme === 'terminal'
+                          ? { backgroundColor: '#32FEFF' }
+                          : resolvedTheme === 'terminal-light'
+                          ? { backgroundColor: '#009192' }
                           : undefined
                       }
                     ></div>
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : resolvedTheme === "terminal"
-                          ? "text-white"
-                          : resolvedTheme === "terminal-light"
-                          ? "text-black"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : resolvedTheme === 'terminal'
+                          ? 'text-white'
+                          : resolvedTheme === 'terminal-light'
+                          ? 'text-black'
+                          : 'text-slate-900'
                       )}
                     >
-                      {network === "solana" ? "Mainnet" : "Devnet"}
+                      {network === 'solana' ? 'Mainnet' : 'Devnet'}
                     </span>
                   </div>
                 </div>
@@ -992,18 +949,18 @@ const X402PaywallContent: React.FC<
             <div className="flex items-center justify-center space-x-2">
               <svg
                 className={cn(
-                  "w-4 h-4",
-                  resolvedTheme === "terminal" || resolvedTheme === "seeker-light"
-                    ? ""
-                    : "text-green-500"
+                  'w-4 h-4',
+                  resolvedTheme === 'terminal' || resolvedTheme === 'seeker-light'
+                    ? ''
+                    : 'text-green-500'
                 )}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { color: "#32FEFF" }
-                    : resolvedTheme === "terminal-light"
-                    ? { color: "#009192" }
-                    : resolvedTheme === "seeker-light"
-                    ? { color: "#00BECC" }
+                  resolvedTheme === 'terminal'
+                    ? { color: '#32FEFF' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { color: '#009192' }
+                    : resolvedTheme === 'seeker-light'
+                    ? { color: '#00BECC' }
                     : undefined
                 }
                 fill="none"
@@ -1012,21 +969,17 @@ const X402PaywallContent: React.FC<
                 strokeWidth="2"
               >
                 <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-                <path
-                  d="M9 12l2 2 4-4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+                <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <span
-                className={cn("text-sm", connectThemeConfig.securityMessage)}
+                className={cn('text-sm', connectThemeConfig.securityMessage)}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { color: "#FFFFFF99" }
-                    : resolvedTheme === "terminal-light"
-                    ? { color: "#71717A" }
-                    : resolvedTheme === "seeker-light"
-                    ? { color: "#000000" }
+                  resolvedTheme === 'terminal'
+                    ? { color: '#FFFFFF99' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { color: '#71717A' }
+                    : resolvedTheme === 'seeker-light'
+                    ? { color: '#000000' }
                     : undefined
                 }
               >
@@ -1036,10 +989,7 @@ const X402PaywallContent: React.FC<
 
             {/* Connect Button */}
             <div className="relative">
-              <div
-                ref={walletButtonRef}
-                className="absolute opacity-0 pointer-events-none -z-10"
-              >
+              <div ref={walletButtonRef} className="absolute opacity-0 pointer-events-none -z-10">
                 <WalletMultiButton />
               </div>
               <PaymentButton
@@ -1047,39 +997,36 @@ const X402PaywallContent: React.FC<
                 description={description}
                 customText="Connect Wallet"
                 onClick={() => {
-                  const button = walletButtonRef.current?.querySelector(
-                    "button"
-                  ) as HTMLElement;
+                  const button = walletButtonRef.current?.querySelector('button') as HTMLElement;
                   button?.click();
                 }}
-                className={cn("w-full h-12", connectThemeConfig.button)}
+                className={cn('w-full h-12', connectThemeConfig.button)}
                 style={
-                  resolvedTheme === "dark"
+                  resolvedTheme === 'dark'
                     ? {
-                        backgroundColor: "#FFFFFF1F",
-                        boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
+                        backgroundColor: '#FFFFFF1F',
+                        boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.3) inset',
                       }
-                    : resolvedTheme === "terminal"
+                    : resolvedTheme === 'terminal'
                     ? {
-                        backgroundColor: "#32FEFF",
-                        color: "#000000",
+                        backgroundColor: '#32FEFF',
+                        color: '#000000',
                       }
-                    : resolvedTheme === "terminal-light"
+                    : resolvedTheme === 'terminal-light'
                     ? {
-                        backgroundColor: "#000000",
-                        color: "#FFFFFF",
+                        backgroundColor: '#000000',
+                        color: '#FFFFFF',
                       }
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
                     ? {
                         background:
-                          "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
-                        backgroundColor: "transparent",
+                          'linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)',
+                        backgroundColor: 'transparent',
                       }
-                    : resolvedTheme === "seeker-light"
+                    : resolvedTheme === 'seeker-light'
                     ? {
-                        background:
-                          "linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)",
-                        backgroundColor: "transparent",
+                        background: 'linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)',
+                        backgroundColor: 'transparent',
                       }
                     : undefined
                 }
@@ -1089,61 +1036,61 @@ const X402PaywallContent: React.FC<
             {/* Helper Text */}
             <div className="text-center">
               <p
-                className={cn("text-sm", connectThemeConfig.helperText)}
+                className={cn('text-sm', connectThemeConfig.helperText)}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { color: "#FFFFFF99" }
-                    : resolvedTheme === "terminal-light"
-                    ? { color: "#71717A" }
+                  resolvedTheme === 'terminal'
+                    ? { color: '#FFFFFF99' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { color: '#71717A' }
                     : undefined
                 }
               >
-                Don't have USDC?{" "}
+                Don't have USDC?{' '}
                 <a
                   href="#"
                   className={cn(
-                    "font-medium underline",
-                    resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                      ? "text-[#95D2E6]"
-                      : resolvedTheme === "seeker-light"
-                      ? "hover:opacity-90"
-                      : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                      ? "text-purple-600"
-                      : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                      ? "hover:opacity-90"
-                      : "text-[#4ADE80]"
+                    'font-medium underline',
+                    resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                      ? 'text-[#95D2E6]'
+                      : resolvedTheme === 'seeker-light'
+                      ? 'hover:opacity-90'
+                      : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                      ? 'text-purple-600'
+                      : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                      ? 'hover:opacity-90'
+                      : 'text-[#4ADE80]'
                   )}
                   style={
-                    resolvedTheme === "terminal"
-                      ? { color: "#32FEFF" }
-                      : resolvedTheme === "terminal-light"
-                      ? { color: "#000000" }
-                      : resolvedTheme === "seeker-light"
-                      ? { color: "#00BECC" }
+                    resolvedTheme === 'terminal'
+                      ? { color: '#32FEFF' }
+                      : resolvedTheme === 'terminal-light'
+                      ? { color: '#000000' }
+                      : resolvedTheme === 'seeker-light'
+                      ? { color: '#00BECC' }
                       : undefined
                   }
                 >
                   Get it here
                   <svg
                     className={cn(
-                      "inline w-3 h-3 ml-1",
-                      resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                        ? "text-[#95D2E6]"
-                        : resolvedTheme === "seeker-light"
-                        ? ""
-                        : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                        ? "text-purple-600"
-                        : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                        ? ""
-                        : "text-[#4ADE80]"
+                      'inline w-3 h-3 ml-1',
+                      resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                        ? 'text-[#95D2E6]'
+                        : resolvedTheme === 'seeker-light'
+                        ? ''
+                        : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                        ? 'text-purple-600'
+                        : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                        ? ''
+                        : 'text-[#4ADE80]'
                     )}
                     style={
-                      resolvedTheme === "terminal"
-                        ? { color: "#32FEFF" }
-                        : resolvedTheme === "terminal-light"
-                        ? { color: "#000000" }
-                        : resolvedTheme === "seeker-light"
-                        ? { color: "#00BECC" }
+                      resolvedTheme === 'terminal'
+                        ? { color: '#32FEFF' }
+                        : resolvedTheme === 'terminal-light'
+                        ? { color: '#000000' }
+                        : resolvedTheme === 'seeker-light'
+                        ? { color: '#00BECC' }
                         : undefined
                     }
                     fill="currentColor"
@@ -1167,73 +1114,69 @@ const X402PaywallContent: React.FC<
   return (
     <div
       className={cn(
-        "flex items-center justify-center min-h-screen p-4",
+        'flex items-center justify-center min-h-screen p-4',
         themeConfig.container,
         classNames?.container
       )}
       style={
-        resolvedTheme === "dark"
+        resolvedTheme === 'dark'
+          ? {
+              background: 'linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)',
+              ...customStyles?.container,
+            }
+          : resolvedTheme === 'solana-dark'
+          ? {
+              background: 'linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)',
+              ...customStyles?.container,
+            }
+          : resolvedTheme === 'light'
           ? {
               background:
-                "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
+                'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)',
               ...customStyles?.container,
             }
-          : resolvedTheme === "solana-dark"
+          : resolvedTheme === 'solana-light'
           ? {
               background:
-                "linear-gradient(to bottom left, #db2777 0%, #9333ea 50%, #1e40af 100%)",
+                'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)',
               ...customStyles?.container,
             }
-          : resolvedTheme === "light"
+          : resolvedTheme === 'seeker'
           ? {
-              background:
-                "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+              background: 'linear-gradient(to top,#21645E 0%, #0D2734 50%, #001214 100%)',
               ...customStyles?.container,
             }
-          : resolvedTheme === "solana-light"
+          : resolvedTheme === 'seeker-2'
           ? {
-              background:
-                "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(236, 72, 153, 0.4) 33%, rgba(147, 51, 234, 0.4) 66%, rgba(34, 211, 238, 0.4) 100%)",
+              background: '#0D1615',
               ...customStyles?.container,
             }
-          : resolvedTheme === "seeker"
+          : resolvedTheme === 'seeker-light'
           ? {
-              background:
-                "linear-gradient(to top,#21645E 0%, #0D2734 50%, #001214 100%)",
+              background: 'linear-gradient(240.08deg, #B8CCD3 -0.56%, #FFFFFF 119.23%)',
               ...customStyles?.container,
             }
-          : resolvedTheme === "seeker-2"
+          : resolvedTheme === 'terminal'
           ? {
-              background: "#0D1615",
+              backgroundColor: '#0D1615',
+              position: 'relative',
               ...customStyles?.container,
             }
-          : resolvedTheme === "seeker-light"
+          : resolvedTheme === 'terminal-light'
           ? {
-              background:
-                "linear-gradient(240.08deg, #B8CCD3 -0.56%, #FFFFFF 119.23%)",
-              ...customStyles?.container,
-            }
-          : resolvedTheme === "terminal"
-          ? {
-              backgroundColor: "#0D1615",
-              position: "relative",
-              ...customStyles?.container,
-            }
-          : resolvedTheme === "terminal-light"
-          ? {
-              backgroundColor: "#F4F4F4",
-              position: "relative",
+              backgroundColor: '#F4F4F4',
+              position: 'relative',
               ...customStyles?.container,
             }
           : customStyles?.container
       }
     >
-      {(resolvedTheme === "terminal" || resolvedTheme === "terminal-light") && (
+      {(resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light') && (
         <div
           className="absolute inset-0 pointer-events-none overflow-hidden"
           style={{
             backgroundImage:
-              resolvedTheme === "terminal"
+              resolvedTheme === 'terminal'
                 ? `
               linear-gradient(to right, #22EBAD33 1px, transparent 1px),
               linear-gradient(to bottom, #22EBAD33 1px, transparent 1px)
@@ -1247,39 +1190,35 @@ const X402PaywallContent: React.FC<
         />
       )}
       <Card
-        className={cn(
-          "w-full max-w-lg shadow-2xl border-0",
-          themeConfig.card,
-          classNames?.card
-        )}
+        className={cn('w-full max-w-lg shadow-2xl border-0', themeConfig.card, classNames?.card)}
         style={
-          resolvedTheme === "seeker"
+          resolvedTheme === 'seeker'
             ? {
-                backgroundColor: "#171719",
+                backgroundColor: '#171719',
                 ...customStyles?.card,
               }
-            : resolvedTheme === "seeker-2"
+            : resolvedTheme === 'seeker-2'
             ? {
-                backgroundColor: "rgba(29, 35, 35, 1)",
-                backdropFilter: "blur(12px)",
+                backgroundColor: 'rgba(29, 35, 35, 1)',
+                backdropFilter: 'blur(12px)',
                 ...customStyles?.card,
               }
-            : resolvedTheme === "seeker-light"
+            : resolvedTheme === 'seeker-light'
             ? {
-                backgroundColor: "#FFFFFF",
+                backgroundColor: '#FFFFFF',
                 ...customStyles?.card,
               }
-            : resolvedTheme === "terminal"
+            : resolvedTheme === 'terminal'
             ? {
-                backgroundColor: "#0D1615",
-                border: "1px solid rgba(34, 235, 173, 0.2)",
+                backgroundColor: '#0D1615',
+                border: '1px solid rgba(34, 235, 173, 0.2)',
                 borderRadius: 0,
                 ...customStyles?.card,
               }
-            : resolvedTheme === "terminal-light"
+            : resolvedTheme === 'terminal-light'
             ? {
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #E4E4E7",
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E4E4E7',
                 borderRadius: 0,
                 ...customStyles?.card,
               }
@@ -1290,39 +1229,39 @@ const X402PaywallContent: React.FC<
           {/* Header with icon, title, and subtitle in top left */}
           <div
             className={cn(
-              "flex items-center space-x-4 mb-6 p-4",
-              resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                ? "-mx-6 -mt-6 relative"
-                : resolvedTheme === "light" || resolvedTheme === "seeker-light"
-                ? "mb-3"
-                : "mb-6"
+              'flex items-center space-x-4 mb-6 p-4',
+              resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                ? '-mx-6 -mt-6 relative'
+                : resolvedTheme === 'light' || resolvedTheme === 'seeker-light'
+                ? 'mb-3'
+                : 'mb-6'
             )}
             style={
-              resolvedTheme === "terminal"
+              resolvedTheme === 'terminal'
                 ? {
-                    backgroundColor: "#1682601A",
-                    borderBottom: "1px solid rgba(34, 235, 173, 0.12)",
+                    backgroundColor: '#1682601A',
+                    borderBottom: '1px solid rgba(34, 235, 173, 0.12)',
                   }
-                : resolvedTheme === "terminal-light"
+                : resolvedTheme === 'terminal-light'
                 ? {
-                    backgroundColor: "#FAFAFA",
-                    borderBottom: "1px solid #E4E4E7",
+                    backgroundColor: '#FAFAFA',
+                    borderBottom: '1px solid #E4E4E7',
                   }
                 : undefined
             }
           >
             <div
               className={cn(
-                "w-auto p-[2px] flex items-center justify-center",
-                resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                  ? "pr-4 self-stretch -my-4"
-                  : "h-auto rounded-full overflow-hidden"
+                'w-auto p-[2px] flex items-center justify-center',
+                resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                  ? 'pr-4 self-stretch -my-4'
+                  : 'h-auto rounded-full overflow-hidden'
               )}
               style={
-                resolvedTheme === "terminal"
-                  ? { borderRight: "1px solid rgba(34, 235, 173, 0.25)" }
-                  : resolvedTheme === "terminal-light"
-                  ? { borderRight: "1px solid #E4E4E7" }
+                resolvedTheme === 'terminal'
+                  ? { borderRight: '1px solid rgba(34, 235, 173, 0.25)' }
+                  : resolvedTheme === 'terminal-light'
+                  ? { borderRight: '1px solid #E4E4E7' }
                   : undefined
               }
             >
@@ -1332,33 +1271,29 @@ const X402PaywallContent: React.FC<
             </div>
             <div>
               <CardTitle
-                className={cn(
-                  "text-l fw-bold pb-1",
-                  themeConfig.title,
-                  classNames?.text
-                )}
+                className={cn('text-l fw-bold pb-1', themeConfig.title, classNames?.text)}
                 style={customStyles?.text}
               >
                 Premium Content XYZ
               </CardTitle>
               <CardDescription
                 className={cn(
-                  "text-sm font-light",
-                  resolvedTheme === "terminal"
-                    ? ""
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                    ? "text-white"
-                    : resolvedTheme === "seeker-light"
-                    ? ""
-                    : "text-[#71717A]"
+                  'text-sm font-light',
+                  resolvedTheme === 'terminal'
+                    ? ''
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                    ? 'text-white'
+                    : resolvedTheme === 'seeker-light'
+                    ? ''
+                    : 'text-[#71717A]'
                 )}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { color: "#FFFFFF99" }
-                    : resolvedTheme === "terminal-light"
-                    ? { color: "#71717A" }
-                    : resolvedTheme === "seeker-light"
-                    ? { color: "#71717A" }
+                  resolvedTheme === 'terminal'
+                    ? { color: '#FFFFFF99' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { color: '#71717A' }
+                    : resolvedTheme === 'seeker-light'
+                    ? { color: '#71717A' }
                     : undefined
                 }
               >
@@ -1368,33 +1303,33 @@ const X402PaywallContent: React.FC<
           </div>
 
           {/* Underline */}
-          {theme !== "terminal" && theme !== "terminal-light" && (
+          {theme !== 'terminal' && theme !== 'terminal-light' && (
             <div
               className={cn(
-                "border-b",
-                resolvedTheme === "light" ? "" : "mb-6",
-                resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                  ? "border-slate-600"
-                  : resolvedTheme === "seeker"
-                  ? ""
-                  : resolvedTheme === "seeker-2"
-                  ? ""
-                  : resolvedTheme === "seeker-light"
-                  ? ""
-                  : "border-slate-200"
+                'border-b',
+                resolvedTheme === 'light' ? '' : 'mb-6',
+                resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                  ? 'border-slate-600'
+                  : resolvedTheme === 'seeker'
+                  ? ''
+                  : resolvedTheme === 'seeker-2'
+                  ? ''
+                  : resolvedTheme === 'seeker-light'
+                  ? ''
+                  : 'border-slate-200'
               )}
               style={
-                resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
+                resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
                   ? {
-                      borderBottom: "1px solid #FFFFFF1F",
-                      marginBottom: "1rem",
+                      borderBottom: '1px solid #FFFFFF1F',
+                      marginBottom: '1rem',
                     }
-                  : resolvedTheme === "seeker-light"
-                  ? { marginBottom: "1rem" }
-                  : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                  ? { marginBottom: "1rem" }
-                  : resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                  ? { marginBottom: "1rem" }
+                  : resolvedTheme === 'seeker-light'
+                  ? { marginBottom: '1rem' }
+                  : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                  ? { marginBottom: '1rem' }
+                  : resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                  ? { marginBottom: '1rem' }
                   : undefined
               }
             ></div>
@@ -1404,49 +1339,49 @@ const X402PaywallContent: React.FC<
             <div className="text-center">
               <h2
                 className={cn(
-                  "text-2xl font-normal mb-2",
-                  resolvedTheme === "dark" ||
-                    resolvedTheme === "solana-dark" ||
-                    resolvedTheme === "seeker"
-                    ? "text-white"
-                    : resolvedTheme === "seeker-2"
-                    ? "text-white"
-                    : resolvedTheme === "seeker-light"
-                    ? "text-black"
-                    : resolvedTheme === "terminal"
-                    ? "text-white font-vt323"
-                    : "text-slate-900"
+                  'text-2xl font-normal mb-2',
+                  resolvedTheme === 'dark' ||
+                    resolvedTheme === 'solana-dark' ||
+                    resolvedTheme === 'seeker'
+                    ? 'text-white'
+                    : resolvedTheme === 'seeker-2'
+                    ? 'text-white'
+                    : resolvedTheme === 'seeker-light'
+                    ? 'text-black'
+                    : resolvedTheme === 'terminal'
+                    ? 'text-white font-vt323'
+                    : 'text-slate-900'
                 )}
               >
                 Payment Required
               </h2>
               <p
                 className={cn(
-                  "text-sm font-light",
-                  resolvedTheme === "dark" ||
-                    resolvedTheme === "solana-dark" ||
-                    resolvedTheme === "seeker"
-                    ? "text-white"
-                    : resolvedTheme === "seeker-2"
-                    ? "text-white"
-                    : resolvedTheme === "seeker-light"
-                    ? ""
-                    : resolvedTheme === "terminal"
-                    ? ""
-                    : "text-slate-600"
+                  'text-sm font-light',
+                  resolvedTheme === 'dark' ||
+                    resolvedTheme === 'solana-dark' ||
+                    resolvedTheme === 'seeker'
+                    ? 'text-white'
+                    : resolvedTheme === 'seeker-2'
+                    ? 'text-white'
+                    : resolvedTheme === 'seeker-light'
+                    ? ''
+                    : resolvedTheme === 'terminal'
+                    ? ''
+                    : 'text-slate-600'
                 )}
                 style={
-                  resolvedTheme === "terminal"
-                    ? { color: "#FFFFFF99" }
-                    : resolvedTheme === "terminal-light"
-                    ? { color: "#71717A" }
-                    : resolvedTheme === "seeker-light"
-                    ? { color: "#71717A" }
+                  resolvedTheme === 'terminal'
+                    ? { color: '#FFFFFF99' }
+                    : resolvedTheme === 'terminal-light'
+                    ? { color: '#71717A' }
+                    : resolvedTheme === 'seeker-light'
+                    ? { color: '#71717A' }
                     : undefined
                 }
               >
-                Access to protected content on base-sepolia. To access this
-                content, please pay $0.01 Base Sepolia USDC
+                Access to protected content on Solana {networkLabel}. To access this content, please
+                pay ${amount.toFixed(2)} USDC
               </p>
             </div>
           )}
@@ -1466,11 +1401,7 @@ const X402PaywallContent: React.FC<
                     viewBox="0 0 24 24"
                     strokeWidth="3"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
               </div>
@@ -1479,13 +1410,13 @@ const X402PaywallContent: React.FC<
               <div className="text-center mb-2">
                 <h3
                   className={cn(
-                    "text-2xl font-semibold",
-                    resolvedTheme === "dark" ||
-                      resolvedTheme === "solana-dark" ||
-                      resolvedTheme === "seeker" ||
-                      resolvedTheme === "seeker-2"
-                      ? "text-white"
-                      : "text-slate-900"
+                    'text-2xl font-semibold',
+                    resolvedTheme === 'dark' ||
+                      resolvedTheme === 'solana-dark' ||
+                      resolvedTheme === 'seeker' ||
+                      resolvedTheme === 'seeker-2'
+                      ? 'text-white'
+                      : 'text-slate-900'
                   )}
                 >
                   Payment Failed
@@ -1495,13 +1426,13 @@ const X402PaywallContent: React.FC<
               {/* Error Message */}
               <p
                 className={cn(
-                  "text-center text-sm mb-6",
-                  resolvedTheme === "dark" ||
-                    resolvedTheme === "solana-dark" ||
-                    resolvedTheme === "seeker" ||
-                    resolvedTheme === "seeker-2"
-                    ? "text-gray-400"
-                    : "text-slate-600"
+                  'text-center text-sm mb-6',
+                  resolvedTheme === 'dark' ||
+                    resolvedTheme === 'solana-dark' ||
+                    resolvedTheme === 'seeker' ||
+                    resolvedTheme === 'seeker-2'
+                    ? 'text-gray-400'
+                    : 'text-slate-600'
                 )}
               >
                 {error?.message ||
@@ -1511,102 +1442,99 @@ const X402PaywallContent: React.FC<
               {/* Payment Details Box */}
               <div
                 className={cn(
-                  "rounded-lg p-6",
-                  resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? "bg-[#0000001F] border border-slate-600"
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                    ? "bg-[rgba(0,0,0,0.12)] border border-white/10"
-                    : "bg-slate-50 border border-slate-200"
+                  'rounded-lg p-6',
+                  resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? 'bg-[#0000001F] border border-slate-600'
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                    ? 'bg-[rgba(0,0,0,0.12)] border border-white/10'
+                    : 'bg-slate-50 border border-slate-200'
                 )}
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       Amount Paid
                     </span>
                     <span
                       className={cn(
-                        "text-sm font-semibold",
-                        resolvedTheme === "light" || resolvedTheme === "solana-light"
-                          ? "text-purple-600"
-                          : "text-green-500"
+                        'text-sm font-semibold',
+                        resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                          ? 'text-purple-600'
+                          : 'text-green-500'
                       )}
                     >
-                      {"$" + amount.toFixed(2)}
+                      {'$' + amount.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       Wallet
                     </span>
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       {reactiveWallet?.publicKey?.toString()
                         ? `${reactiveWallet.publicKey
                             .toString()
-                            .slice(0, 6)}...${reactiveWallet.publicKey
-                            .toString()
-                            .slice(-4)}`
+                            .slice(0, 6)}...${reactiveWallet.publicKey.toString().slice(-4)}`
                         : reactiveWallet?.address
-                        ? `${reactiveWallet.address.slice(
-                            0,
-                            6
-                          )}...${reactiveWallet.address.slice(-4)}`
-                        : "Not connected"}
+                        ? `${reactiveWallet.address.slice(0, 6)}...${reactiveWallet.address.slice(
+                            -4
+                          )}`
+                        : 'Not connected'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       Available Balance
                     </span>
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       ${walletBalance}
@@ -1615,26 +1543,26 @@ const X402PaywallContent: React.FC<
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       Currency
                     </span>
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       USDC
@@ -1643,13 +1571,13 @@ const X402PaywallContent: React.FC<
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        "text-sm",
-                        resolvedTheme === "dark" ||
-                          resolvedTheme === "solana-dark" ||
-                          resolvedTheme === "seeker" ||
-                          resolvedTheme === "seeker-2"
-                          ? "text-white"
-                          : "text-slate-900"
+                        'text-sm',
+                        resolvedTheme === 'dark' ||
+                          resolvedTheme === 'solana-dark' ||
+                          resolvedTheme === 'seeker' ||
+                          resolvedTheme === 'seeker-2'
+                          ? 'text-white'
+                          : 'text-slate-900'
                       )}
                     >
                       Network
@@ -1658,13 +1586,13 @@ const X402PaywallContent: React.FC<
                       <div className="w-2 h-2 rounded-full bg-green-500"></div>
                       <span
                         className={cn(
-                          "text-sm",
-                          resolvedTheme === "dark" ||
-                            resolvedTheme === "solana-dark" ||
-                            resolvedTheme === "seeker" ||
-                            resolvedTheme === "seeker-2"
-                            ? "text-white"
-                            : "text-slate-900"
+                          'text-sm',
+                          resolvedTheme === 'dark' ||
+                            resolvedTheme === 'solana-dark' ||
+                            resolvedTheme === 'seeker' ||
+                            resolvedTheme === 'seeker-2'
+                            ? 'text-white'
+                            : 'text-slate-900'
                         )}
                       >
                         {networkLabel}
@@ -1677,13 +1605,13 @@ const X402PaywallContent: React.FC<
               {/* Orange Warning Banner */}
               <div
                 className={cn(
-                  "rounded-lg p-4 flex items-start space-x-3",
-                  resolvedTheme === "dark" ||
-                    resolvedTheme === "solana-dark" ||
-                    resolvedTheme === "seeker" ||
-                    resolvedTheme === "seeker-2"
-                    ? "bg-orange-900/50 border border-orange-700"
-                    : "bg-orange-50 border border-orange-200"
+                  'rounded-lg p-4 flex items-start space-x-3',
+                  resolvedTheme === 'dark' ||
+                    resolvedTheme === 'solana-dark' ||
+                    resolvedTheme === 'seeker' ||
+                    resolvedTheme === 'seeker-2'
+                    ? 'bg-orange-900/50 border border-orange-700'
+                    : 'bg-orange-50 border border-orange-200'
                 )}
               >
                 <div className="flex-shrink-0">
@@ -1705,17 +1633,17 @@ const X402PaywallContent: React.FC<
                 </div>
                 <p
                   className={cn(
-                    "text-sm",
-                    resolvedTheme === "dark" ||
-                      resolvedTheme === "solana-dark" ||
-                      resolvedTheme === "seeker" ||
-                      resolvedTheme === "seeker-2"
-                      ? "text-white"
-                      : "text-orange-800"
+                    'text-sm',
+                    resolvedTheme === 'dark' ||
+                      resolvedTheme === 'solana-dark' ||
+                      resolvedTheme === 'seeker' ||
+                      resolvedTheme === 'seeker-2'
+                      ? 'text-white'
+                      : 'text-orange-800'
                   )}
                 >
-                  Make sure your Solana wallet has enough USDC to cover the
-                  amount before retrying the transaction.
+                  Make sure your Solana wallet has enough USDC to cover the amount before retrying
+                  the transaction.
                 </p>
               </div>
 
@@ -1731,60 +1659,59 @@ const X402PaywallContent: React.FC<
                 loading={isLoading}
                 disabled={isLoading || !reactiveWallet?.publicKey}
                 className={cn(
-                  "w-full h-12",
-                  resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? resolvedTheme === "dark"
-                      ? "bg-[#FFFFFF1F] rounded-full"
-                      : "bg-solana-gradient rounded-full"
-                    : resolvedTheme === "light"
-                    ? "bg-black hover:bg-gray-800 text-white font-light rounded-full"
-                    : resolvedTheme === "solana-light"
-                    ? "bg-solana-gradient hover:opacity-90 text-white font-light rounded-full"
-                    : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full"
-                    : resolvedTheme === "seeker-light"
-                    ? "text-white rounded-full"
-                    : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                    ? "text-black hover:opacity-90 font-vt323 rounded-none"
-                    : "bg-solana-gradient rounded-full",
+                  'w-full h-12',
+                  resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? resolvedTheme === 'dark'
+                      ? 'bg-[#FFFFFF1F] rounded-full'
+                      : 'bg-solana-gradient rounded-full'
+                    : resolvedTheme === 'light'
+                    ? 'bg-black hover:bg-gray-800 text-white font-light rounded-full'
+                    : resolvedTheme === 'solana-light'
+                    ? 'bg-solana-gradient hover:opacity-90 text-white font-light rounded-full'
+                    : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full'
+                    : resolvedTheme === 'seeker-light'
+                    ? 'text-white rounded-full'
+                    : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                    ? 'text-black hover:opacity-90 font-vt323 rounded-none'
+                    : 'bg-solana-gradient rounded-full',
                   classNames?.button
                 )}
                 style={
-                  resolvedTheme === "terminal"
+                  resolvedTheme === 'terminal'
                     ? {
-                        backgroundColor: "#32FEFF",
-                        color: "#000000",
+                        backgroundColor: '#32FEFF',
+                        color: '#000000',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "dark"
+                    : resolvedTheme === 'dark'
                     ? {
-                        backgroundColor: "#FFFFFF1F",
-                        boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
+                        backgroundColor: '#FFFFFF1F',
+                        boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.3) inset',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "light"
+                    : resolvedTheme === 'light'
                     ? customStyles?.button
-                    : resolvedTheme === "solana-light"
+                    : resolvedTheme === 'solana-light'
                     ? customStyles?.button
-                    : resolvedTheme === "seeker"
+                    : resolvedTheme === 'seeker'
                     ? {
                         background:
-                          "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
-                        backgroundColor: "transparent",
+                          'linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)',
+                        backgroundColor: 'transparent',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "seeker-2"
+                    : resolvedTheme === 'seeker-2'
                     ? {
                         background:
-                          "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
-                        backgroundColor: "transparent",
+                          'linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)',
+                        backgroundColor: 'transparent',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "seeker-light"
+                    : resolvedTheme === 'seeker-light'
                     ? {
-                        background:
-                          "linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)",
-                        backgroundColor: "transparent",
+                        background: 'linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)',
+                        backgroundColor: 'transparent',
                         ...customStyles?.button,
                       }
                     : customStyles?.button
@@ -1796,74 +1723,74 @@ const X402PaywallContent: React.FC<
               <div className="text-center">
                 <p
                   className={cn(
-                    "text-sm",
-                    resolvedTheme === "dark" ||
-                      resolvedTheme === "solana-dark" ||
-                      resolvedTheme === "seeker" ||
-                      resolvedTheme === "seeker-2"
-                      ? "text-white"
-                      : "text-slate-900"
+                    'text-sm',
+                    resolvedTheme === 'dark' ||
+                      resolvedTheme === 'solana-dark' ||
+                      resolvedTheme === 'seeker' ||
+                      resolvedTheme === 'seeker-2'
+                      ? 'text-white'
+                      : 'text-slate-900'
                   )}
                 >
                   <span
                     className={cn(
-                      resolvedTheme === "dark" ||
-                        resolvedTheme === "solana-dark" ||
-                        resolvedTheme === "seeker" ||
-                        resolvedTheme === "seeker-2"
-                        ? "text-gray-400"
-                        : "text-slate-600"
+                      resolvedTheme === 'dark' ||
+                        resolvedTheme === 'solana-dark' ||
+                        resolvedTheme === 'seeker' ||
+                        resolvedTheme === 'seeker-2'
+                        ? 'text-gray-400'
+                        : 'text-slate-600'
                     )}
                   >
-                    Don't have USDC?{" "}
+                    Don't have USDC?{' '}
                   </span>
                   <a
                     href="https://www.coinbase.com/how-to-buy/usdc"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      "font-medium hover:opacity-80",
-                      resolvedTheme === "light" || resolvedTheme === "solana-light"
-                        ? "text-purple-600"
-                        : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                        ? "text-[#95D2E6] hover:text-[#95D2E6]"
-                        : resolvedTheme === "seeker-light"
-                        ? "hover:opacity-90"
-                        : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                        ? "hover:opacity-90"
-                        : "text-green-400 hover:text-green-300"
+                      'font-medium hover:opacity-80',
+                      resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                        ? 'text-purple-600'
+                        : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                        ? 'text-[#95D2E6] hover:text-[#95D2E6]'
+                        : resolvedTheme === 'seeker-light'
+                        ? 'hover:opacity-90'
+                        : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                        ? 'hover:opacity-90'
+                        : 'text-green-400 hover:text-green-300'
                     )}
                     style={
-                      resolvedTheme === "terminal"
-                        ? { color: "#32FEFF" }
-                        : resolvedTheme === "terminal-light"
-                        ? { color: "#000000" }
-                        : resolvedTheme === "seeker-light"
-                        ? { color: "#00BECC" }
+                      resolvedTheme === 'terminal'
+                        ? { color: '#32FEFF' }
+                        : resolvedTheme === 'terminal-light'
+                        ? { color: '#000000' }
+                        : resolvedTheme === 'seeker-light'
+                        ? { color: '#00BECC' }
                         : undefined
                     }
                   >
                     Get it here
                     <svg
                       className={cn(
-                        "inline w-3 h-3 ml-1",
-                        resolvedTheme === "light" || resolvedTheme === "solana-light"
-                          ? "text-purple-600"
-                          : resolvedTheme === "seeker" || resolvedTheme === "seeker-2"
-                          ? "text-[#95D2E6]"
-                          : resolvedTheme === "seeker-light"
-                          ? ""
-                          : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                          ? ""
-                          : "text-green-400"
+                        'inline w-3 h-3 ml-1',
+                        resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                          ? 'text-purple-600'
+                          : resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
+                          ? 'text-[#95D2E6]'
+                          : resolvedTheme === 'seeker-light'
+                          ? ''
+                          : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                          ? ''
+                          : 'text-green-400'
                       )}
                       style={
-                        resolvedTheme === "terminal"
-                          ? { color: "#32FEFF" }
-                          : resolvedTheme === "terminal-light"
-                          ? { color: "#000000" }
-                          : resolvedTheme === "seeker-light"
-                          ? { color: "#00BECC" }
+                        resolvedTheme === 'terminal'
+                          ? { color: '#32FEFF' }
+                          : resolvedTheme === 'terminal-light'
+                          ? { color: '#000000' }
+                          : resolvedTheme === 'seeker-light'
+                          ? { color: '#00BECC' }
                           : undefined
                       }
                       fill="currentColor"
@@ -1887,70 +1814,67 @@ const X402PaywallContent: React.FC<
                 onDisconnect={handleDisconnect}
                 theme={theme}
                 className={cn(
-                  "mb-4",
-                  (resolvedTheme === "dark" || resolvedTheme === "solana-dark") &&
-                    "bg-[#0000001F] border-slate-600 text-white",
-                  (resolvedTheme === "light" || resolvedTheme === "solana-light") &&
-                    "bg-[#F4F4F5] rounded-xl border-none"
+                  'mb-4',
+                  (resolvedTheme === 'dark' || resolvedTheme === 'solana-dark') &&
+                    'bg-[#0000001F] border-slate-600 text-white',
+                  (resolvedTheme === 'light' || resolvedTheme === 'solana-light') &&
+                    'bg-[#F4F4F5] rounded-xl border-none'
                 )}
                 style={
-                  resolvedTheme === "terminal"
+                  resolvedTheme === 'terminal'
                     ? {
-                        backgroundColor: "#0B2D2D",
-                        border: "1px solid #22EBAD33",
+                        backgroundColor: '#0B2D2D',
+                        border: '1px solid #22EBAD33',
                       }
-                    : resolvedTheme === "terminal-light"
+                    : resolvedTheme === 'terminal-light'
                     ? {
-                        border: "1px solid #E4E4E7",
+                        border: '1px solid #E4E4E7',
                       }
-                    : resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                    : resolvedTheme === "seeker"
+                    : resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? { boxShadow: '0px 0px 16px 4px #000000 inset' }
+                    : resolvedTheme === 'seeker'
                     ? {
-                        backgroundColor: "rgba(0, 0, 0, 0.12)",
+                        backgroundColor: 'rgba(0, 0, 0, 0.12)',
                       }
-                    : resolvedTheme === "seeker-2"
-                    ? { backgroundColor: "#171A1A" }
-                    : resolvedTheme === "seeker-light"
+                    : resolvedTheme === 'seeker-2'
+                    ? { backgroundColor: '#171A1A' }
+                    : resolvedTheme === 'seeker-light'
                     ? {
-                        backgroundColor: "#F4F4F5",
+                        backgroundColor: '#F4F4F5',
                       }
-                    : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                    ? { backgroundColor: "#F4F4F5", border: "none" }
+                    : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                    ? { backgroundColor: '#F4F4F5', border: 'none' }
                     : undefined
                 }
               />
 
               {/* Payment Details */}
               {showPaymentDetails &&
-                (resolvedTheme === "seeker" || resolvedTheme === "seeker-2" ? (
+                (resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2' ? (
                   <div
-                    className={cn("p-6", themeConfig.paymentDetails)}
+                    className={cn('p-6', themeConfig.paymentDetails)}
                     style={
-                      resolvedTheme === "seeker"
+                      resolvedTheme === 'seeker'
                         ? {
-                            backgroundColor: "rgba(0, 0, 0, 0.12)",
+                            backgroundColor: 'rgba(0, 0, 0, 0.12)',
                           }
-                        : resolvedTheme === "seeker-2"
-                        ? { backgroundColor: "#171A1A" }
+                        : resolvedTheme === 'seeker-2'
+                        ? { backgroundColor: '#171A1A' }
                         : undefined
                     }
                   >
                     {/* Amount Section - Top Row */}
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-sm text-white">Amount</span>
-                      <div
-                        className="text-xl font-bold"
-                        style={{ color: "#95D2E6" }}
-                      >
-                        {"$" + amount.toFixed(2)}
+                      <div className="text-xl font-bold" style={{ color: '#95D2E6' }}>
+                        {'$' + amount.toFixed(2)}
                       </div>
                     </div>
 
                     {/* Separator Line */}
                     <div
                       className="border-t mb-4"
-                      style={{ borderTop: "1px solid #FFFFFF1F" }}
+                      style={{ borderTop: '1px solid #FFFFFF1F' }}
                     ></div>
 
                     {/* Other Details */}
@@ -1961,24 +1885,18 @@ const X402PaywallContent: React.FC<
                           {reactiveWallet?.publicKey?.toString()
                             ? `${reactiveWallet.publicKey
                                 .toString()
-                                .slice(0, 6)}...${reactiveWallet.publicKey
-                                .toString()
-                                .slice(-4)}`
+                                .slice(0, 6)}...${reactiveWallet.publicKey.toString().slice(-4)}`
                             : reactiveWallet?.address
                             ? `${reactiveWallet.address.slice(
                                 0,
                                 6
                               )}...${reactiveWallet.address.slice(-4)}`
-                            : "Not connected"}
+                            : 'Not connected'}
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-white">
-                          Available Balance
-                        </span>
-                        <div className="text-sm text-white">
-                          ${walletBalance}
-                        </div>
+                        <span className="text-sm text-white">Available Balance</span>
+                        <div className="text-sm text-white">${walletBalance}</div>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-white">Currency</span>
@@ -1989,11 +1907,9 @@ const X402PaywallContent: React.FC<
                         <div className="flex items-center space-x-2">
                           <div
                             className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: "#95D2E6" }}
+                            style={{ backgroundColor: '#95D2E6' }}
                           ></div>
-                          <span className="text-sm text-white">
-                            {networkLabel}
-                          </span>
+                          <span className="text-sm text-white">{networkLabel}</span>
                         </div>
                       </div>
                     </div>
@@ -2001,28 +1917,28 @@ const X402PaywallContent: React.FC<
                 ) : (
                   <div
                     className={cn(
-                      "p-6",
-                      resolvedTheme === "light" || resolvedTheme === "solana-light"
-                        ? "bg-[#F4F4F5] border-none rounded-xl"
+                      'p-6',
+                      resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                        ? 'bg-[#F4F4F5] border-none rounded-xl'
                         : themeConfig.paymentDetails
                     )}
                     style={
-                      resolvedTheme === "terminal"
+                      resolvedTheme === 'terminal'
                         ? {
-                            backgroundColor: "#0B2D2D",
-                            border: "1px solid #22EBAD33",
+                            backgroundColor: '#0B2D2D',
+                            border: '1px solid #22EBAD33',
                           }
-                        : resolvedTheme === "terminal-light"
+                        : resolvedTheme === 'terminal-light'
                         ? {
-                            border: "1px solid #E4E4E7",
+                            border: '1px solid #E4E4E7',
                           }
-                        : resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                        ? { boxShadow: "0px 0px 16px 4px #000000 inset" }
-                        : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                        ? { backgroundColor: "#F4F4F5", border: "none" }
-                        : resolvedTheme === "seeker-light"
+                        : resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                        ? { boxShadow: '0px 0px 16px 4px #000000 inset' }
+                        : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                        ? { backgroundColor: '#F4F4F5', border: 'none' }
+                        : resolvedTheme === 'seeker-light'
                         ? {
-                            backgroundColor: "#F4F4F5",
+                            backgroundColor: '#F4F4F5',
                           }
                         : undefined
                     }
@@ -2031,61 +1947,61 @@ const X402PaywallContent: React.FC<
                     <div className="flex items-center justify-between mb-4">
                       <span
                         className={cn(
-                          "text-sm",
-                          resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                            ? "text-white"
-                            : resolvedTheme === "terminal-light"
-                            ? "text-black"
-                            : resolvedTheme === "seeker-light"
-                            ? "text-black"
-                            : resolvedTheme === "terminal"
-                            ? "text-white"
-                            : "text-black"
+                          'text-sm',
+                          resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                            ? 'text-white'
+                            : resolvedTheme === 'terminal-light'
+                            ? 'text-black'
+                            : resolvedTheme === 'seeker-light'
+                            ? 'text-black'
+                            : resolvedTheme === 'terminal'
+                            ? 'text-white'
+                            : 'text-black'
                         )}
                       >
                         Amount
                       </span>
                       <div
                         className={cn(
-                          "text-xl font-bold",
-                          resolvedTheme === "light" || resolvedTheme === "solana-light"
-                            ? "text-purple-600"
-                            : resolvedTheme === "terminal"
-                            ? ""
-                            : resolvedTheme === "terminal-light"
-                            ? ""
-                            : resolvedTheme === "seeker-light"
-                            ? ""
-                            : "text-[#21ECAB]"
+                          'text-xl font-bold',
+                          resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                            ? 'text-purple-600'
+                            : resolvedTheme === 'terminal'
+                            ? ''
+                            : resolvedTheme === 'terminal-light'
+                            ? ''
+                            : resolvedTheme === 'seeker-light'
+                            ? ''
+                            : 'text-[#21ECAB]'
                         )}
                         style={
-                          resolvedTheme === "terminal"
-                            ? { color: "#32FEFF" }
-                            : resolvedTheme === "terminal-light"
-                            ? { color: "#009192" }
-                            : resolvedTheme === "seeker-light"
-                            ? { color: "#00BECC" }
+                          resolvedTheme === 'terminal'
+                            ? { color: '#32FEFF' }
+                            : resolvedTheme === 'terminal-light'
+                            ? { color: '#009192' }
+                            : resolvedTheme === 'seeker-light'
+                            ? { color: '#00BECC' }
                             : undefined
                         }
                       >
-                        {"$" + amount.toFixed(2)}
+                        {'$' + amount.toFixed(2)}
                       </div>
                     </div>
 
                     {/* Separator Line */}
                     <div
                       className={cn(
-                        "border-t mb-4",
-                        resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                          ? "border-slate-600"
-                          : resolvedTheme === "terminal"
-                          ? ""
-                          : "border-slate-200"
+                        'border-t mb-4',
+                        resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                          ? 'border-slate-600'
+                          : resolvedTheme === 'terminal'
+                          ? ''
+                          : 'border-slate-200'
                       )}
                       style={
-                        resolvedTheme === "terminal"
+                        resolvedTheme === 'terminal'
                           ? {
-                              borderTop: "1px solid #22EBAD1F",
+                              borderTop: '1px solid #22EBAD1F',
                             }
                           : undefined
                       }
@@ -2096,77 +2012,75 @@ const X402PaywallContent: React.FC<
                       <div className="flex items-center justify-between">
                         <span
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white"
-                              : "text-black"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white'
+                              : 'text-black'
                           )}
                         >
                           Wallet
                         </span>
                         <div
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black font-vt323"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white font-vt323"
-                              : "text-slate-900"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black font-vt323'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white font-vt323'
+                              : 'text-slate-900'
                           )}
                         >
                           {reactiveWallet?.publicKey?.toString()
                             ? `${reactiveWallet.publicKey
                                 .toString()
-                                .slice(0, 6)}...${reactiveWallet.publicKey
-                                .toString()
-                                .slice(-4)}`
+                                .slice(0, 6)}...${reactiveWallet.publicKey.toString().slice(-4)}`
                             : reactiveWallet?.address
                             ? `${reactiveWallet.address.slice(
                                 0,
                                 6
                               )}...${reactiveWallet.address.slice(-4)}`
-                            : "Not connected"}
+                            : 'Not connected'}
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
                         <span
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white"
-                              : "text-black"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white'
+                              : 'text-black'
                           )}
                         >
                           Available Balance
                         </span>
                         <div
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black font-vt323"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white font-vt323"
-                              : "text-slate-900"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black font-vt323'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white font-vt323'
+                              : 'text-slate-900'
                           )}
                         >
                           ${walletBalance}
@@ -2175,32 +2089,32 @@ const X402PaywallContent: React.FC<
                       <div className="flex items-center justify-between">
                         <span
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white"
-                              : "text-black"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white'
+                              : 'text-black'
                           )}
                         >
                           Currency
                         </span>
                         <div
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black font-vt323"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white font-vt323"
-                              : "text-slate-900"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black font-vt323'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white font-vt323'
+                              : 'text-slate-900'
                           )}
                         >
                           USDC
@@ -2209,16 +2123,16 @@ const X402PaywallContent: React.FC<
                       <div className="flex items-center justify-between">
                         <span
                           className={cn(
-                            "text-sm",
-                            resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                              ? "text-white"
-                              : resolvedTheme === "terminal-light"
-                              ? "text-black"
-                              : resolvedTheme === "seeker-light"
-                              ? "text-black"
-                              : resolvedTheme === "terminal"
-                              ? "text-white"
-                              : "text-black"
+                            'text-sm',
+                            resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                              ? 'text-white'
+                              : resolvedTheme === 'terminal-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'seeker-light'
+                              ? 'text-black'
+                              : resolvedTheme === 'terminal'
+                              ? 'text-white'
+                              : 'text-black'
                           )}
                         >
                           Network
@@ -2226,35 +2140,35 @@ const X402PaywallContent: React.FC<
                         <div className="flex items-center space-x-2">
                           <div
                             className={cn(
-                              "w-2 h-2 rounded-full",
-                              resolvedTheme === "terminal" ||
-                                resolvedTheme === "terminal-light" ||
-                                resolvedTheme === "seeker-light"
-                                ? ""
-                                : "bg-green-500"
+                              'w-2 h-2 rounded-full',
+                              resolvedTheme === 'terminal' ||
+                                resolvedTheme === 'terminal-light' ||
+                                resolvedTheme === 'seeker-light'
+                                ? ''
+                                : 'bg-green-500'
                             )}
                             style={
-                              resolvedTheme === "terminal"
-                                ? { backgroundColor: "#32FEFF" }
-                                : resolvedTheme === "terminal-light"
-                                ? { backgroundColor: "#009192" }
-                                : resolvedTheme === "seeker-light"
-                                ? { backgroundColor: "#00BECC" }
+                              resolvedTheme === 'terminal'
+                                ? { backgroundColor: '#32FEFF' }
+                                : resolvedTheme === 'terminal-light'
+                                ? { backgroundColor: '#009192' }
+                                : resolvedTheme === 'seeker-light'
+                                ? { backgroundColor: '#00BECC' }
                                 : undefined
                             }
                           ></div>
                           <span
                             className={cn(
-                              "text-sm",
-                              resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                                ? "text-white"
-                                : resolvedTheme === "terminal-light"
-                                ? "text-black font-vt323"
-                                : resolvedTheme === "seeker-light"
-                                ? "text-black"
-                                : resolvedTheme === "terminal"
-                                ? "text-white font-vt323"
-                                : "text-slate-900"
+                              'text-sm',
+                              resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                                ? 'text-white'
+                                : resolvedTheme === 'terminal-light'
+                                ? 'text-black font-vt323'
+                                : resolvedTheme === 'seeker-light'
+                                ? 'text-black'
+                                : resolvedTheme === 'terminal'
+                                ? 'text-white font-vt323'
+                                : 'text-slate-900'
                             )}
                           >
                             {networkLabel}
@@ -2269,20 +2183,20 @@ const X402PaywallContent: React.FC<
               <div className="flex items-center justify-center space-x-2">
                 <svg
                   className={cn(
-                    "w-4 h-4",
-                    resolvedTheme === "terminal" ||
-                      resolvedTheme === "terminal-light" ||
-                      resolvedTheme === "seeker-light"
-                      ? ""
-                      : "text-green-500"
+                    'w-4 h-4',
+                    resolvedTheme === 'terminal' ||
+                      resolvedTheme === 'terminal-light' ||
+                      resolvedTheme === 'seeker-light'
+                      ? ''
+                      : 'text-green-500'
                   )}
                   style={
-                    resolvedTheme === "terminal"
-                      ? { color: "#32FEFF" }
-                      : resolvedTheme === "terminal-light"
-                      ? { color: "#009192" }
-                      : resolvedTheme === "seeker-light"
-                      ? { color: "#00BECC" }
+                    resolvedTheme === 'terminal'
+                      ? { color: '#32FEFF' }
+                      : resolvedTheme === 'terminal-light'
+                      ? { color: '#009192' }
+                      : resolvedTheme === 'seeker-light'
+                      ? { color: '#00BECC' }
                       : undefined
                   }
                   fill="none"
@@ -2291,25 +2205,21 @@ const X402PaywallContent: React.FC<
                   strokeWidth="2"
                 >
                   <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-                  <path
-                    d="M9 12l2 2 4-4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span
-                  className={cn("text-sm", themeConfig.securityMessage)}
+                  className={cn('text-sm', themeConfig.securityMessage)}
                   style={
-                    resolvedTheme === "terminal"
-                      ? { color: "#FFFFFF99" }
-                      : resolvedTheme === "seeker"
-                      ? { color: "#FFFFFF66" }
-                      : resolvedTheme === "seeker-2"
-                      ? { color: "#FFFFFF66" }
-                      : resolvedTheme === "terminal-light"
-                      ? { color: "#71717A" }
-                      : resolvedTheme === "seeker-light"
-                      ? { color: "#000000" }
+                    resolvedTheme === 'terminal'
+                      ? { color: '#FFFFFF99' }
+                      : resolvedTheme === 'seeker'
+                      ? { color: '#FFFFFF66' }
+                      : resolvedTheme === 'seeker-2'
+                      ? { color: '#FFFFFF66' }
+                      : resolvedTheme === 'terminal-light'
+                      ? { color: '#71717A' }
+                      : resolvedTheme === 'seeker-light'
+                      ? { color: '#000000' }
                       : undefined
                   }
                 >
@@ -2325,52 +2235,51 @@ const X402PaywallContent: React.FC<
                 loading={isLoading}
                 disabled={isLoading || !reactiveWallet?.publicKey}
                 className={cn(
-                  "w-full h-12",
-                  resolvedTheme === "dark" || resolvedTheme === "solana-dark"
-                    ? resolvedTheme === "dark"
-                      ? "bg-[#FFFFFF1F] rounded-full"
-                      : "bg-solana-gradient rounded-full"
+                  'w-full h-12',
+                  resolvedTheme === 'dark' || resolvedTheme === 'solana-dark'
+                    ? resolvedTheme === 'dark'
+                      ? 'bg-[#FFFFFF1F] rounded-full'
+                      : 'bg-solana-gradient rounded-full'
                     : themeConfig.button,
                   classNames?.button
                 )}
                 style={
-                  resolvedTheme === "terminal"
+                  resolvedTheme === 'terminal'
                     ? {
-                        backgroundColor: "#32FEFF",
-                        color: "#000000",
+                        backgroundColor: '#32FEFF',
+                        color: '#000000',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "terminal-light"
+                    : resolvedTheme === 'terminal-light'
                     ? {
-                        backgroundColor: "#000000",
-                        color: "#FFFFFF",
+                        backgroundColor: '#000000',
+                        color: '#FFFFFF',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "dark"
+                    : resolvedTheme === 'dark'
                     ? {
-                        backgroundColor: "#FFFFFF1F",
-                        boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.3) inset",
+                        backgroundColor: '#FFFFFF1F',
+                        boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.3) inset',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "seeker"
+                    : resolvedTheme === 'seeker'
                     ? {
                         background:
-                          "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
-                        backgroundColor: "transparent",
+                          'linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)',
+                        backgroundColor: 'transparent',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "seeker-2"
+                    : resolvedTheme === 'seeker-2'
                     ? {
                         background:
-                          "linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)",
-                        backgroundColor: "transparent",
+                          'linear-gradient(0deg, #39A298, #39A298), radial-gradient(101.17% 101.67% at 50.28% 134.17%, rgba(255, 255, 255, 0.6) 0%, rgba(22, 188, 174, 0.6) 100%)',
+                        backgroundColor: 'transparent',
                         ...customStyles?.button,
                       }
-                    : resolvedTheme === "seeker-light"
+                    : resolvedTheme === 'seeker-light'
                     ? {
-                        background:
-                          "linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)",
-                        backgroundColor: "transparent",
+                        background: 'linear-gradient(180deg, #00BECC -9.37%, #92F9FC 160.42%)',
+                        backgroundColor: 'transparent',
                         ...customStyles?.button,
                       }
                     : customStyles?.button
@@ -2381,83 +2290,82 @@ const X402PaywallContent: React.FC<
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                   <p className="text-sm text-red-800 text-center">
-                    <span className="font-semibold">Payment Error:</span>{" "}
-                    {error.message}
+                    <span className="font-semibold">Payment Error:</span> {error.message}
                   </p>
                 </div>
               )}
 
               {/* Helper Text */}
               <div className="text-center">
-                <p className={cn("text-sm", themeConfig.helperText)}>
+                <p className={cn('text-sm', themeConfig.helperText)}>
                   <span
                     style={
-                      resolvedTheme === "terminal"
-                        ? { color: "#FFFFFF99" }
-                        : resolvedTheme === "terminal-light"
-                        ? { color: "#71717A" }
-                        : resolvedTheme === "seeker"
-                        ? { color: "#FFFFFF66" }
-                        : resolvedTheme === "seeker-2"
-                        ? { color: "#FFFFFF66" }
+                      resolvedTheme === 'terminal'
+                        ? { color: '#FFFFFF99' }
+                        : resolvedTheme === 'terminal-light'
+                        ? { color: '#71717A' }
+                        : resolvedTheme === 'seeker'
+                        ? { color: '#FFFFFF66' }
+                        : resolvedTheme === 'seeker-2'
+                        ? { color: '#FFFFFF66' }
                         : undefined
                     }
                   >
-                    Don't have USDC?{" "}
+                    Don't have USDC?{' '}
                   </span>
                   <a
                     href="#"
                     className={cn(
-                      "font-medium",
-                      resolvedTheme === "seeker"
-                        ? "text-[#95D2E6]"
-                        : resolvedTheme === "seeker-2"
-                        ? "text-[#95D2E6]"
-                        : resolvedTheme === "seeker-light"
-                        ? "hover:opacity-90"
-                        : resolvedTheme === "light" || resolvedTheme === "solana-light"
-                        ? "text-purple-600"
-                        : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                        ? "hover:opacity-90"
-                        : themeConfig.helperLink || "text-[#4ADE80]"
+                      'font-medium',
+                      resolvedTheme === 'seeker'
+                        ? 'text-[#95D2E6]'
+                        : resolvedTheme === 'seeker-2'
+                        ? 'text-[#95D2E6]'
+                        : resolvedTheme === 'seeker-light'
+                        ? 'hover:opacity-90'
+                        : resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                        ? 'text-purple-600'
+                        : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                        ? 'hover:opacity-90'
+                        : themeConfig.helperLink || 'text-[#4ADE80]'
                     )}
                     style={
-                      resolvedTheme === "terminal"
-                        ? { color: "#32FEFF" }
-                        : resolvedTheme === "terminal-light"
-                        ? { color: "#000000" }
-                        : resolvedTheme === "seeker"
-                        ? { color: "#95D2E6" }
-                        : resolvedTheme === "seeker-2"
-                        ? { color: "#95D2E6" }
-                        : resolvedTheme === "seeker-light"
-                        ? { color: "#00BECC" }
+                      resolvedTheme === 'terminal'
+                        ? { color: '#32FEFF' }
+                        : resolvedTheme === 'terminal-light'
+                        ? { color: '#000000' }
+                        : resolvedTheme === 'seeker'
+                        ? { color: '#95D2E6' }
+                        : resolvedTheme === 'seeker-2'
+                        ? { color: '#95D2E6' }
+                        : resolvedTheme === 'seeker-light'
+                        ? { color: '#00BECC' }
                         : undefined
                     }
                   >
                     Get it here
                     <svg
                       className={cn(
-                        "inline w-3 h-3 ml-1",
-                        resolvedTheme === "light" || resolvedTheme === "solana-light"
-                          ? "text-purple-600"
-                          : resolvedTheme === "seeker"
-                          ? "text-[#95D2E6]"
-                          : resolvedTheme === "seeker-2"
-                          ? "text-[#95D2E6]"
-                          : resolvedTheme === "seeker-light"
-                          ? ""
-                          : resolvedTheme === "terminal" || resolvedTheme === "terminal-light"
-                          ? ""
-                          : "text-[#4ADE80]"
+                        'inline w-3 h-3 ml-1',
+                        resolvedTheme === 'light' || resolvedTheme === 'solana-light'
+                          ? 'text-purple-600'
+                          : resolvedTheme === 'seeker'
+                          ? 'text-[#95D2E6]'
+                          : resolvedTheme === 'seeker-2'
+                          ? 'text-[#95D2E6]'
+                          : resolvedTheme === 'seeker-light'
+                          ? ''
+                          : resolvedTheme === 'terminal' || resolvedTheme === 'terminal-light'
+                          ? ''
+                          : 'text-[#4ADE80]'
                       )}
                       style={
-                        resolvedTheme === "terminal"
-                          ? { color: "#32FEFF" }
-                          : resolvedTheme === "terminal-light"
-                          ? { color: "#000000" }
-                          : resolvedTheme === "seeker-light"
-                          ? { color: "#00BECC" }
+                        resolvedTheme === 'terminal'
+                          ? { color: '#32FEFF' }
+                          : resolvedTheme === 'terminal-light'
+                          ? { color: '#000000' }
+                          : resolvedTheme === 'seeker-light'
+                          ? { color: '#00BECC' }
                           : undefined
                       }
                       fill="currentColor"
@@ -2490,23 +2398,15 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   // Auto-detect provider network from the network prop if not explicitly set
   const detectedProviderNetwork =
     providerNetwork ??
-    (props.network === "solana"
-      ? WalletAdapterNetwork.Mainnet
-      : WalletAdapterNetwork.Devnet);
+    (props.network === 'solana' ? WalletAdapterNetwork.Mainnet : WalletAdapterNetwork.Devnet);
 
   // Hooks must be called unconditionally
   const endpoint = useMemo(
-    () =>
-      providerEndpoint ||
-      props.rpcUrl ||
-      clusterApiUrl(detectedProviderNetwork),
+    () => providerEndpoint || props.rpcUrl || clusterApiUrl(detectedProviderNetwork),
     [providerEndpoint, props.rpcUrl, detectedProviderNetwork]
   );
 
-  const wallets = useMemo(
-    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
-    []
-  );
+  const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], []);
 
   // If auto-setup is enabled, wrap with providers
   if (autoSetupProviders) {
@@ -2525,4 +2425,4 @@ export const X402Paywall: React.FC<X402PaywallProps> = ({
   return <X402PaywallContent {...props} />;
 };
 
-X402Paywall.displayName = "X402Paywall";
+X402Paywall.displayName = 'X402Paywall';
