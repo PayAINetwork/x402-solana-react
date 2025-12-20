@@ -108,7 +108,7 @@ export function useX402Payment(config: PaymentConfig): UseX402PaymentReturn {
         // x402Client.fetch() automatically handles the full payment flow:
         // 1. Makes initial request → receives 402 with payment requirements
         // 2. Creates and signs payment transaction
-        // 3. Retries with X-PAYMENT header containing signed payment
+        // 3. Retries with PAYMENT-SIGNATURE header containing signed payment (v2)
         // 4. Merchant verifies, settles, and fulfills the request
         const response = await x402Client.fetch(apiEndpoint, {
           method: 'POST',

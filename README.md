@@ -1,6 +1,8 @@
 # x402 Solana React Paywall
 
-A reusable React component library that provides drop-in paywall functionality for Solana-based applications using the x402 payment protocol.
+A reusable React component library that provides drop-in paywall functionality for Solana-based applications using the x402 payment protocol v2.
+
+> **x402 Protocol v2**: This package uses `@payai/x402-solana` which implements the x402 v2 specification with CAIP-2 network identifiers, `PAYMENT-SIGNATURE` headers, and improved payload structure. See the [CHANGELOG](./CHANGELOG.md) for details.
 
 ## Classic theme
 
@@ -119,8 +121,8 @@ npm install @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana
 Import the required styles in your main file (e.g., `main.tsx` or `App.tsx`):
 
 ```tsx
-import "@payai/x402-solana-react/styles";
-import "@solana/wallet-adapter-react-ui/styles.css";
+import '@payai/x402-solana-react/styles';
+import '@solana/wallet-adapter-react-ui/styles.css';
 ```
 
 ### 2. Environment Variables (Optional - Recommended for Production)
@@ -143,7 +145,7 @@ Restart the dev server after changing `.env` so Vite picks up updates.
 The component automatically sets up wallet providers for you! Just use it directly:
 
 ```tsx
-import { X402Paywall } from "@payai/x402-solana-react";
+import { X402Paywall } from '@payai/x402-solana-react';
 
 function App() {
   return (
@@ -163,17 +165,11 @@ function App() {
 Wrap your app with Solana wallet providers:
 
 ```tsx
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from "@solana/wallet-adapter-react";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { clusterApiUrl } from '@solana/web3.js';
 
 function App() {
   const network = WalletAdapterNetwork.Mainnet;
@@ -204,9 +200,9 @@ function App() {
 ### Simplest Example (Auto-Setup)
 
 ```tsx
-import { X402Paywall } from "@payai/x402-solana-react";
-import "@payai/x402-solana-react/styles";
-import "@solana/wallet-adapter-react-ui/styles.css";
+import { X402Paywall } from '@payai/x402-solana-react';
+import '@payai/x402-solana-react/styles';
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 function PremiumPage() {
   return (
@@ -214,7 +210,7 @@ function PremiumPage() {
       amount={0.02}
       description="Premium AI Chat Access"
       network="solana" // Use 'solana' for mainnet, 'solana-devnet' for testing
-      onPaymentSuccess={(txId) => console.log("Payment successful!", txId)}
+      onPaymentSuccess={txId => console.log('Payment successful!', txId)}
     >
       <PremiumContent />
     </X402Paywall>
@@ -225,7 +221,7 @@ function PremiumPage() {
 ### With Custom RPC (Recommended for Production)
 
 ```tsx
-import { X402Paywall } from "@payai/x402-solana-react";
+import { X402Paywall } from '@payai/x402-solana-react';
 
 function PremiumPage() {
   // Set via environment variable: VITE_SOLANA_RPC_URL
@@ -237,12 +233,12 @@ function PremiumPage() {
       description="Premium Content"
       network="solana"
       rpcUrl={rpcUrl} // Avoids rate limiting on public RPCs
-      onPaymentSuccess={(txId) => {
-        console.log("Payment successful!", txId);
+      onPaymentSuccess={txId => {
+        console.log('Payment successful!', txId);
         // Update your backend, show success message, etc.
       }}
-      onPaymentError={(error) => {
-        console.error("Payment failed:", error);
+      onPaymentError={error => {
+        console.error('Payment failed:', error);
       }}
     >
       <PremiumContent />
@@ -268,11 +264,11 @@ The component comes with multiple built-in themes:
 ### Theme Example
 
 ```tsx
-import { X402Paywall } from "@payai/x402-solana-react";
-import { useState } from "react";
+import { X402Paywall } from '@payai/x402-solana-react';
+import { useState } from 'react';
 
 function PremiumPage() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState('light');
 
   return (
     <X402Paywall
@@ -280,7 +276,7 @@ function PremiumPage() {
       description="Premium Features"
       network="solana"
       theme={theme} // Try: 'light', 'dark', 'solana-light', 'solana-dark', etc.
-      onPaymentSuccess={(txId) => console.log("Paid!", txId)}
+      onPaymentSuccess={txId => console.log('Paid!', txId)}
     >
       <AdvancedFeatures />
     </X402Paywall>
@@ -299,11 +295,11 @@ You can customize further using `classNames` and `customStyles` props:
   network="solana"
   theme="dark"
   classNames={{
-    container: "bg-gradient-to-r from-purple-600 to-blue-600",
-    button: "bg-white text-purple-600 hover:bg-gray-50 font-bold",
+    container: 'bg-gradient-to-r from-purple-600 to-blue-600',
+    button: 'bg-white text-purple-600 hover:bg-gray-50 font-bold',
   }}
   customStyles={{
-    button: { boxShadow: "0 10px 30px rgba(153, 69, 255, 0.4)" },
+    button: { boxShadow: '0 10px 30px rgba(153, 69, 255, 0.4)' },
   }}
 >
   <AdvancedFeatures />
@@ -314,32 +310,32 @@ You can customize further using `classNames` and `customStyles` props:
 
 ### X402Paywall Props
 
-| Prop                 | Type                          | Required | Default           | Description                                                 |
-| -------------------- | ----------------------------- | -------- | ----------------- | ----------------------------------------------------------- |
-| `amount`             | `number`                      | ✅       | -                 | Payment amount in USDC                                      |
-| `description`        | `string`                      | ✅       | -                 | Payment description                                         |
-| `children`           | `ReactNode`                   | ✅       | -                 | Protected content to show after payment                     |
-| `network`            | `'solana' \| 'solana-devnet'` | ❌       | `'solana-devnet'` | Solana network to use                                       |
-| `wallet`             | `WalletAdapter`               | ❌       | -                 | Optional wallet adapter (auto-uses context if not provided) |
-| `rpcUrl`             | `string`                      | ❌       | -                 | Custom RPC URL (recommended to avoid rate limits)           |
-| `autoSetupProviders` | `boolean`                     | ❌       | `true`            | Automatically setup wallet providers                        |
-| `providerNetwork`    | `WalletAdapterNetwork`        | ❌       | Auto-detected     | Network for auto-setup providers                            |
-| `providerEndpoint`   | `string`                      | ❌       | -                 | Custom endpoint for auto-setup providers                    |
-| `apiEndpoint`        | `string`                      | ❌       | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint      |
-| `facilitatorUrl`     | `string`                      | ❌       | -                 | Custom facilitator URL                                      |
-| `theme`              | `ThemePreset`                 | ❌       | `'solana-light'`  | Visual theme (see Themes section)                           |
-| `logoUrl`            | `string`                      | ❌       | -                 | Custom logo URL to display                                  |
-| `showBalance`        | `boolean`                     | ❌       | `true`            | Show wallet USDC balance                                    |
-| `showNetworkInfo`    | `boolean`                     | ❌       | `true`            | Show network information                                    |
-| `showPaymentDetails` | `boolean`                     | ❌       | `true`            | Show payment details section                                |
-| `maxPaymentAmount`   | `number`                      | ❌       | -                 | Maximum allowed payment amount                              |
-| `classNames`         | `ComponentClassNames`         | ❌       | -                 | Custom CSS classes for components                           |
-| `customStyles`       | `ComponentStyles`             | ❌       | -                 | Custom inline styles for components                         |
-| `onPaymentStart`     | `() => void`                  | ❌       | -                 | Callback when payment starts                                |
-| `onPaymentSuccess`   | `(txId: string) => void`      | ❌       | -                 | Callback on successful payment                              |
-| `onPaymentError`     | `(error: Error) => void`      | ❌       | -                 | Callback on payment error                                   |
-| `onWalletConnect`    | `(publicKey: string) => void` | ❌       | -                 | Callback when wallet connects                               |
-| `onDisconnect`       | `() => void`                  | ❌       | -                 | Callback when wallet disconnects                            |
+| Prop                 | Type                          | Required | Default                                              | Description                                                 |
+| -------------------- | ----------------------------- | -------- | ---------------------------------------------------- | ----------------------------------------------------------- |
+| `amount`             | `number`                      | ✅       | -                                                    | Payment amount in USDC                                      |
+| `description`        | `string`                      | ✅       | -                                                    | Payment description                                         |
+| `children`           | `ReactNode`                   | ✅       | -                                                    | Protected content to show after payment                     |
+| `network`            | `'solana' \| 'solana-devnet'` | ❌       | `'solana-devnet'`                                    | Solana network to use                                       |
+| `wallet`             | `WalletAdapter`               | ❌       | -                                                    | Optional wallet adapter (auto-uses context if not provided) |
+| `rpcUrl`             | `string`                      | ❌       | -                                                    | Custom RPC URL (recommended to avoid rate limits)           |
+| `autoSetupProviders` | `boolean`                     | ❌       | `true`                                               | Automatically setup wallet providers                        |
+| `providerNetwork`    | `WalletAdapterNetwork`        | ❌       | Auto-detected                                        | Network for auto-setup providers                            |
+| `providerEndpoint`   | `string`                      | ❌       | -                                                    | Custom endpoint for auto-setup providers                    |
+| `apiEndpoint`        | `string`                      | ❌       | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint                                         |
+| `facilitatorUrl`     | `string`                      | ❌       | -                                                    | Custom facilitator URL                                      |
+| `theme`              | `ThemePreset`                 | ❌       | `'solana-light'`                                     | Visual theme (see Themes section)                           |
+| `logoUrl`            | `string`                      | ❌       | -                                                    | Custom logo URL to display                                  |
+| `showBalance`        | `boolean`                     | ❌       | `true`                                               | Show wallet USDC balance                                    |
+| `showNetworkInfo`    | `boolean`                     | ❌       | `true`                                               | Show network information                                    |
+| `showPaymentDetails` | `boolean`                     | ❌       | `true`                                               | Show payment details section                                |
+| `maxPaymentAmount`   | `number`                      | ❌       | -                                                    | Maximum allowed payment amount                              |
+| `classNames`         | `ComponentClassNames`         | ❌       | -                                                    | Custom CSS classes for components                           |
+| `customStyles`       | `ComponentStyles`             | ❌       | -                                                    | Custom inline styles for components                         |
+| `onPaymentStart`     | `() => void`                  | ❌       | -                                                    | Callback when payment starts                                |
+| `onPaymentSuccess`   | `(txId: string) => void`      | ❌       | -                                                    | Callback on successful payment                              |
+| `onPaymentError`     | `(error: Error) => void`      | ❌       | -                                                    | Callback on payment error                                   |
+| `onWalletConnect`    | `(publicKey: string) => void` | ❌       | -                                                    | Callback when wallet connects                               |
+| `onDisconnect`       | `() => void`                  | ❌       | -                                                    | Callback when wallet disconnects                            |
 
 See [full API documentation](./docs/API_REFERENCE.md) for complete reference.
 
@@ -410,8 +406,8 @@ npm run lint
 
 - Make sure you imported both required stylesheets:
   ```tsx
-  import "@payai/x402-solana-react/styles";
-  import "@solana/wallet-adapter-react-ui/styles.css";
+  import '@payai/x402-solana-react/styles';
+  import '@solana/wallet-adapter-react-ui/styles.css';
   ```
 - Check browser console for CSS loading errors
 - Verify Tailwind CSS is configured if using custom classes
@@ -428,12 +424,25 @@ npm run lint
 ### Features Complete
 
 - ✅ Core paywall component with Solana integration
+- ✅ **x402 Protocol v2** - Full support via `@payai/x402-solana`
 - ✅ Payment processing via x402 protocol
 - ✅ Multi-wallet support (Phantom, Solflare, etc.)
 - ✅ Beautiful Solana-themed UI with Tailwind CSS
 - ✅ TypeScript support with full type safety
 - ✅ Devnet integration with PayAI facilitator
 - ✅ Responsive design and accessibility
+
+### x402 v2 Protocol
+
+This package supports the x402 v2 specification which includes:
+
+| Feature            | v1                        | v2                             |
+| ------------------ | ------------------------- | ------------------------------ |
+| **Network Format** | `solana`, `solana-devnet` | CAIP-2 format (auto-converted) |
+| **Payment Header** | `X-PAYMENT`               | `PAYMENT-SIGNATURE`            |
+| **Amount Field**   | `maxAmountRequired`       | `amount`                       |
+
+**Note**: You can still use simple network names (`solana`, `solana-devnet`) in your code - the library automatically converts them to CAIP-2 format internally.
 
 ## 🤝 Contributing
 
@@ -445,9 +454,9 @@ MIT License
 
 ## 🔗 Related Projects
 
-- [x402-solana](https://github.com/payainetwork/x402-solana) - Base Solana payment protocol implementation
-- [x402](https://github.com/payainetwork/x402) - Core x402 payment protocol
-- [PayAI Network](https://payai.network) - x402 payment infrastructure
+- [x402-solana](https://github.com/payainetwork/x402-solana) - Base Solana payment protocol implementation (x402 v2)
+- [x402](https://github.com/coinbase/x402) - Core x402 payment protocol specification
+- [PayAI Network](https://payai.network) - x402 payment infrastructure and facilitator
 
 ---
 

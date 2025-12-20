@@ -1,5 +1,7 @@
 # API Reference
 
+> This package implements x402 protocol v2 via `@payai/x402-solana`. The API uses simple network names (`solana`, `solana-devnet`) which are automatically converted to CAIP-2 format internally.
+
 ## Components
 
 ### X402Paywall
@@ -31,31 +33,31 @@ The main paywall component that wraps protected content.
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `amount` | `number` | **required** | Payment amount in USD |
-| `description` | `string` | **required** | Description of what the payment is for |
-| `wallet` | `WalletAdapter` | **required** | Solana wallet adapter |
-| `network` | `'solana' \| 'solana-devnet'` | `'solana-devnet'` | Solana network to use |
-| `facilitatorUrl` | `string` | `undefined` | x402 facilitator service URL |
-| `rpcUrl`| `string` | `undefined` | Custom RPC URL (recommended to avoid rate limits) |
-| `apiEndpoint` | `string` | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint |
-| `logoUrl` | `string` | - | Custom logo URL to display |
-| `autoSetupProviders` | `boolean` | `true` | Automatically setup wallet providers |
-| `providerNetwork` | `WalletAdapterNetwork` | `undefined` | Network for auto-setup providers |
-| `providerEndpoint` | `string` | `undefined` | Custom endpoint for auto-setup providers |
-| `theme` | `'solana' \| 'dark' \| 'light' \| 'seeker-2'` | `'solana'` | Visual theme preset |
-| `showBalance` | `boolean` | `true` | Show wallet balance |
-| `showNetworkInfo` | `boolean` | `true` | Show network information |
-| `showPaymentDetails` | `boolean` | `true` | Show payment amount details |
-| `classNames` | `ComponentClassNames` | `{}` | Custom Tailwind classes |
-| `customStyles` | `ComponentStyles` | `{}` | Custom inline CSS styles |
-| `maxPaymentAmount` | `number` | `undefined` | Maximum allowed payment amount |
-| `onPaymentStart` | `() => void` | `undefined` | Callback when payment starts |
-| `onPaymentSuccess` | `(txId: string) => void` | `undefined` | Callback when payment succeeds |
-| `onPaymentError` | `(error: Error) => void` | `undefined` | Callback when payment fails |
-| `onWalletConnect` | `(address: string) => void` | `undefined` | Callback when wallet connects |
-| `onDisconnect`| `() => void` | `undefined` | Callback when wallet disconnects |
+| Prop                 | Type                                          | Default                                              | Description                                       |
+| -------------------- | --------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------- |
+| `amount`             | `number`                                      | **required**                                         | Payment amount in USD                             |
+| `description`        | `string`                                      | **required**                                         | Description of what the payment is for            |
+| `wallet`             | `WalletAdapter`                               | **required**                                         | Solana wallet adapter                             |
+| `network`            | `'solana' \| 'solana-devnet'`                 | `'solana-devnet'`                                    | Solana network to use                             |
+| `facilitatorUrl`     | `string`                                      | `undefined`                                          | x402 facilitator service URL                      |
+| `rpcUrl`             | `string`                                      | `undefined`                                          | Custom RPC URL (recommended to avoid rate limits) |
+| `apiEndpoint`        | `string`                                      | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint                               |
+| `logoUrl`            | `string`                                      | -                                                    | Custom logo URL to display                        |
+| `autoSetupProviders` | `boolean`                                     | `true`                                               | Automatically setup wallet providers              |
+| `providerNetwork`    | `WalletAdapterNetwork`                        | `undefined`                                          | Network for auto-setup providers                  |
+| `providerEndpoint`   | `string`                                      | `undefined`                                          | Custom endpoint for auto-setup providers          |
+| `theme`              | `'solana' \| 'dark' \| 'light' \| 'seeker-2'` | `'solana'`                                           | Visual theme preset                               |
+| `showBalance`        | `boolean`                                     | `true`                                               | Show wallet balance                               |
+| `showNetworkInfo`    | `boolean`                                     | `true`                                               | Show network information                          |
+| `showPaymentDetails` | `boolean`                                     | `true`                                               | Show payment amount details                       |
+| `classNames`         | `ComponentClassNames`                         | `{}`                                                 | Custom Tailwind classes                           |
+| `customStyles`       | `ComponentStyles`                             | `{}`                                                 | Custom inline CSS styles                          |
+| `maxPaymentAmount`   | `number`                                      | `undefined`                                          | Maximum allowed payment amount                    |
+| `onPaymentStart`     | `() => void`                                  | `undefined`                                          | Callback when payment starts                      |
+| `onPaymentSuccess`   | `(txId: string) => void`                      | `undefined`                                          | Callback when payment succeeds                    |
+| `onPaymentError`     | `(error: Error) => void`                      | `undefined`                                          | Callback when payment fails                       |
+| `onWalletConnect`    | `(address: string) => void`                   | `undefined`                                          | Callback when wallet connects                     |
+| `onDisconnect`       | `() => void`                                  | `undefined`                                          | Callback when wallet disconnects                  |
 
 ---
 
@@ -117,31 +119,24 @@ Wallet information display component.
 Hook for managing x402 payments.
 
 ```tsx
-const {
-  pay,
-  isLoading,
-  status,
-  error,
-  transactionId,
-  reset
-} = useX402Payment({
+const { pay, isLoading, status, error, transactionId, reset } = useX402Payment({
   wallet,
   network,
-  facilitatorUrl?,
-  maxPaymentAmount?
+  facilitatorUrl,
+  maxPaymentAmount,
 });
 ```
 
 #### Returns
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `pay` | `(amount: number, description: string) => Promise<string \| null>` | Function to initiate payment |
-| `isLoading` | `boolean` | Whether payment is in progress |
-| `status` | `PaymentStatusType` | Current payment status |
-| `error` | `Error \| null` | Payment error if any |
-| `transactionId` | `string \| null` | Transaction ID if successful |
-| `reset` | `() => void` | Reset payment state |
+| Property        | Type                                                               | Description                    |
+| --------------- | ------------------------------------------------------------------ | ------------------------------ |
+| `pay`           | `(amount: number, description: string) => Promise<string \| null>` | Function to initiate payment   |
+| `isLoading`     | `boolean`                                                          | Whether payment is in progress |
+| `status`        | `PaymentStatusType`                                                | Current payment status         |
+| `error`         | `Error \| null`                                                    | Payment error if any           |
+| `transactionId` | `string \| null`                                                   | Transaction ID if successful   |
+| `reset`         | `() => void`                                                       | Reset payment state            |
 
 ---
 
@@ -195,6 +190,11 @@ type PaymentStatusType = 'idle' | 'connecting' | 'pending' | 'success' | 'error'
 type SolanaNetwork = 'solana' | 'solana-devnet';
 ```
 
+**Note (v2)**: These simple names are automatically converted to CAIP-2 format internally:
+
+- `solana` → `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp`
+- `solana-devnet` → `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`
+
 ---
 
 ## Styling
@@ -219,12 +219,12 @@ Example:
 ```tsx
 <X402Paywall
   classNames={{
-    container: "bg-purple-900",
-    button: "bg-gradient-to-r from-pink-500 to-purple-500"
+    container: 'bg-purple-900',
+    button: 'bg-gradient-to-r from-pink-500 to-purple-500',
   }}
   customStyles={{
     container: { minHeight: '100vh' },
-    button: { boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)' }
+    button: { boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)' },
   }}
   theme="seeker-2"
   {...otherProps}
