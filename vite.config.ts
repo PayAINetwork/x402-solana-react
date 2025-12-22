@@ -17,12 +17,16 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
+  css: {
+    // Output CSS with correct filename to match package.json exports
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'X402SolanaReact',
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`,
+      fileName: format => `index.${format === 'es' ? 'mjs' : 'js'}`,
+      cssFileName: 'style',
     },
     rollupOptions: {
       external: [
