@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠️ BREAKING CHANGES
 
-This release upgrades to x402 protocol v2 via the new `@payai/x402-solana` package.
+This release upgrades to x402 protocol v2 via the new `x402-solana` package.
 
 ### Changed
 
-- **Protocol Version**: Upgraded from x402 v1 to v2 (via `@payai/x402-solana`)
-- **Dependency**: Now uses `@payai/x402-solana` v1.0.0-canary.1 for payment handling
+- **Protocol Version**: Upgraded from x402 v1 to v2 (via `x402-solana`)
+- **Dependency**: Now uses `x402-solana` v2.0.0 for payment handling
 - **Payment Header**: Internally uses `PAYMENT-SIGNATURE` instead of `X-PAYMENT` (handled automatically)
 - **Network Format**: Uses CAIP-2 internally (`solana:chainId`) - simple names (`solana`, `solana-devnet`) still work in props
 
