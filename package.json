@@ -1,6 +1,6 @@
 {
   "name": "@payai/x402-solana-react",
-  "version": "2.0.0-canary.1",
+  "version": "2.0.0",
   "description": "Reusable React paywall components for Solana using the x402 payment protocol",
   "type": "module",
   "main": "./dist/index.js",
@@ -45,7 +45,7 @@
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/wallet-adapter-wallets": "^0.19.37",
-    "@solana/web3.js": "^1.0.0",
+    "@solana/web3.js": "^1.98.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
@@ -55,15 +55,15 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
     "tailwind-merge": "^3.4.0",
-    "@payai/x402-solana": "^1.0.0-canary.1"
+    "@payai/x402-solana": "2.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.50.0",
-    "@typescript-eslint/parser": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "@vitejs/plugin-react": "^5.1.2",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.0.1",
