@@ -1380,8 +1380,8 @@ const X402PaywallContent: React.FC<
                     : undefined
                 }
               >
-                Access to protected content on Solana {networkLabel}. To access this content, please
-                pay ${amount.toFixed(2)} USDC
+                Access to protected content on Solana {networkLabel}. To access this
+                content, please pay ${amount.toFixed(2)} USDC
               </p>
             </div>
           )}
