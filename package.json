@@ -80,12 +80,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/payainetwork/x402-solana-react.git"
+    "url": "git+https://github.com/PayAINetwork/x402-solana-react.git"
   },
   "bugs": {
-    "url": "https://github.com/payainetwork/x402-solana-react/issues"
+    "url": "https://github.com/PayAINetwork/x402-solana-react/issues"
   },
-  "homepage": "https://github.com/payainetwork/x402-solana-react#readme",
+  "homepage": "https://github.com/PayAINetwork/x402-solana-react#readme",
   "publishConfig": {
     "access": "public"
 
