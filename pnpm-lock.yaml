@@ -42,8 +42,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       x402-solana:
-        specifier: 2.0.0
-        version: 2.0.0(@solana/spl-token@0.4.14(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))
+        specifier: ^2.0.3
+        version: 2.0.3(@solana/spl-token@0.4.14(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.1.18
@@ -729,8 +729,8 @@ packages:
       '@solana/web3.js': ^1.50.1
       bs58: ^4.0.1
 
-  '@payai/x402@2.0.0-payai.6':
-    resolution: {integrity: sha512-tCZBHBHRCvd890A5uXz6b0TxrVZpHKT0EHcnkrMj/dHUjJTipgrPc5xj+/KGMIkQgFzJeWn9hdsvqMZf3onPzA==}
+  '@payai/x402@2.2.1':
+    resolution: {integrity: sha512-F8dDYB9PKjZb4Dpx/tMWrDtgkWSFEdyQkVBEBTjqWRHHp60ujeZ9gAEpTnsXLvJTydXKhGWB/pECHEZyM/4dqw==}
 
   '@project-serum/sol-wallet-adapter@0.2.6':
     resolution: {integrity: sha512-cpIb13aWPW8y4KzkZAPDgw+Kb+DXjCC6rZoH74MGm3I/6e/zKyGnfAuW5olb2zxonFqsYgnv7ev8MQnvSgJ3/g==}
@@ -3230,7 +3230,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
@@ -4988,8 +4988,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  x402-solana@2.0.0:
-    resolution: {integrity: sha512-05BrXfLV2+X8HLMGvf9t5WEJ2Vbes0r8KGoxRxzNhJPMYT/Ctn2/MshJQbhXFjRiotNFD9cNujxsiNOkEzBgXg==}
+  x402-solana@2.0.3:
+    resolution: {integrity: sha512-vhp35srHkcW/P8hQiRNEu0QoMT05UlbonqcTWdNW2ZSHhaQHYOf4I3yXqJuQ6xPI8YOzNZ82QloArCGORXCXpg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@solana/spl-token': '>=0.4.14'
@@ -5727,7 +5727,7 @@ snapshots:
       '@solana/web3.js': 1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       bs58: 5.0.0
 
-  '@payai/x402@2.0.0-payai.6':
+  '@payai/x402@2.2.1':
     dependencies:
       zod: 3.25.76
 
@@ -11557,9 +11557,9 @@ snapshots:
       bufferutil: 4.1.0
       utf-8-validate: 5.0.10
 
-  x402-solana@2.0.0(@solana/spl-token@0.4.14(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)):
+  x402-solana@2.0.3(@solana/spl-token@0.4.14(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)):
     dependencies:
-      '@payai/x402': 2.0.0-payai.6
+      '@payai/x402': 2.2.1
       '@solana/spl-token': 0.4.14(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       zod: 4.3.5
