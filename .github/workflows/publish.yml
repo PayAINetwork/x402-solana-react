@@ -74,7 +74,7 @@ jobs:
       
       - name: Publish to NPM
         if: steps.check.outputs.version_changed == 'true' || github.event.inputs.force_publish == 'true'
-        run: npm publish --access public --provenance
+        run: npm publish --access public
       
       - name: Get package version
         if: steps.check.outputs.version_changed == 'true' || github.event.inputs.force_publish == 'true'
