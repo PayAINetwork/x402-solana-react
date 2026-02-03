@@ -2,7 +2,7 @@
 
 A reusable React component library that provides drop-in paywall functionality for Solana-based applications using the x402 payment protocol v2.
 
-> **x402 Protocol v2**: This package uses `@payai/x402-solana` which implements the x402 v2 specification with CAIP-2 network identifiers, `PAYMENT-SIGNATURE` headers, and improved payload structure. See the [CHANGELOG](./CHANGELOG.md) for details.
+> **x402 Protocol v2**: This package uses `x402-solana` which implements the x402 v2 specification with CAIP-2 network identifiers, `PAYMENT-SIGNATURE` headers, and improved payload structure. See the [CHANGELOG](./CHANGELOG.md) for details.
 
 ## Classic theme
 
@@ -424,7 +424,7 @@ npm run lint
 ### Features Complete
 
 - ✅ Core paywall component with Solana integration
-- ✅ **x402 Protocol v2** - Full support via `@payai/x402-solana`
+- ✅ **x402 Protocol v2** - Full support via `x402-solana`
 - ✅ Payment processing via x402 protocol
 - ✅ Multi-wallet support (Phantom, Solflare, etc.)
 - ✅ Beautiful Solana-themed UI with Tailwind CSS

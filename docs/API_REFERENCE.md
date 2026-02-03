@@ -1,6 +1,6 @@
 # API Reference
 
-> This package implements x402 protocol v2 via `@payai/x402-solana`. The API uses simple network names (`solana`, `solana-devnet`) which are automatically converted to CAIP-2 format internally.
+> This package implements x402 protocol v2 via `x402-solana`. The API uses simple network names (`solana`, `solana-devnet`) which are automatically converted to CAIP-2 format internally.
 
 ## Components
 

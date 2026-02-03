@@ -55,7 +55,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
     "tailwind-merge": "^3.4.0",
-    "@payai/x402-solana": "^1.0.0-canary.1"
+    "x402-solana": "^2.0.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
