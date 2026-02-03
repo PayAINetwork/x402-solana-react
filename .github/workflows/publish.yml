@@ -23,7 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Update npm to latest
+        run: npm install -g npm@latest
       
       - name: Install dependencies
         run: npm ci
@@ -61,7 +64,7 @@ jobs:
       
       - name: Publish to NPM
         if: steps.check.outputs.version_changed == 'true'
-        run: npm publish --access public --provenance
+        run: npm publish --access public
       
       - name: Get package version
         if: steps.check.outputs.version_changed == 'true'
