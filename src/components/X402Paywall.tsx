@@ -1047,7 +1047,9 @@ const X402PaywallContent: React.FC<
               >
                 Don't have USDC?{' '}
                 <a
-                  href="#"
+                  href={network === 'solana' ? 'https://www.coinbase.com/how-to-buy/usdc' : 'https://faucet.circle.com/'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={cn(
                     'font-medium underline',
                     resolvedTheme === 'seeker' || resolvedTheme === 'seeker-2'
@@ -2314,7 +2316,9 @@ const X402PaywallContent: React.FC<
                     Don't have USDC?{' '}
                   </span>
                   <a
-                    href="#"
+                    href={network === 'solana' ? 'https://www.coinbase.com/how-to-buy/usdc' : 'https://faucet.circle.com/'}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={cn(
                       'font-medium',
                       resolvedTheme === 'seeker'
