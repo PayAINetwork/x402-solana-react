@@ -68,6 +68,10 @@ const X402PaywallContent: React.FC<
   });
   const walletButtonRef = useRef<HTMLDivElement>(null);
   const networkLabel = network === 'solana' ? 'Mainnet' : 'Devnet';
+  const usdcUrl =
+    network === 'solana'
+      ? 'https://www.coinbase.com/how-to-buy/usdc'
+      : 'https://faucet.circle.com/';
 
   const { pay, isLoading, status, error, transactionId, responseContent, reset } = useX402Payment({
     wallet: reactiveWallet,
@@ -1047,7 +1051,7 @@ const X402PaywallContent: React.FC<
               >
                 Don't have USDC?{' '}
                 <a
-                  href={network === 'solana' ? 'https://www.coinbase.com/how-to-buy/usdc' : 'https://faucet.circle.com/'}
+                  href={usdcUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
@@ -1747,7 +1751,7 @@ const X402PaywallContent: React.FC<
                     Don't have USDC?{' '}
                   </span>
                   <a
-                    href="https://www.coinbase.com/how-to-buy/usdc"
+                    href={usdcUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
@@ -2316,7 +2320,7 @@ const X402PaywallContent: React.FC<
                     Don't have USDC?{' '}
                   </span>
                   <a
-                    href={network === 'solana' ? 'https://www.coinbase.com/how-to-buy/usdc' : 'https://faucet.circle.com/'}
+                    href={usdcUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
