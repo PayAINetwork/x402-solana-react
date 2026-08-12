@@ -35,8 +35,14 @@ jobs:
           node-version: '20'
           registry-url: https://registry.npmjs.org/
 
-      - name: Update npm to latest
-        run: npm install -g npm@latest
+      # This package publishes via npm trusted publishing (OIDC) - no NPM_TOKEN
+      # secret is used. OIDC publish requires npm >= 11.5.1, but Node 20 bundles
+      # npm 10.x. `npm@latest` is now npm 12, whose engine floor is Node
+      # ^22.22.2 || ^24.15.0 || >=26, so it fails EBADENGINE here and takes the
+      # publish job down with it. Pinned to a major so a future npm release with
+      # a higher Node floor can't break this job again.
+      - name: Install OIDC-capable npm
+        run: npm install -g npm@11
       
       - name: Install dependencies
         run: npm ci
