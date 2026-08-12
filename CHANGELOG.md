@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-08-12
+
+### Changed
+
+- Bump `x402-solana` dependency from `^2.0.4` to `^3.0.0`, completing this package's move off the
+  abandoned PayAI x402 fork. `x402-solana@3.0.0` runs upstream `@x402/core@2.21.0` in place of
+  `@payai/x402`, so this package's dependency tree no longer contains a forked x402 package.
+  `@payai/facilitator` is unaffected and remains in the tree.
+
+This package's own API is unchanged. The breaking changes in `x402-solana@3.0.0` are confined to
+protocol types that package re-exports (`VerifyRequest`/`SettleRequest` gained a required
+`x402Version`; `PaymentPayload.resource`, `ResourceInfo.description` and `ResourceInfo.mimeType`
+became optional). None of those cross this package's public surface — `WalletAdapter`,
+`SolanaNetwork` and the other exported types are defined locally — so there is no consumer-visible
+change here.
+
 ## [2.0.3] - 2026-02-16
 
 ### Changed
