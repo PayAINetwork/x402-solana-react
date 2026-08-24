@@ -321,7 +321,7 @@ You can customize further using `classNames` and `customStyles` props:
 | `autoSetupProviders` | `boolean`                     | ❌       | `true`                                               | Automatically setup wallet providers                        |
 | `providerNetwork`    | `WalletAdapterNetwork`        | ❌       | Auto-detected                                        | Network for auto-setup providers                            |
 | `providerEndpoint`   | `string`                      | ❌       | -                                                    | Custom endpoint for auto-setup providers                    |
-| `apiEndpoint`        | `string`                      | ❌       | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint                                         |
+| `apiEndpoint`        | `string`                      | ❌       | network-based echo merchant                          | Override the demo 402 endpoint. Default is `.../api/solana/paid-content` on mainnet and `.../api/solana-devnet/paid-content` on devnet |
 | `facilitatorUrl`     | `string`                      | ❌       | -                                                    | Custom facilitator URL                                      |
 | `theme`              | `ThemePreset`                 | ❌       | `'solana-light'`                                     | Visual theme (see Themes section)                           |
 | `logoUrl`            | `string`                      | ❌       | -                                                    | Custom logo URL to display                                  |

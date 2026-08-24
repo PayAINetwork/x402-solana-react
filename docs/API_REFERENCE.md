@@ -41,7 +41,7 @@ The main paywall component that wraps protected content.
 | `network`            | `'solana' \| 'solana-devnet'`                 | `'solana-devnet'`                                    | Solana network to use                             |
 | `facilitatorUrl`     | `string`                                      | `undefined`                                          | x402 facilitator service URL                      |
 | `rpcUrl`             | `string`                                      | `undefined`                                          | Custom RPC URL (recommended to avoid rate limits) |
-| `apiEndpoint`        | `string`                                      | `https://x402.payai.network/api/solana/paid-content` | Custom API endpoint                               |
+| `apiEndpoint`        | `string`                                      | follows `network`                                    | Override the demo 402 endpoint. Unset, this is `https://x402.payai.network/api/solana/paid-content` when `network` is `solana`, and `https://x402.payai.network/api/solana-devnet/paid-content` when `network` is `solana-devnet`. |
 | `logoUrl`            | `string`                                      | -                                                    | Custom logo URL to display                        |
 | `autoSetupProviders` | `boolean`                                     | `true`                                               | Automatically setup wallet providers              |
 | `providerNetwork`    | `WalletAdapterNetwork`                        | `undefined`                                          | Network for auto-setup providers                  |
